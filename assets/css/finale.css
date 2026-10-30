@@ -4,14 +4,14 @@
    convergence point (--cv-y) and the light's scale from it, so type and light stay registered at every size.
    Below the frame the floor runs on for --finale-tail, and the page's footer stands there, inside the scene. */
 
-:root { --finale-tail: 140px; }
+:root { --finale-tail: calc(140 * var(--z)); }
 
 .finale {
   --w: min(100vw, 152svh);
   position: relative;
   height: calc(var(--w) / 1.52 + var(--finale-tail));
   /* The quiet top of the scene is part of the gap from section 03: together they make one section space. */
-  margin-top: max(48px, calc(var(--space-section) - var(--w) / 1.52 * 0.2));
+  margin-top: max(48 * var(--z), calc(var(--space-section) - var(--w) / 1.52 * 0.2));
   overflow: hidden;
   isolation: isolate;
   /* Without WebGL: a soft glow at the point in place of the light. */
@@ -70,13 +70,13 @@
 }
 .finale-lede {
   margin-top: 1.5cqw;
-  font-size: max(15px, 1.86cqw); font-weight: 400; line-height: 1.4; letter-spacing: 0.005em; color: rgba(243, 243, 241, 0.8);
+  font-size: max(15 * var(--z), 1.86cqw); font-weight: 400; line-height: 1.4; letter-spacing: 0.005em; color: rgba(243, 243, 241, 0.8);
 }
 .finale-btn.btn {
   margin-top: 2.2cqw;
-  height: max(44px, 3.99cqw);
-  padding: 0 max(20px, 3cqw) 0 max(22px, 3.6cqw);
-  font-size: max(15px, 1.36cqw);
+  height: max(44 * var(--z), 3.99cqw);
+  padding: 0 max(20 * var(--z), 3cqw) 0 max(22 * var(--z), 3.6cqw);
+  font-size: max(15 * var(--z), 1.36cqw);
 }
 
 /* ---------- The footer, standing on the floor of the scene ---------- */
@@ -92,15 +92,15 @@
 
 /* ---------- Phones: one tall frame, the words above, the point lower down ---------- */
 
-@media (max-width: 1079px) { :root { --finale-tail: 200px; } }
+@media (max-width: 1079px) { :root { --finale-tail: calc(200 * var(--z)); } }
 
 @media (max-width: 720px) {
-  .finale { --w: 100vw; height: calc(clamp(600px, 100svh, 860px) + var(--finale-tail)); margin-top: calc(var(--space-section) * 0.5); }
+  .finale { --w: 100vw; height: calc(clamp(600 * var(--z), 100svh, 860 * var(--z)) + var(--finale-tail)); margin-top: calc(var(--space-section) * 0.5); }
     /* The fan is drawn narrower rather than cropped, so its whole sweep still reaches the point. */
-  .finale-frame { --cv-y: 0.72; --cv-unit: 0.64; --cv-sx: 0.5; container-type: normal; height: clamp(600px, 100svh, 860px); }
-  .finale-copy { top: 15%; padding: 0 20px; }
+  .finale-frame { --cv-y: 0.72; --cv-unit: 0.64; --cv-sx: 0.5; container-type: normal; height: clamp(600 * var(--z), 100svh, 860 * var(--z)); }
+  .finale-copy { top: 15%; padding: 0 calc(20 * var(--z)); }
   .finale-word { font-size: 13.4vw; }
   .finale-sub { margin-top: 2.4vw; font-size: 10.6vw; }
-  .finale-lede { margin-top: 18px; font-size: 17px; }
-  .finale-btn.btn { margin-top: 26px; height: 50px; padding: 0 22px 0 26px; font-size: 16px; }
+  .finale-lede { margin-top: calc(18 * var(--z)); font-size: calc(17 * var(--z)); }
+  .finale-btn.btn { margin-top: calc(26 * var(--z)); height: calc(50 * var(--z)); padding: 0 calc(22 * var(--z)) 0 calc(26 * var(--z)); font-size: calc(16 * var(--z)); }
 }

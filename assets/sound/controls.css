@@ -2,6 +2,10 @@
    js/controls.js). Tokens follow the CATION site (assets/css/base.css): Satoshi, near-black, white type,
    silver-grey support text, a restrained lavender accent, hairlines. */
 
+/* One screen pixel of the layout. On its own it is 1px; embedded in the homepage (surface.html) it follows the page's
+   --z, so on a big monitor the captions and controls grow with the page around them. */
+:root { --z: 1px; }
+
 .xp {
   --text: #f3f3f1;
   --text-2: rgba(243, 243, 241, 0.8);
@@ -10,9 +14,9 @@
   --lavender: #a487ea;
   --lavender-2: #c4b2f6;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --pad: clamp(14px, 2.2vw, 26px);
+  --pad: clamp(14 * var(--z), 2.2vw, 26 * var(--z));
   --close: 0;  /* annotate.js: the camera, 0 = Observe, 1 = Close */
-  --halo: 0 0 2px rgba(4, 5, 8, 0.9), 0 0 8px rgba(4, 5, 8, 0.85), 0 0 18px rgba(4, 5, 8, 0.7);
+  --halo: 0 0 calc(2 * var(--z)) rgba(4, 5, 8, 0.9), 0 0 calc(8 * var(--z)) rgba(4, 5, 8, 0.85), 0 0 calc(18 * var(--z)) rgba(4, 5, 8, 0.7);
   position: fixed; inset: 0;
   font-family: 'Satoshi', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   color: var(--text);
@@ -21,7 +25,7 @@
   user-select: none;
 }
 .xp button, .xp input { font: inherit; color: inherit; }
-.xp :focus-visible { outline: 1.5px solid var(--lavender-2); outline-offset: 2px; }
+.xp :focus-visible { outline: calc(1.5 * var(--z)) solid var(--lavender-2); outline-offset: calc(2 * var(--z)); }
 .xp > * { z-index: 1; }
 .xp-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
@@ -36,8 +40,8 @@
 
 .xp-src {
   position: absolute; left: 0; top: 0; margin: 0;
-  display: flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.01em; color: var(--text-2); white-space: nowrap;
+  display: flex; align-items: center; gap: calc(6 * var(--z));
+  font-size: calc(12 * var(--z)); font-weight: 600; letter-spacing: 0.01em; color: var(--text-2); white-space: nowrap;
   text-shadow: var(--halo);
 }
 /* Once its source is out of view, the label waits at the edge of the frame, pointing toward it. */
@@ -53,19 +57,19 @@
   opacity: clamp(0, (var(--close) - 0.62) * 3.2, 1);
 }
 .xp-level {
-  position: absolute; left: -20px; top: -0.5px; width: 40px; height: 1px;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0 13px, transparent 13px 27px, rgba(255, 255, 255, 0.7) 27px);
-  box-shadow: 0 0 6px rgba(4, 5, 8, 0.6);
+  position: absolute; left: calc(-20 * var(--z)); top: -0.5px; width: calc(40 * var(--z)); height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0 calc(13 * var(--z)), transparent calc(13 * var(--z)) calc(27 * var(--z)), rgba(255, 255, 255, 0.7) calc(27 * var(--z)));
+  box-shadow: 0 0 calc(6 * var(--z)) rgba(4, 5, 8, 0.6);
 }
 .xp-dot {
-  position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%;
+  position: absolute; left: calc(-4 * var(--z)); top: calc(-4 * var(--z)); width: calc(8 * var(--z)); height: calc(8 * var(--z)); border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 0 1px rgba(4, 5, 8, 0.35), 0 0 10px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(4, 5, 8, 0.35), 0 0 calc(10 * var(--z)) rgba(255, 255, 255, 0.35);
   will-change: transform;
 }
 .xp-word {
-  position: absolute; left: 30px; top: -9px;
-  font-size: 12.5px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+  position: absolute; left: calc(30 * var(--z)); top: calc(-9 * var(--z));
+  font-size: calc(12.5 * var(--z)); font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
   text-shadow: var(--halo);
 }
 
@@ -73,15 +77,15 @@
 
 .xp-bottom {
   position: absolute; left: var(--pad); right: var(--pad); bottom: var(--pad);
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: calc(12 * var(--z));
   text-align: center;
 }
 .xp-captions { display: grid; max-width: 40ch; text-wrap: balance; }
 .xp-cap {
   grid-area: 1 / 1; align-self: end; margin: 0;
-  font-size: clamp(15px, 1.35vw, 19px); font-weight: 500; line-height: 1.4; letter-spacing: -0.005em;
-  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
-  opacity: 0; transform: translateY(6px);
+  font-size: clamp(15 * var(--z), 1.35vw, 19 * var(--z)); font-weight: 500; line-height: 1.4; letter-spacing: -0.005em;
+  text-shadow: 0 1px calc(14 * var(--z)) rgba(0, 0, 0, 0.7);
+  opacity: 0; transform: translateY(calc(6 * var(--z)));
   transition: opacity 0.22s ease-in, transform 0.3s ease-in;
 }
 /* One line at a time: the outgoing caption clears before the next fades in. */
@@ -89,7 +93,7 @@
 
 /* While source B turns, how far out of step it is. */
 .xp-meta {
-  margin: 0; font-size: 12.5px; font-weight: 500; color: var(--text-3); letter-spacing: 0.01em;
+  margin: 0; font-size: calc(12.5 * var(--z)); font-weight: 500; color: var(--text-3); letter-spacing: 0.01em;
   opacity: 0; transition: opacity 0.4s var(--ease-out);
 }
 .xp-meta b { font-weight: 600; color: var(--lavender-2); font-variant-numeric: tabular-nums; }
@@ -97,51 +101,51 @@
 
 /* The slider, shown in the last beat: a hairline track, a lavender fill and ticks at the quarter turns. */
 .xp-phase {
-  display: flex; align-items: center; gap: 14px; height: 34px; margin-top: -4px;
+  display: flex; align-items: center; gap: calc(14 * var(--z)); height: calc(34 * var(--z)); margin-top: calc(-4 * var(--z));
   cursor: pointer; pointer-events: auto;
-  opacity: 0; transform: translateY(8px); visibility: hidden;
+  opacity: 0; transform: translateY(calc(8 * var(--z))); visibility: hidden;
   transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out), visibility 0s 0.6s;
 }
 .xp.is-trying .xp-phase { opacity: 1; transform: none; visibility: visible; transition-delay: 0.1s, 0.1s, 0s; }
-.xp-label { font-size: 13px; font-weight: 500; color: var(--text-3); white-space: nowrap; }
+.xp-label { font-size: calc(13 * var(--z)); font-weight: 500; color: var(--text-3); white-space: nowrap; }
 .xp-phase output {
   min-width: 4ch; text-align: right;
-  font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.01em;
+  font-size: calc(14 * var(--z)); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.01em;
 }
-.xp-slider { position: relative; display: block; width: clamp(180px, 24vw, 320px); }
+.xp-slider { position: relative; display: block; width: clamp(180 * var(--z), 24vw, 320 * var(--z)); }
 .xp-phase input {
   --fill: 0%;
-  --thumb: 14px;
-  display: block; width: 100%; height: 30px; margin: 0;
+  --thumb: calc(14 * var(--z));
+  display: block; width: 100%; height: calc(30 * var(--z)); margin: 0;
   -webkit-appearance: none; appearance: none; background: none; cursor: pointer;
 }
 .xp-phase input::-webkit-slider-runnable-track {
-  height: 2px; border-radius: 2px;
+  height: calc(2 * var(--z)); border-radius: calc(2 * var(--z));
   background: linear-gradient(to right, var(--lavender) var(--fill), rgba(255, 255, 255, 0.2) var(--fill));
 }
-.xp-phase input::-moz-range-track { height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.2); }
-.xp-phase input::-moz-range-progress { height: 2px; border-radius: 2px; background: var(--lavender); }
+.xp-phase input::-moz-range-track { height: calc(2 * var(--z)); border-radius: calc(2 * var(--z)); background: rgba(255, 255, 255, 0.2); }
+.xp-phase input::-moz-range-progress { height: calc(2 * var(--z)); border-radius: calc(2 * var(--z)); background: var(--lavender); }
 .xp-phase input::-webkit-slider-thumb {
   -webkit-appearance: none; width: var(--thumb); height: var(--thumb); margin-top: calc(1px - var(--thumb) / 2);
   border-radius: 50%; background: var(--text);
-  box-shadow: 0 0 0 0 rgba(196, 178, 246, 0), 0 1px 6px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 0 rgba(196, 178, 246, 0), 0 1px calc(6 * var(--z)) rgba(0, 0, 0, 0.55);
   transition: box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out);
 }
 .xp-phase input::-moz-range-thumb {
   width: var(--thumb); height: var(--thumb); border: 0; border-radius: 50%; background: var(--text);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 1px calc(6 * var(--z)) rgba(0, 0, 0, 0.55);
 }
 .xp-phase:hover input::-webkit-slider-thumb, .xp-phase input:active::-webkit-slider-thumb {
-  box-shadow: 0 0 0 5px rgba(196, 178, 246, 0.22), 0 1px 6px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 calc(5 * var(--z)) rgba(196, 178, 246, 0.22), 0 1px calc(6 * var(--z)) rgba(0, 0, 0, 0.55);
 }
 .xp-phase input:active::-webkit-slider-thumb { transform: scale(1.12); }
 .xp-phase input:focus-visible { outline: none; }
-.xp-phase input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px #0b0c10, 0 0 0 3.5px var(--lavender-2); }
-.xp-phase input:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 2px #0b0c10, 0 0 0 3.5px var(--lavender-2); }
+.xp-phase input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 calc(2 * var(--z)) #0b0c10, 0 0 0 calc(3.5 * var(--z)) var(--lavender-2); }
+.xp-phase input:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 calc(2 * var(--z)) #0b0c10, 0 0 0 calc(3.5 * var(--z)) var(--lavender-2); }
 .xp-ticks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
 .xp-ticks i {
-  position: absolute; top: 5px; width: 1px; height: 4px; background: rgba(255, 255, 255, 0.28);
-  left: calc(var(--thumb, 14px) / 2 + (100% - var(--thumb, 14px)) * var(--at));
+  position: absolute; top: calc(5 * var(--z)); width: 1px; height: calc(4 * var(--z)); background: rgba(255, 255, 255, 0.28);
+  left: calc(var(--thumb, calc(14 * var(--z))) / 2 + (100% - var(--thumb, calc(14 * var(--z)))) * var(--at));
 }
 .xp-ticks i:nth-child(1) { --at: 0; }
 .xp-ticks i:nth-child(2) { --at: 0.25; }
@@ -152,26 +156,26 @@
 /* ---------- pause, in the corner ---------- */
 
 .xp-play {
-  position: absolute; top: calc(var(--pad) - 6px); right: calc(var(--pad) - 6px);
+  position: absolute; top: calc(var(--pad) - 6 * var(--z)); right: calc(var(--pad) - 6 * var(--z));
   display: grid; place-items: center;
-  width: 34px; height: 34px; border: 0; border-radius: 50%;
+  width: calc(34 * var(--z)); height: calc(34 * var(--z)); border: 0; border-radius: 50%;
   background: rgba(9, 10, 14, 0.3); color: var(--text-3); cursor: pointer; pointer-events: auto;
   box-shadow: inset 0 0 0 1px var(--line);
   transition: background-color 0.3s var(--ease-out), color 0.3s;
 }
 .xp-play:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
-.xp-play svg { width: 10px; height: 10px; }
+.xp-play svg { width: calc(10 * var(--z)); height: calc(10 * var(--z)); }
 
 /* ---------- phones ---------- */
 
 @media (max-width: 640px) {
   .xp-captions { max-width: 30ch; }
-  .xp-phase { gap: 10px; align-self: stretch; justify-content: center; }
-  .xp-slider { flex: 1; width: auto; max-width: 260px; }
-  .xp-label { font-size: 12px; }
-  .xp-src { font-size: 11px; }
+  .xp-phase { gap: calc(10 * var(--z)); align-self: stretch; justify-content: center; }
+  .xp-slider { flex: 1; width: auto; max-width: calc(260 * var(--z)); }
+  .xp-label { font-size: calc(12 * var(--z)); }
+  .xp-src { font-size: calc(11 * var(--z)); }
   /* The word sits above the point, clear of the source labels at the edges. */
-  .xp-word { font-size: 12px; left: 0; top: -34px; transform: translateX(-50%); }
+  .xp-word { font-size: calc(12 * var(--z)); left: 0; top: calc(-34 * var(--z)); transform: translateX(-50%); }
 }
 @media (prefers-reduced-motion: reduce) {
   .xp *, .xp *::before, .xp *::after { transition: none !important; }

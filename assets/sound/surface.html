@@ -9,6 +9,14 @@
   <title>CATION · Can sound cancel sound?</title>
   <link rel="stylesheet" href="../css/fonts.css">
   <link rel="stylesheet" href="controls.css">
+  <!-- The captions and controls take the homepage's --z (base.css), so they grow with the page on big monitors. -->
+  <script>
+    try {
+      const page = parent !== window && parent.innerWidth ? parent : null;
+      const fit = () => document.documentElement.style.setProperty('--z', `${Math.max(1, Math.min(page.innerWidth / 1920, page.innerHeight / 1080))}px`);
+      if (page) { fit(); page.addEventListener('resize', fit); }
+    } catch (e) { /* Not on a page this frame can read: the controls keep 1px. */ }
+  </script>
   <style>
     html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
     canvas { display: block; width: 100vw; height: 100vh; }
