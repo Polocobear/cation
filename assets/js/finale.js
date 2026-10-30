@@ -115,7 +115,10 @@ void main() {
   float depth = max(-q.y, 0.0);
   // The floor mirrors the light above it: a point at this depth sees the strands at height k·depth, so their
   // reflections stretch downwards away from the centre, and they widen as the floor comes towards the viewer.
-  float k = side > 0.5 ? 0.359 * pow(max(dx, 0.03), -0.533) : 0.393 * pow(max(dx, 0.03), -0.6);
+  // Near the centre line the stretch levels off smoothly (a hard limit creased the streaks into steps), and the two
+  // sides' stretches blend across it.
+  float ds = sqrt(dx * dx + 0.0009);
+  float k = mix(0.393 * pow(ds, -0.6), 0.359 * pow(ds, -0.533), hue);
   float y = mix(q.y, k * depth, below);
   float m = mix(1.0, 1.0 + depth * 55.0, below);
   // A restrained shimmer that travels along the strands in towards the point.
@@ -127,7 +130,8 @@ void main() {
   float at = smoothstep(0.78, 1.0, uReveal);
 
   vec3 c = light(dx, y, side, hue, m, shine, 0.55 * below, 1.0 - 0.75 * below) * arrive;
-  float streak = 0.3 + 1.5 * pow(noise(vec2(dx * 5.0 + uT * 0.004, y * 85.0)), 1.5);
+  // The streaks thin out towards the centre line, where the stretch levels off and they would run level.
+  float streak = mix(0.9, 0.3 + 1.5 * pow(noise(vec2(dx * 5.0 + uT * 0.004, y * 85.0)), 1.5), smoothstep(0.0, 0.12, dx));
   c *= mix(1.0, mix(1.5, 1.75, hue) * exp(-depth * 3.6) * streak, below);
 
   // The point itself: a small, very bright core, a short flare along the horizon, and a glow around it that tints
