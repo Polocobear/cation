@@ -1,0 +1,252 @@
+/* CATION: shared tokens, type and components for every page.
+   Concept site for the Nevka Systems portfolio. Satoshi (Fontshare) is the only typeface. */
+
+:root {
+  --bg: #090b0d;
+  --bg-raised: #0f1215;
+  --bg-sunk: #060708;
+  --surface: #13161a;
+  --surface-2: #1a1e23;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.14);
+  --line-3: rgba(255, 255, 255, 0.3);
+
+  --text: #f3f3f1;
+  --text-2: rgba(243, 243, 241, 0.8);
+  --text-3: rgba(243, 243, 241, 0.6);
+  --text-4: rgba(243, 243, 241, 0.42);
+
+  /* Lavender marks whatever is active. Primary actions take the brand's Soft Gold and Periwinkle: the token keeps
+     its earlier name, lime, so every page that uses it picks the gold up. */
+  --gold: #e9d78b;
+  --periwinkle: #7c87dd;
+  --lavender: #a487ea;
+  --lavender-2: #c4b2f6;
+  --lavender-wash: rgba(164, 135, 234, 0.14);
+  --lavender-ink: #120d1f;
+  --lime: var(--gold);
+  --lime-hover: #f2e4ac;
+  --lime-ink: #14110a;
+
+  --font: 'Satoshi', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Inner pages share the homepage header at a fixed scale. */
+  --hs: clamp(0.82px, calc(100vw / 1672), 1px);
+  --gutter: clamp(20px, 3.6vw, 58px);
+  /* The space from one section's content to the next section's heading, on every page: 128px on phones,
+     rising to 232px on wide screens. */
+  --space-section: clamp(160px, 19vw, 300px);
+  --max: 1560px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4, p, ol, ul, figure, dl, dd, blockquote { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--lavender-2); outline-offset: 3px; border-radius: 4px; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; left: 16px; top: 12px; z-index: 100;
+  padding: 10px 16px; border-radius: 999px;
+  background: var(--lime); color: var(--lime-ink); font-weight: 600; font-size: 14px;
+  transform: translateY(-160%); transition: transform 0.2s var(--ease-out);
+}
+.skip-link:focus { transform: none; }
+
+/* ---------- Wordmark, header ---------- */
+
+.wordmark { display: inline-flex; color: var(--text); }
+.wordmark svg { width: calc(140 * var(--hs)); height: auto; overflow: visible; }
+.wordmark path, .wordmark circle { fill: none; stroke: currentColor; stroke-width: 1.7; vector-effect: non-scaling-stroke; }
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  height: calc(84 * var(--hs));
+  padding: 0 calc(55 * var(--hs)) 0 calc(58 * var(--hs));
+}
+.primary-nav { display: flex; gap: calc(47 * var(--hs)); margin-left: calc(90 * var(--hs)); }
+.primary-nav a {
+  position: relative;
+  font-size: max(13px, calc(16 * var(--hs)));
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  color: var(--text-2);
+  padding: 6px 0;
+  transition: color 0.2s;
+}
+.primary-nav a:hover, .primary-nav a[aria-current] { color: var(--text); }
+.primary-nav a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s var(--ease-out);
+}
+.primary-nav a:hover::after, .primary-nav a[aria-current]::after { transform: scaleX(1); }
+
+.header-actions { display: flex; align-items: center; gap: calc(31 * var(--hs)); margin-left: auto; }
+.icon-link {
+  display: grid; place-items: center;
+  width: max(36px, calc(40 * var(--hs))); height: max(36px, calc(40 * var(--hs)));
+  margin: 0 calc(-10 * var(--hs)); border-radius: 50%;
+  color: var(--text-2); transition: color 0.2s, background-color 0.2s;
+}
+.icon-link:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
+.icon-link svg { width: max(18px, calc(21 * var(--hs))); height: auto; }
+
+.menu-toggle { display: none; }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6em;
+  height: max(40px, calc(42 * var(--hs)));
+  padding: 0 calc(22 * var(--hs)) 0 calc(26 * var(--hs));
+  border-radius: 999px;
+  font-size: max(14px, calc(15 * var(--hs)));
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
+  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s var(--ease-out);
+}
+.btn .arrow { width: 1.05em; height: auto; transition: transform 0.35s var(--ease-out); }
+.btn:hover .arrow { transform: translateX(3px); }
+/* The primary button runs from Soft Gold into Periwinkle, with a soft glow of both. */
+.btn-lime {
+  background: linear-gradient(100deg, var(--gold) 0%, #efe3ad 40%, #c6c2e8 74%, #a4acef 100%);
+  color: var(--lime-ink);
+  box-shadow: 0 0 24px -6px rgba(124, 135, 221, 0.6), 0 0 16px -8px rgba(233, 215, 139, 0.7);
+}
+.btn-lime:hover {
+  background: linear-gradient(100deg, #f2e4ac 0%, #f6edc8 40%, #d3d0ef 74%, #b4bbf3 100%);
+  box-shadow: 0 0 0 6px rgba(233, 215, 139, 0.1), 0 0 30px -4px rgba(124, 135, 221, 0.7);
+}
+.btn-ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--line-3); }
+.btn-ghost:hover { box-shadow: inset 0 0 0 1px var(--text-2); background: rgba(255, 255, 255, 0.04); }
+.btn[aria-disabled='true'] {
+  background: transparent; color: var(--text-3); box-shadow: inset 0 0 0 1px var(--line-2);
+  cursor: not-allowed;
+}
+
+.eyebrow {
+  font-size: 12px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-3);
+}
+.eyebrow-bar { display: block; width: 2px; height: 30px; background: var(--lime); margin-bottom: 18px; }
+
+/* Status pills are honest about what exists yet. */
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 26px; padding: 0 11px 0 9px; border-radius: 999px;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.02em; white-space: nowrap;
+  color: var(--text-2); box-shadow: inset 0 0 0 1px var(--line-2);
+}
+.status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.status-open { color: var(--lime); box-shadow: inset 0 0 0 1px rgba(233, 215, 139, 0.35); }
+.status-build { color: var(--lavender-2); box-shadow: inset 0 0 0 1px rgba(196, 178, 246, 0.32); }
+.status-plan { color: var(--text-3); }
+
+/* ---------- Mobile header ---------- */
+
+@media (max-width: 1079px) {
+  :root { --hs: 1px; }
+  .site-header { height: 68px; padding: 0 20px; }
+  .wordmark svg { width: 108px; }
+  .primary-nav, .header-actions .btn { display: none; }
+  .header-actions { gap: 6px; }
+  .menu-toggle {
+    display: grid; place-items: center; width: 44px; height: 44px; margin-right: -8px; border-radius: 50%;
+  }
+  .menu-toggle span, .menu-toggle span::before {
+    display: block; width: 22px; height: 1.5px; background: var(--text); border-radius: 2px;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .menu-toggle span { position: relative; transform: translateY(-3.5px); }
+  .menu-toggle span::before { content: ''; position: absolute; left: 0; top: 7px; }
+  .menu-open .menu-toggle span { transform: rotate(45deg); }
+  .menu-open .menu-toggle span::before { transform: translateY(-7px) rotate(-90deg); }
+
+  .menu-sheet {
+    position: fixed; inset: 68px 0 auto; z-index: 19;
+    padding: 12px 20px 28px;
+    background: rgba(9, 11, 13, 0.97);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transform: translateY(-8px); opacity: 0; visibility: hidden;
+    transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out), visibility 0s 0.4s;
+  }
+  .menu-open .menu-sheet { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
+  .menu-sheet a:not(.btn) {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+    font-size: 24px; font-weight: 500; letter-spacing: -0.01em;
+  }
+  .menu-sheet .btn { width: 100%; height: 52px; margin-top: 22px; font-size: 16px; }
+}
+@media (min-width: 1080px) {
+  .menu-sheet { display: none; }
+}
+
+/* ---------- Reveals ----------
+   Content eases into place once, the first time it comes into view: a short rise under a fade, with a long
+   decelerating settle. No bounce, blur, spin or slide from the side. site.js adds .is-in to each [data-reveal]
+   element as it arrives; elements that arrive together follow one another in page order, and the first screen waits
+   for the typeface so nothing re-wraps mid-motion.
+   - data-reveal: rise and fade.
+   - data-reveal="fade": fade only, for anything another script positions or measures.
+   - data-reveal="media": the frame fades while the picture inside settles from slightly larger.
+   Navigation, breadcrumbs, the footer and the plates that pages morph between are never revealed: they are there
+   from the start. The hidden state needs scripting and welcome motion, so without JavaScript, in print or with Reduce
+   Motion everything is simply there. The animations fill backwards only, and .is-done drops them once they finish, so
+   nothing is left holding an element's opacity or position, and a filtered list doesn't replay them. */
+:root {
+  --reveal-rise: clamp(18px, 2.2vw, 34px);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-fade: cubic-bezier(0.3, 0, 0.2, 1);
+}
+@media screen and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not(.is-in) { opacity: 0; }
+  [data-reveal].is-in:not(.is-done) {
+    animation:
+      reveal-fade 0.8s var(--ease-fade) var(--reveal-delay, 0s) backwards,
+      reveal-rise 1.3s var(--ease-reveal) var(--reveal-delay, 0s) backwards;
+  }
+  [data-reveal='fade'].is-in:not(.is-done) { animation: reveal-fade 0.9s var(--ease-fade) var(--reveal-delay, 0s) backwards; }
+  [data-reveal='media'].is-in:not(.is-done) { animation: reveal-fade 1s var(--ease-fade) var(--reveal-delay, 0s) backwards; }
+  [data-reveal='media'].is-in:not(.is-done) img { animation: reveal-settle 1.8s var(--ease-reveal) var(--reveal-delay, 0s) backwards; }
+  /* If site.js never runs, show everything after a moment rather than leave the page blank. */
+  :root:not(.has-reveals) [data-reveal] { animation: reveal-show 0.6s ease 2.5s forwards; }
+}
+@keyframes reveal-fade { from { opacity: 0; } }
+@keyframes reveal-rise { from { translate: 0 var(--reveal-rise); } }
+@keyframes reveal-settle { from { scale: 1.07; } }
+@keyframes reveal-show { to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

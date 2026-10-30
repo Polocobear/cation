@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- Embedded in the homepage, section 02. A copy of cation/art/sound/prototype.html, controls.css and js/, which stay
+     the source for this work: copy them here again after changing them. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>CATION · Can sound cancel sound?</title>
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="controls.css">
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    canvas { display: block; width: 100vw; height: 100vh; }
+  </style>
+  <!-- Three.js pinned to an exact release. -->
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js" } }</script>
+</head>
+<body>
+  <canvas id="surface" role="img" aria-label="Two sets of circular ripples spreading across a pearlescent surface and interfering where they meet."></canvas>
+  <script type="module" src="js/prototype.js"></script>
+</body>
+</html>

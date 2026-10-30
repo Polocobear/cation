@@ -1,0 +1,82 @@
+/* Course pages: the outline of one course, with its status stated plainly. */
+
+.c-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.42fr);
+  gap: clamp(32px, 6vw, 120px);
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding: clamp(24px, 3vw, 44px) var(--gutter) 0;
+}
+.c-eyebrow { display: flex; align-items: center; font-size: 12px; font-weight: 500; letter-spacing: 0.26em; text-transform: uppercase; color: var(--text-3); }
+.c-title {
+  max-width: 13ch;
+  margin-top: 22px;
+  margin-left: -0.03em;
+  font-size: clamp(48px, 7.2vw, 118px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.052em;
+}
+.c-summary { max-width: 46ch; margin-top: 26px; font-size: clamp(18px, 1.5vw, 22px); font-weight: 300; line-height: 1.5; color: var(--text-2); }
+.c-meta {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;
+  margin-top: clamp(36px, 4vw, 56px); padding-top: 22px;
+  border-top: 1px solid var(--line-2);
+}
+.c-meta dt { font-size: 11.5px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-4); }
+.c-meta dd { margin: 8px 0 0; font-size: 16px; line-height: 1.4; color: var(--text); }
+.c-hero .notice { margin-top: 32px; max-width: 640px; }
+.c-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.c-actions .btn { height: 50px; padding-inline: 24px; font-size: 15px; }
+
+.c-art { position: relative; min-height: 560px; }
+.c-art img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  border-radius: 14px; box-shadow: 0 0 0 1px var(--line-2);
+  view-transition-name: plate;
+}
+
+.outcomes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.outcomes li { padding: 28px 28px 32px; border-radius: 14px; background: var(--bg-raised); box-shadow: inset 0 0 0 1px var(--line); }
+.o-num { font-size: 13px; font-weight: 500; color: var(--lavender-2); font-variant-numeric: tabular-nums; }
+.outcomes p { margin-top: 48px; font-size: clamp(20px, 1.6vw, 24px); font-weight: 500; line-height: 1.3; letter-spacing: -0.015em; }
+
+.syllabus { border-top: 1px solid var(--line); }
+.module {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px auto; align-items: center; gap: 24px;
+  padding: 26px 0; border-bottom: 1px solid var(--line);
+}
+.m-num { font-size: 13px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.m-title { font-size: clamp(22px, 2vw, 30px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+.m-count { font-size: 14px; color: var(--text-3); }
+
+.related { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.rel-card {
+  display: flex; flex-direction: column; gap: 12px; height: 100%;
+  padding: 28px; border-radius: 14px;
+  background: var(--bg-raised); box-shadow: inset 0 0 0 1px var(--line);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+.rel-card:hover { background: var(--surface); box-shadow: inset 0 0 0 1px var(--line-2); }
+.rel-level { font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3); }
+.rel-title { font-size: clamp(26px, 2.2vw, 34px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+.rel-summary { font-size: 15.5px; line-height: 1.55; color: var(--text-2); }
+.rel-go { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 20px; font-size: 15px; font-weight: 500; }
+.rel-go .arrow { width: 15px; transition: transform 0.35s var(--ease-out); }
+.rel-card:hover .rel-go .arrow { transform: translateX(4px); }
+
+@media (max-width: 1080px) {
+  .c-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .c-hero { grid-template-columns: 1fr; }
+  .c-art { order: -1; min-height: 0; height: 220px; }
+  .c-art .notch { display: none; }
+  .outcomes, .related { grid-template-columns: 1fr; }
+  .outcomes p { margin-top: 22px; }
+  .module { grid-template-columns: 40px minmax(0, 1fr); gap: 6px 14px; }
+  .m-count, .module .status { grid-column: 2; }
+  .module .status { justify-self: start; margin-top: 6px; }
+}

@@ -1,0 +1,106 @@
+/* 04 · Closing: Concept 4, "Abstract Convergence" (cation/art/closing/reference-concept-4.webp). A full-width scene of
+   light, drawn by finale.js, under the page's last words. .finale-frame is the reference's 1204 × 792 composition
+   scaled to the window: the words sit in it by percentage and size by its width (cqw), and finale.js takes the
+   convergence point (--cv-y) and the light's scale from it, so type and light stay registered at every size.
+   Below the frame the floor runs on for --finale-tail, and the page's footer stands there, inside the scene. */
+
+:root { --finale-tail: 140px; }
+
+.finale {
+  --w: min(100vw, 152svh);
+  position: relative;
+  height: calc(var(--w) / 1.52 + var(--finale-tail));
+  /* The quiet top of the scene is part of the gap from section 03: together they make one section space. */
+  margin-top: max(48px, calc(var(--space-section) - var(--w) / 1.52 * 0.2));
+  overflow: hidden;
+  isolation: isolate;
+  /* Without WebGL: a soft glow at the point in place of the light. */
+  background:
+    radial-gradient(ellipse 34% 9% at 50% 72.85%, rgba(233, 215, 139, 0.16), transparent 70%),
+    radial-gradient(ellipse 14% 4% at 50% 72.85%, rgba(196, 178, 246, 0.22), transparent 70%),
+    var(--bg);
+}
+.finale.is-drawn { background: var(--bg); }
+.finale-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; }
+.finale.is-drawn .finale-canvas { opacity: 1; }
+
+.finale-frame {
+  --cv-y: 0.7285;   /* the convergence point, as a fraction of the frame's height */
+  --cv-unit: 1;     /* the light's scale, in frame heights */
+  --cv-sx: 1;       /* horizontal compression of the light */
+  position: absolute; top: 0; left: 50%; translate: -50% 0;
+  width: var(--w); height: calc(var(--w) / 1.52);
+  container-type: inline-size;
+  pointer-events: none;
+}
+
+/* ---------- The words ---------- */
+
+.finale-copy {
+  position: absolute; left: 0; right: 0; top: 20.2%;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  pointer-events: auto;
+}
+.finale-title { display: flex; flex-direction: column; align-items: center; font-weight: 900; }
+/* "EDU" is solid and "cation." carries the brand's outlined accent (.hero-title-accent in home.css), as "anything." and
+   "capability." do. The second line carries light from Soft Gold through warm white into Periwinkle. */
+.finale-word {
+  display: block;
+  font-size: 7.6cqw; font-weight: 900; line-height: 0.92; letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--text);
+}
+/* Here the outline holds still, Soft Gold on the left into Periwinkle on the right, in register with the light below
+   it and the line under it, where elsewhere the accent's light drifts. */
+.finale-word .hero-title-accent {
+  background-image: linear-gradient(90deg, #e9d78b 0%, #f0e3b2 26%, #f0ebdf 46%, #c8c9f2 66%, #9aa3ec 84%, #7c87dd 100%);
+  background-size: 100% 100%;
+  background-position: 0 50%;
+  animation: none;
+}
+.finale-sub {
+  display: block;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Room below the line for the descender, which the clipped background would otherwise cut off. */
+  margin-top: 0; padding-bottom: 0.22em; margin-bottom: -0.22em;
+  font-size: 6.62cqw; font-weight: 400; line-height: 1.04; letter-spacing: -0.01em;
+  background-image: linear-gradient(90deg, #e5d391 0%, #eee5c4 26%, #f1efea 46%, #dcdaf2 62%, #b4b9f0 80%, #9aa3ec 100%);
+}
+.finale-lede {
+  margin-top: 1.5cqw;
+  font-size: max(15px, 1.86cqw); font-weight: 400; line-height: 1.4; letter-spacing: 0.005em; color: rgba(243, 243, 241, 0.8);
+}
+.finale-btn.btn {
+  margin-top: 2.2cqw;
+  height: max(44px, 3.99cqw);
+  padding: 0 max(20px, 3cqw) 0 max(22px, 3.6cqw);
+  font-size: max(15px, 1.36cqw);
+}
+
+/* ---------- The footer, standing on the floor of the scene ---------- */
+
+/* It rises into the section's tail, over the fading floor, with its content at the bottom; no rule above it, as the
+   scene already closes the page. */
+.home-footer {
+  position: relative; z-index: 1;
+  min-height: var(--finale-tail); margin-top: calc(-1 * var(--finale-tail));
+  align-content: flex-end;
+  border-top: 0;
+}
+
+/* ---------- Phones: one tall frame, the words above, the point lower down ---------- */
+
+@media (max-width: 1079px) { :root { --finale-tail: 200px; } }
+
+@media (max-width: 720px) {
+  .finale { --w: 100vw; height: calc(clamp(600px, 100svh, 860px) + var(--finale-tail)); margin-top: calc(var(--space-section) * 0.5); }
+    /* The fan is drawn narrower rather than cropped, so its whole sweep still reaches the point. */
+  .finale-frame { --cv-y: 0.72; --cv-unit: 0.64; --cv-sx: 0.5; container-type: normal; height: clamp(600px, 100svh, 860px); }
+  .finale-copy { top: 15%; padding: 0 20px; }
+  .finale-word { font-size: 13.4vw; }
+  .finale-sub { margin-top: 2.4vw; font-size: 10.6vw; }
+  .finale-lede { margin-top: 18px; font-size: 17px; }
+  .finale-btn.btn { margin-top: 26px; height: 50px; padding: 0 22px 0 26px; font-size: 16px; }
+}

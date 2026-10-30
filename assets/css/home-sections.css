@@ -1,0 +1,529 @@
+/* CATION homepage below the hero: 02 a CATION lesson, 03 curiosity becoming capability in four stages,
+   04 the closing invitation. Same tokens as the hero, new rhythms: an instrument, a path, a coda. */
+
+.story, .closing, .home-footer {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.story { padding-top: var(--space-section); }
+/* On desktop the sections share the hero's margins, so every left edge lines up with the headline. */
+@media (min-width: 1080px) and (min-height: 600px) {
+  .story, .closing, .home-footer { max-width: none; padding-inline: calc(58 * var(--s)) calc(55 * var(--s)); }
+}
+
+/* ---------- Section heads ---------- */
+
+.story-head {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  grid-template-areas: 'title side';
+  align-items: end;
+  gap: 26px clamp(32px, 5vw, 96px);
+}
+.story-title {
+  grid-area: title;
+  font-size: clamp(46px, 6.1vw, 100px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.052em;
+}
+.story-side { grid-area: side; padding-bottom: 6px; }
+.story-lede { font-size: clamp(17px, 1.35vw, 20px); font-weight: 300; line-height: 1.55; color: var(--text-2); }
+.story-note { display: flex; gap: 10px; align-items: baseline; margin-top: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-3); }
+.story-note span { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--lavender); transform: translateY(-1px); }
+
+/* ---------- 02 · A CATION lesson: the wave surface ---------- */
+
+/* 02's head: an eyebrow over the lesson's question, with the supporting line beside it. */
+.story-main { grid-area: title; }
+.story-eyebrow { margin-bottom: 18px; }
+.adapt .story-title { text-wrap: balance; }
+
+/* A live shader in a frame (assets/sound/surface.html). */
+.wave-stage {
+  position: relative;
+  margin-top: clamp(40px, 5vw, 72px);
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  background: #000;
+  box-shadow: 0 40px 120px -60px rgba(164, 135, 234, 0.25);
+  overflow: hidden;
+}
+.wave-stage::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--line); pointer-events: none;
+}
+.wave-frame { display: block; width: 100%; height: 100%; border: 0; }
+
+/* The lesson runs as the page scrolls. The section is a tall track; the heading and the experiment sit in a
+   screen-high box pinned to the top of the window while the visitor scrolls through it, and how far the box
+   has travelled down the track drives the lesson (assets/sound/js/lesson.js). The stage takes the height the
+   heading leaves, up to 16:9 (5:7 on phones); on shorter screens it turns wider instead of running off the
+   bottom (the camera keeps its vertical view and shows more plate at the sides). */
+.story.adapt {
+  --lesson-run: 230svh;                     /* the scroll the lesson takes */
+  --pin-top: clamp(56px, 8svh, 104px);
+  height: calc(100svh + var(--lesson-run));
+  padding-top: 0;
+  margin-top: max(0px, calc(var(--space-section) - var(--pin-top)));  /* the rest of the usual space above */
+}
+.adapt-pin {
+  position: sticky; top: 0;
+  display: flex; flex-direction: column;
+  height: 100svh;
+  padding-top: var(--pin-top); padding-bottom: clamp(16px, 3svh, 36px);
+  container-type: inline-size;
+}
+.adapt .story-head { flex: none; }
+.adapt .wave-stage {
+  flex: 1 1 auto; min-height: 300px; max-height: calc(100cqw * 9 / 16);
+  aspect-ratio: auto;
+  margin-top: clamp(24px, 3.6svh, 48px);
+}
+@media (min-width: 1080px) and (min-height: 600px) {
+  .adapt .story-title { font-size: clamp(42px, 4.7vw, 84px); line-height: 0.95; letter-spacing: -0.05em; }
+}
+@media (max-width: 640px) {
+  .adapt .wave-stage { max-height: calc(100cqw * 1.4); margin-top: 24px; }
+}
+/* Reduced motion, or a screen too short to pin (a phone held sideways): the section stays in the page's flow
+   and the experiment opens on the lesson's last step, with its explanation in one line and the slider. With
+   reduced motion the heading and the experiment still share one screen. */
+@media (prefers-reduced-motion: reduce) {
+  .story.adapt { height: auto; }
+  .adapt-pin { position: static; }
+}
+@media (max-height: 559px) {
+  .story.adapt { height: auto; }
+  .adapt-pin { position: static; height: auto; }
+  .adapt .wave-stage { flex: none; max-height: none; aspect-ratio: 16 / 9; }
+}
+@media (max-height: 559px) and (max-width: 640px) {
+  .adapt .wave-stage { aspect-ratio: 4 / 5; }
+}
+
+/* ---------- 02 · The lesson (no longer on the page; assets/js/lesson.js is not loaded) ---------- */
+
+.lesson {
+  margin-top: clamp(40px, 5vw, 72px);
+  border-radius: 22px;
+  background: var(--bg-raised);
+  box-shadow: inset 0 0 0 1px var(--line), 0 40px 120px -60px rgba(164, 135, 234, 0.25);
+  overflow: hidden;
+}
+.lesson-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+  padding: 16px 20px 16px 26px;
+  border-bottom: 1px solid var(--line);
+}
+.lesson-crumb { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13.5px; color: var(--text-3); }
+.lesson-crumb span + span::before { content: '/'; margin-right: 10px; color: var(--text-4); }
+.lesson-crumb span:last-child { color: var(--text-2); }
+.lesson-modes { display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); }
+.lesson-modes button {
+  height: 34px; padding: 0 15px; border-radius: 999px;
+  font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap;
+  transition: background-color 0.35s var(--ease-out), color 0.35s;
+}
+.lesson-modes button:hover { color: var(--text); }
+.lesson-modes button[aria-pressed='true'] { background: var(--lavender); color: var(--lavender-ink); }
+
+.lesson-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(330px, 410px); }
+.lesson-stage {
+  position: relative; display: flex; flex-direction: column; justify-content: center;
+  margin: 0; padding: 18px 18px 52px; border-right: 1px solid var(--line); background: var(--bg);
+}
+.truss { display: block; width: 100%; height: auto; overflow: visible; touch-action: none; user-select: none; }
+.truss text { font-family: var(--font); }
+.stage-readout {
+  position: absolute; left: 26px; right: 26px; bottom: 18px;
+  font-size: 14px; color: var(--text-3); font-variant-numeric: tabular-nums;
+}
+
+.stage-grid path { stroke: rgba(255, 255, 255, 0.032); stroke-width: 1; }
+.abut { fill: url(#abut-hatch); stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; }
+.hatch-line { stroke: rgba(255, 255, 255, 0.075); stroke-width: 1.2; }
+.water { stroke: rgba(108, 200, 255, 0.28); stroke-width: 1.4; stroke-dasharray: 2 8; stroke-linecap: round; }
+.support, .support-line { fill: none; stroke: rgba(255, 255, 255, 0.6); stroke-width: 1.4; }
+.dims path { fill: none; stroke: rgba(255, 255, 255, 0.26); stroke-width: 1; }
+.dims text { fill: rgba(243, 243, 241, 0.5); font-size: calc(13px * var(--ui, 1)); letter-spacing: 0.06em; }
+.bar { stroke-linecap: round; }
+.chevrons { transition: none; }
+.chevrons path { fill: none; stroke-width: calc(1.7px * var(--ui, 1)); stroke-linecap: round; stroke-linejoin: round; }
+.flabel { font-size: calc(12.5px * var(--ui, 1)); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.flabel-squeeze { fill: #c4b2f6; }
+.flabel-stretch { fill: #8fd5ff; }
+.hardest { transition: opacity 0.4s; }
+.hardest path { stroke: var(--lime); stroke-width: calc(1.5px * var(--ui, 1)); }
+.hardest text { fill: var(--lime); font-size: calc(13px * var(--ui, 1)); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.joint { cursor: pointer; outline: none; }
+.joint-hit { fill: transparent; }
+.joint-ring { fill: var(--bg); stroke: rgba(255, 255, 255, 0.72); stroke-width: 1.3; transition: fill 0.3s, stroke 0.3s; }
+.joint-core { fill: #fff; transition: fill 0.3s; }
+.joint:hover .joint-ring { stroke: #fff; }
+.joint.is-selected .joint-ring { fill: var(--lime); stroke: var(--lime); }
+.joint.is-selected .joint-core { fill: var(--lime-ink); }
+.joint:focus-visible .joint-ring { stroke: var(--lavender-2); stroke-width: 3; }
+.fbd-arrow { fill: none; stroke-width: calc(2.2px * var(--ui, 1)); stroke-linecap: round; stroke-linejoin: round; }
+.fbd-arrow.squeeze { stroke: var(--lavender); }
+.fbd-arrow.stretch { stroke: #6cc8ff; }
+.fbd-arrow.load { stroke: #f3f3f1; }
+.fbd-arrow.reaction { stroke: rgba(243, 243, 241, 0.7); }
+.fbd-value { fill: var(--text-2); font-size: calc(13px * var(--ui, 1)); font-weight: 600; font-variant-numeric: tabular-nums; }
+.fbd-value.load { fill: var(--text); }
+.fbd-value.reaction { fill: var(--text-3); font-weight: 500; }
+
+.load { cursor: grab; outline: none; }
+.load-hit { fill: transparent; }
+.truss.is-narrow .dims { display: none; }
+.load.is-dragging { cursor: grabbing; }
+.load-pill { fill: #f3f3f1; transition: fill 0.35s; }
+.load-text { fill: var(--lime-ink); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; pointer-events: none; }
+.load-stem { fill: none; stroke: #f3f3f1; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.load-grip { fill: none; stroke: var(--lime); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity 0.4s; }
+.lesson[data-mode='experiment'] .load-pill { fill: var(--lime); }
+.lesson[data-mode='experiment'] .load-grip { opacity: 1; }
+.load:focus-visible .load-pill { stroke: var(--lavender-2); stroke-width: 4; }
+
+/* The panel beside the bridge. */
+.lesson-panel { display: flex; flex-direction: column; padding: 30px 30px 32px; }
+.lesson-title { font-size: clamp(25px, 2vw, 31px); font-weight: 700; line-height: 1.08; letter-spacing: -0.025em; }
+.lesson-body { margin-top: 22px; font-size: 16px; line-height: 1.6; color: var(--text-2); }
+.lesson-body > * + * { margin-top: 14px; }
+.lesson-body.is-in > * { animation: lesson-in 0.6s var(--ease-out) both; }
+.lesson-body.is-in > :nth-child(2) { animation-delay: 0.05s; }
+.lesson-body.is-in > :nth-child(3) { animation-delay: 0.1s; }
+.lesson-body.is-in > :nth-child(4) { animation-delay: 0.15s; }
+@keyframes lesson-in { from { opacity: 0; transform: translateY(8px); } }
+
+.check { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.check-q { font-size: 15px; font-weight: 600; color: var(--text); }
+.check-options { display: grid; gap: 8px; margin-top: 14px; }
+.check-options button, .feedback-options button {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 46px; padding: 0 16px; border-radius: 12px; text-align: left;
+  font-size: 15px; font-weight: 500; color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  transition: box-shadow 0.25s, background-color 0.25s, color 0.25s, transform 0.2s;
+}
+.check-options button:hover:not(:disabled), .feedback-options button:hover { box-shadow: inset 0 0 0 1px var(--line-3); background: rgba(255, 255, 255, 0.03); }
+.check-options button:disabled { cursor: default; color: var(--text-3); }
+.check-options button.is-picked:not(.is-right) { color: #ffb39c; box-shadow: inset 0 0 0 1px rgba(255, 139, 107, 0.5); }
+.check-options button.is-right { color: var(--text); box-shadow: inset 0 0 0 1px rgba(204, 250, 114, 0.55); }
+.check-options button.is-right::after { content: ''; width: 9px; height: 5px; border: solid var(--lime); border-width: 0 0 2px 2px; transform: rotate(-45deg) translateY(-2px); }
+.check-feedback { min-height: 1.6em; margin-top: 12px; font-size: 14.5px; color: var(--text-2); }
+.is-pressed { transform: scale(0.97); box-shadow: inset 0 0 0 1px var(--lavender-2) !important; background: var(--lavender-wash) !important; }
+
+.legend { display: grid; gap: 10px; }
+.legend li { display: grid; grid-template-columns: 28px auto; column-gap: 12px; font-size: 15px; line-height: 1.45; }
+.legend b { color: var(--text); font-weight: 600; }
+.legend li b + * , .legend li { color: var(--text-2); }
+.swatch { grid-row: span 2; width: 28px; height: 6px; margin-top: 9px; border-radius: 3px; }
+.swatch.squeeze { background: var(--lavender); }
+.swatch.stretch { background: #6cc8ff; }
+.aside { font-size: 14px; color: var(--text-3); }
+.feedback { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.feedback > p { font-size: 15px; font-weight: 600; color: var(--text); }
+.feedback-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+.feedback-options button { justify-content: center; }
+
+.task { display: flex; gap: 12px; align-items: baseline; font-size: 15.5px; font-weight: 600; color: var(--text); }
+.task-mark { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); }
+.meter { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; padding: 16px; border-radius: 14px; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
+.meter-label { font-size: 13px; color: var(--text-3); }
+.meter-value { font-size: 14px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.meter-bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.meter-bar span { display: block; height: 100%; border-radius: 3px; background: #6cc8ff; transition: width 0.25s var(--ease-out); }
+.weight { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; font-size: 14px; color: var(--text-3); }
+.weight input { width: 100%; accent-color: var(--lavender); }
+.weight output { min-width: 52px; text-align: right; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.task-result { padding: 14px 16px; border-radius: 12px; background: rgba(204, 250, 114, 0.08); box-shadow: inset 0 0 0 1px rgba(204, 250, 114, 0.28); font-size: 15px; color: var(--text); }
+.task-result.is-warn { background: rgba(255, 139, 107, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 139, 107, 0.35); }
+.btn-why {
+  align-self: flex-start; height: 44px; padding: 0 20px; border-radius: 999px;
+  background: var(--lime); color: var(--lime-ink); font-size: 15px; font-weight: 600;
+  transition: background-color 0.25s, transform 0.2s;
+}
+.btn-why:hover { background: var(--lime-hover); }
+
+.sums table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.sums caption { padding-bottom: 10px; text-align: left; font-size: 13px; color: var(--text-3); }
+.sums th, .sums td { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; text-align: right; }
+.sums th { text-align: left; font-weight: 500; color: var(--text); }
+.sums tbody th span { display: block; font-size: 12.5px; font-weight: 400; color: var(--text-3); }
+.sums thead th { font-size: 12px; font-weight: 500; color: var(--text-4); text-align: right; }
+.sums thead th:first-child { text-align: left; }
+.sums td { width: 64px; color: var(--text-2); }
+.sums tfoot th, .sums tfoot td { border-bottom: 0; padding-top: 10px; font-weight: 700; color: var(--lime); }
+
+/* What the tutor noticed and changed. */
+.lesson-trace { padding: 20px 24px 24px; border-top: 1px solid var(--line); }
+.trace-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.trace-title { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; }
+.trace-who { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 10px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); font-size: 13px; color: var(--text-2); }
+.trace-who-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+.lesson.is-sim .trace-who-dot { background: var(--lavender); animation: who-pulse 1.8s ease-in-out infinite; }
+@keyframes who-pulse { 50% { box-shadow: 0 0 0 5px rgba(164, 135, 234, 0.18); } }
+.trace-replay {
+  display: inline-flex; align-items: center; gap: 8px; margin-left: auto;
+  height: 36px; padding: 0 14px; border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line-2); font-size: 13.5px; font-weight: 500; color: var(--text-2);
+  transition: color 0.2s, box-shadow 0.2s;
+}
+.trace-replay svg { width: 15px; }
+.trace-replay:hover { color: var(--text); box-shadow: inset 0 0 0 1px var(--line-3); }
+.trace-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin-top: 18px; min-height: 132px; }
+.trace-item {
+  position: relative; display: flex; flex-direction: column; gap: 8px;
+  padding: 16px 18px 4px; border-left: 1px solid var(--line);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+}
+.trace-item:first-child { border-left: 0; padding-left: 0; }
+.trace-item::before { content: ''; position: absolute; left: 18px; right: 18px; top: 0; height: 2px; border-radius: 1px; background: var(--line-2); }
+.trace-item:first-child::before { left: 0; }
+.trace-item.is-latest::before { background: var(--lime); }
+.trace-item.is-in { opacity: 1; transform: none; }
+.trace-time { font-size: 12.5px; color: var(--text-4); font-variant-numeric: tabular-nums; }
+.trace-noticed, .trace-changed { font-size: 14.5px; line-height: 1.45; }
+.trace-noticed { color: var(--text-2); }
+.trace-changed { color: var(--text); }
+.trace-noticed span, .trace-changed span { display: block; margin-bottom: 2px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.trace-noticed span { color: var(--text-4); }
+.trace-changed span { color: var(--lavender-2); }
+
+/* ---------- 03 · Curiosity becomes capability ---------- */
+
+/* Sizes follow the approved reference, which is drawn 1024 px wide: --u is one reference pixel. The four images sit
+   on a shared baseline and grow taller from left to right, so their labels, and the path through the labels' markers,
+   climb with them. */
+.route {
+  --u: min(calc(100vw / 1024), 1.75px);
+  --col-gap: calc(25 * var(--u));
+  position: relative;
+  /* It sets its own top: a divider, then the heading the usual section space below the content above. */
+  margin-top: calc(var(--space-section) - 51 * var(--u));
+  padding-top: calc(51 * var(--u));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* The headline's light reaches past the edges of the screen on narrow ones; cut it there so the page can't widen. */
+  overflow-x: clip;
+}
+/* Where the section fits the window, it holds still while the path draws: route.js adds .is-pinned, the run after
+   the section gives the scroll distance (--route-hold, one window by default), and the section sticks with its
+   content centred in the window (--pin-top). */
+.route-run.is-pinned::after { content: ''; display: block; height: var(--route-hold, 100vh); }
+.route-run.is-pinned > .route { position: sticky; top: var(--pin-top, 0px); }
+.route-path { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+/* route.js measures the path by rewriting its shape. The reduced-motion rule in base.css gives everything a tiny
+   transition, which would make the shape lag and the measurements read the old one. */
+.route-path * { transition: none !important; }
+/* Only the drawn stretch of the path shows: the guide copy route.js measures along has no stroke. */
+.route-line { fill: none; stroke-linecap: round; }
+/* The lit stroke runs from Soft Gold into Periwinkle along the path, on the ramp the hero's button uses, and glows
+   periwinkle like the hero's word and edge light. */
+.route-line-lit { stroke: url(#route-sheen); stroke-width: 1.6; }
+.route-sheen stop:nth-child(1) { stop-color: var(--gold); }
+.route-sheen stop:nth-child(2) { stop-color: #efe3ad; }
+.route-sheen stop:nth-child(3) { stop-color: #c6c2e8; }
+.route-sheen stop:nth-child(4) { stop-color: #a4acef; }
+.route-sheen stop:nth-child(5) { stop-color: var(--periwinkle); }
+/* The glow (route.js): a blurred layer under the path with a wide periwinkle wash and a tighter copy of the lit
+   stroke, a brighter trail fading back from the leading point, and a bloom inside a wider aura around it, where a
+   small bright tip rides the stroke itself. */
+.route-halo { filter: blur(4px); }
+.route-line-wash { stroke: var(--periwinkle); stroke-width: 14; opacity: 0.2; }
+.route-line-glow { stroke: url(#route-sheen); stroke-width: 4; opacity: 0.6; }
+.route-line-trail { stroke: url(#route-trail-fade); stroke-width: 6; }
+.route-trail-from { stop-color: #aab1ef; stop-opacity: 0; }
+.route-trail-to { stop-color: #f7f0d2; stop-opacity: 0.9; }
+.route-aura { fill: url(#route-aura-fade); }
+.route-aura-core { stop-color: #f7f0d2; stop-opacity: 0.5; }
+.route-aura-mid { stop-color: var(--periwinkle); stop-opacity: 0.24; }
+.route-aura-edge { stop-color: var(--periwinkle); stop-opacity: 0; }
+.route-bloom { fill: #f7f0d2; }
+.route-tip { fill: #fffdf6; }
+
+.route-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: auto auto auto auto;
+  column-gap: var(--col-gap);
+}
+/* Like the hero, the headline runs as one line and its last word takes the hero's outlined accent
+   (.hero-title-accent in home.css), so the two headlines change together. */
+.route-head { display: contents; }
+.route-title { position: relative; z-index: 0; grid-area: 1 / 1 / 2 / 5; font-size: calc(60.5 * var(--u)); font-weight: 900; line-height: 0.91; letter-spacing: -0.05em; white-space: nowrap; }
+/* "capability." is lit by the path, whose leading point is the light. route.js sets where the light sits against the
+   word (--lx, --ly) and how strongly it reaches it (--k, falling off with distance). Everything the light does is drawn
+   with copies of the word that keep the accent's own class, so each part takes the colour of the letters it comes
+   from, drifting with them: gold where they are gold, periwinkle where they are periwinkle. Behind the word, a soft
+   glow, and rays streaming off the letters away from the light, like light through the frames of a window: copies
+   filled with the accent's light, each scaled a little further out from the light, blurred and fainter, so only what
+   clears the dark letters shows. Over the word, the outline nearest the light burns brighter (the rim). Once the light
+   has passed, the glow grows (--lit, 0 to 1). Without the script the word keeps the hero's glow and outline. */
+.route-title .hero-title-accent:not(.route-copy) { display: inline-grid; }
+.route.is-live .route-title .hero-title-accent:not(.route-copy) { filter: none; }
+.route-title :is(.route-rays, .route-copy) { position: absolute; display: block; pointer-events: none; white-space: nowrap; }
+/* The accent's negative margins would move a copy off the word. */
+.route-title .route-copy { margin: 0; }
+.route-title :is(.route-glow, .route-rim) { left: var(--x); top: var(--y); }
+.route-title :is(.route-glow, .route-rays > .route-copy) { -webkit-text-fill-color: transparent; }
+.route-title .route-glow { z-index: -1; filter: blur(0.07em); opacity: 0.5; }
+.route-title .route-glow-wide { filter: blur(0.22em); opacity: calc(0.6 * var(--lit, 0)); }
+.route-title .route-rays {
+  z-index: -1;
+  left: calc(var(--x) - 2em); top: calc(var(--y) - 2em); width: calc(var(--w) + 4em); height: calc(var(--h) + 4em);
+  opacity: var(--k, 0);
+  -webkit-mask: radial-gradient(circle at calc(var(--lx) + 2em) calc(var(--ly) + 2em), #000, rgb(0 0 0 / 0.5) 2.5em, transparent 5.5em);
+  mask: radial-gradient(circle at calc(var(--lx) + 2em) calc(var(--ly) + 2em), #000, rgb(0 0 0 / 0.5) 2.5em, transparent 5.5em);
+}
+.route-title .route-rays > .route-copy {
+  left: 2em; top: 2em;
+  opacity: var(--a);
+  filter: blur(var(--b));
+  transform: scale(var(--s));
+  transform-origin: var(--lx) var(--ly);
+  will-change: transform;
+}
+.route-title .route-rim {
+  opacity: var(--k, 0);
+  filter: brightness(1.55);
+  -webkit-mask: radial-gradient(circle at var(--lx) var(--ly), #000, rgb(0 0 0 / 0.45) 1.2em, transparent 2.6em);
+  mask: radial-gradient(circle at var(--lx) var(--ly), #000, rgb(0 0 0 / 0.45) 1.2em, transparent 2.6em);
+}
+.route-lede { grid-area: 2 / 1 / 3 / 3; margin-top: calc(17 * var(--u)); padding-bottom: calc(18 * var(--u)); font-size: calc(15.6 * var(--u)); font-weight: 300; line-height: calc(23.3 * var(--u)); color: var(--text-2); }
+
+/* The list shares the section grid, so stages 3 and 4 can rise beside the description. Its top padding holds them
+   (and the path leaving the last marker) clear of the headline's descenders without moving the description. */
+.route-stages { grid-area: 2 / 1 / 5 / 5; display: grid; grid-template-columns: subgrid; grid-template-rows: subgrid; padding-top: calc(50 * var(--u)); pointer-events: none; }
+.route-stage { display: grid; grid-template-rows: subgrid; grid-row: 2 / 4; pointer-events: auto; }
+.route-stage:nth-child(1) { grid-column: 1; }
+.route-stage:nth-child(2) { grid-column: 2; }
+.route-stage:nth-child(3) { grid-column: 3; grid-row: 1 / 4; }
+.route-stage:nth-child(4) { grid-column: 4; grid-row: 1 / 4; }
+.stage-visual { position: relative; grid-row: 1 / -2; align-self: end; }
+.stage-copy { position: relative; grid-row: -2 / -1; padding: calc(17 * var(--u)) calc(12 * var(--u)) 0; }
+
+.stage-label { position: relative; display: flex; flex-direction: column; align-items: flex-start; margin-left: calc(40 * var(--u)); padding-bottom: calc(9 * var(--u)); font-weight: inherit; }
+.stage-num { position: relative; font-size: calc(15.6 * var(--u)); font-weight: 300; line-height: 1.05; letter-spacing: 0.01em; color: var(--text-2); }
+.stage-name { font-size: calc(18.5 * var(--u)); font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; color: var(--text); }
+
+/* Markers are lit by default; once route.js is running, each lights as the path reaches it, in the path's colour
+   where it passes (--tint, from the same ramp). */
+.route-stage:nth-child(1) { --tint: #eada93; }
+.route-stage:nth-child(2) { --tint: #eee1a8; }
+.route-stage:nth-child(3) { --tint: #d0cad9; }
+.route-stage:nth-child(4) { --tint: #a8aeee; }
+.stage-marker {
+  position: absolute; left: 50%; top: calc(-15 * var(--u));
+  width: calc(16 * var(--u)); height: calc(16 * var(--u)); margin: calc(-8 * var(--u)) 0 0 calc(-8 * var(--u));
+  border-radius: 50%;
+  background: #0c0d16;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 60%, transparent), 0 0 calc(10 * var(--u)) rgba(124, 135, 221, 0.35);
+  transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+}
+.stage-marker::after {
+  content: ''; position: absolute; inset: 0; margin: auto;
+  width: calc(7.5 * var(--u)); height: calc(7.5 * var(--u)); border-radius: 50%;
+  background: var(--tint);
+  box-shadow: 0 0 calc(5 * var(--u)) color-mix(in srgb, var(--tint) 70%, transparent);
+  transition: transform 0.5s var(--ease-out), background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+}
+.route.is-live .route-stage:not(.is-reached) .stage-marker { background: var(--bg); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.route.is-live .route-stage:not(.is-reached) .stage-marker::after { background: rgba(255, 255, 255, 0.32); box-shadow: none; transform: scale(0.55); }
+
+/* Each stage, with its marker and the divider before it, stays hidden until the path comes to it: route.js
+   sets --reveal (0 to 1) on the stage from the scroll position, so it appears over the stretch of path leading to its
+   marker and is fully shown as the stroke arrives. */
+.route.is-live .route-stage { opacity: var(--reveal, 1); }
+
+.stage-media { position: relative; aspect-ratio: var(--ratio); border-radius: calc(6 * var(--u)); overflow: hidden; background: var(--surface); }
+.stage-media img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus); }
+.stage-media::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); pointer-events: none; }
+
+/* Hairlines between the columns, in the middle of each gap. */
+.route-stage + .route-stage .stage-visual::before,
+.route-stage + .route-stage .stage-copy::before {
+  content: ''; position: absolute; left: calc(var(--col-gap) / -2); width: 1px; background: rgba(255, 255, 255, 0.1);
+}
+.route-stage + .route-stage .stage-visual::before { top: calc(26 * var(--u)); bottom: 0; }
+.route-stage + .route-stage .stage-copy::before { top: 0; bottom: 0; }
+
+.stage-title { font-size: calc(14.8 * var(--u)); font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; color: var(--text); }
+.stage-text { margin-top: calc(6 * var(--u)); font-size: calc(13.4 * var(--u)); line-height: calc(18.5 * var(--u)); color: var(--text-3); }
+
+/* 04 · Closing: its own stylesheet, finale.css. */
+
+.home-footer {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 18px 40px;
+  /* It stands inside the closing scene: finale.css sets its margin and drops the rule. */
+  padding-top: 28px; padding-bottom: 40px;
+}
+.home-footer .wordmark svg { width: 103px; }
+.home-footer-nav { display: flex; gap: 26px; font-size: 14.5px; color: var(--text-2); }
+.home-footer-nav a:hover { color: var(--text); }
+.home-footer-note { margin-left: auto; max-width: 52ch; font-size: 13.5px; color: var(--text-4); }
+
+/* Section heads, copy and stages ease in as they come into view: data-reveal, in base.css and site.js. */
+
+/* ---------- Narrower screens ---------- */
+
+@media (max-width: 1240px) {
+  .lesson-main { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); }
+  .trace-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .trace-item:nth-child(-n + 2):not(:nth-last-child(-n + 3)) { display: none; }
+}
+
+@media (max-width: 1079px) {
+  .story { padding-top: var(--space-section); }
+  .story-head { grid-template-columns: 1fr; grid-template-areas: 'title' 'side'; gap: 20px; }
+  .story-title { font-size: clamp(42px, 11.5vw, 76px); }
+  .lesson { margin-top: 36px; border-radius: 18px; }
+  .wave-stage { margin-top: 36px; border-radius: 18px; }
+  .lesson-bar { padding: 14px 16px; }
+  .lesson-modes { width: 100%; overflow-x: auto; scrollbar-width: none; }
+  .lesson-modes button { flex: 1; }
+  .lesson-main { grid-template-columns: 1fr; }
+  .lesson-stage { padding: 10px 8px 50px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .lesson-stage { padding-bottom: 16px; }
+  .stage-readout { position: static; margin: 14px 8px 0; font-size: 13.5px; }
+  .lesson-panel { padding: 24px 20px 26px; }
+  .lesson-trace { padding: 18px 20px 22px; }
+  .trace-replay { margin-left: 0; }
+  .trace-list { grid-template-columns: 1fr; min-height: 0; }
+  .trace-item, .trace-item:first-child { padding: 14px 0 12px; border-left: 0; border-top: 1px solid var(--line); }
+  .trace-item::before, .trace-item:first-child::before { left: 0; right: auto; top: -1px; width: 48px; }
+  .trace-item:nth-child(-n + 2):not(:nth-last-child(-n + 3)) { display: flex; }
+
+  /* Stacked: one column, the path runs down a rail beside the stages, and every image is shown whole at 3:2. */
+  .route { margin-top: calc(var(--space-section) - 72px); padding-top: 72px; }
+  .route-grid { display: block; }
+  .route-title { font-size: clamp(44px, 14.4vw, 76px); line-height: 0.88; white-space: normal; }
+  .route-title span { display: block; }
+  .route-title .hero-title-accent:not(.route-copy) { display: grid; width: fit-content; }
+  .route-lede { margin-top: 20px; padding-bottom: 0; font-size: 18px; line-height: 1.45; }
+  .br-route { display: none; }
+  .route-stages { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 52px; max-width: 620px; margin-top: 52px; padding: 0 0 0 40px; }
+  .route-stage, .route-stage:nth-child(n) { display: block; grid-column: 1; grid-row: auto; }
+  .stage-copy { padding: 18px 0 0; }
+  .stage-label { flex-direction: row; align-items: baseline; gap: 12px; margin-left: 0; padding-bottom: 14px; }
+  .stage-num { font-size: 18px; }
+  .stage-name { font-size: 22px; }
+  /* The rail runs the whole ramp, so the later markers sit further into Periwinkle. */
+  .route-stage:nth-child(3) { --tint: #bebdea; }
+  .route-stage:nth-child(4) { --tint: #7c87dd; }
+  .stage-marker { left: -29px; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; }
+  .stage-marker::after { width: 9px; height: 9px; }
+  .stage-media { aspect-ratio: 3 / 2; border-radius: 8px; }
+  .stage-media img { object-position: var(--focus-stacked, 50% 50%); }
+  .route-stage + .route-stage .stage-visual::before,
+  .route-stage + .route-stage .stage-copy::before { display: none; }
+  .stage-title { font-size: 19px; }
+  .stage-text { margin-top: 6px; font-size: 16px; line-height: 1.5; }
+
+  .home-footer-note { margin-left: 0; }
+}

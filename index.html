@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CATION · Make sense of anything</title>
+  <meta name="description" content="CATION is an interactive STEM learning space. Choose science, technology, engineering or mathematics and start where your curiosity begins.">
+  <meta name="theme-color" content="#090b0d">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+  <link rel="stylesheet" href="assets/css/home-sections.css">
+  <link rel="stylesheet" href="assets/css/personal.css">
+  <link rel="stylesheet" href="assets/css/finale.css">
+  <!-- Three.js for the optics stage, pinned to an exact release (MIT). The sound surface loads its own in its frame. -->
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+  <script type="module" src="assets/js/site.js"></script>
+  <script type="module" src="assets/js/home.js"></script>
+  <script type="module" src="assets/js/route.js"></script>
+  <script type="module" src="assets/js/personal/main.js"></script>
+  <script type="module" src="assets/js/finale.js"></script>
+</head>
+<body class="page-home">
+  <a class="skip-link" href="#disciplines">Skip to the four disciplines</a>
+
+  <header class="site-header">
+    <a class="wordmark" href="index.html" aria-label="CATION home">
+      <svg viewBox="0 0 140 22" aria-hidden="true"><path d="M19.29 3.01A11.3 11.3 0 1 0 19.29 18.99M27.5 22 38 0 48.5 22M30.6 15.5h14.8M49 0h19M58.5 0v22M79 0v22M123 22V0l17 22V0"/><circle cx="103" cy="11" r="11.3"/></svg>
+    </a>
+    <nav class="primary-nav" aria-label="Primary">
+      <a href="explore/index.html">Explore</a>
+      <a href="programs/index.html">Programs</a>
+      <a href="about/index.html">About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-link" href="explore/index.html#search" aria-label="Search subjects">
+        <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9.5" cy="9.5" r="7"/><path d="m14.6 14.6 5.4 5.4" stroke-linecap="round"/></svg>
+      </a>
+      <a class="btn btn-lime" href="explore/index.html">Start learning <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.5M9 3.5 13.5 8 9 12.5"/></svg></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu-sheet"><span></span><span class="visually-hidden">Menu</span></button>
+    </div>
+  </header>
+  <div class="menu-sheet" id="menu-sheet">
+    <nav aria-label="Primary">
+      <a href="explore/index.html">Explore <span aria-hidden="true">→</span></a>
+      <a href="programs/index.html">Programs <span aria-hidden="true">→</span></a>
+      <a href="about/index.html">About <span aria-hidden="true">→</span></a>
+    </nav>
+    <a class="btn btn-lime" href="explore/index.html">Start learning</a>
+  </div>
+
+  <main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 class="hero-title" id="hero-title" data-reveal>Make <span>sense of</span> <span class="hero-title-accent">anything.</span></h1>
+      <p class="hero-lede" data-reveal><span class="hero-lede-text"><span class="hero-lede-lead">Interactive lessons that adapt to you.</span> Learn STEM by running real models, testing ideas and seeing what happens. When an explanation isn’t landing, the lesson changes how it teaches.</span></p>
+      <a class="btn btn-lime hero-cta" href="#adaptive" data-reveal>Try a lesson for free <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.5M9 3.5 13.5 8 9 12.5"/></svg></a>
+      <!-- What CATION covers, counted from content/site.json. Course outlines are published; lessons are in development. -->
+      <ul class="hero-facts" aria-label="What CATION covers" data-reveal>
+        <li><strong>16</strong> subjects</li>
+        <li><strong>12</strong> course outlines</li>
+        <li><strong>4</strong> programs</li>
+      </ul>
+      <!-- Placeholder rating for the concept: there are no learner ratings yet. Replace the figure with a
+           real one, or remove this, before the page is shown as fact. -->
+      <p class="hero-rating" data-reveal><span class="hero-stars" role="img" aria-label="Rated 4.9 out of 5"><svg viewBox="0 0 20 20"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg><svg viewBox="0 0 20 20"><path d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"/></svg></span><span class="hero-rating-score">4.9</span><span class="hero-rating-label">learner rating</span></p>
+    </div>
+
+    <!-- Artwork lives in /assets/art. Each slot is a 1600×2000 (4:5) WebP plus an 800×1000 copy; the panels use
+         the Soft Gold and Periwinkle graded copies (<slot>-graded-*.webp, made by cation/exports/panel-grade).
+         --focus is the object-position used when a panel is cropped to a narrow strip. -->
+    <nav class="disciplines" id="disciplines" aria-label="Choose a discipline">
+      <ul class="panels">
+        <li class="panel" data-slot="science" style="--focus: 46% 45%" data-reveal="media">
+          <a class="panel-link" href="science/index.html">
+            <span class="panel-art"><img src="assets/art/science-graded-800.webp" srcset="assets/art/science-graded-800.webp 800w, assets/art/science-graded-1600.webp 1600w" sizes="(min-width: 1080px) 42vw, 100vw" alt="" decoding="async" fetchpriority="high"></span>
+            <span class="panel-shade" aria-hidden="true"></span>
+            <span class="panel-label"><span class="panel-name">Science</span><span class="visually-hidden">: physics, chemistry, life and earth sciences</span></span>
+            <span class="panel-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+          </a>
+        </li>
+        <li class="panel" data-slot="technology" style="--focus: 50% 47%" data-reveal="media">
+          <a class="panel-link" href="technology/index.html">
+            <span class="panel-art"><img src="assets/art/technology-graded-800.webp" srcset="assets/art/technology-graded-800.webp 800w, assets/art/technology-graded-1600.webp 1600w" sizes="(min-width: 1080px) 42vw, 100vw" alt="" decoding="async"></span>
+            <span class="panel-shade" aria-hidden="true"></span>
+            <span class="panel-label"><span class="panel-name">Technology</span><span class="visually-hidden">: computing, data, networks and AI</span></span>
+            <span class="panel-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+          </a>
+        </li>
+        <li class="panel" data-slot="engineering" style="--focus: 50% 46%" data-reveal="media">
+          <a class="panel-link" href="engineering/index.html">
+            <span class="panel-art"><img src="assets/art/engineering-graded-800.webp" srcset="assets/art/engineering-graded-800.webp 800w, assets/art/engineering-graded-1600.webp 1600w" sizes="(min-width: 1080px) 42vw, 100vw" alt="" decoding="async"></span>
+            <span class="panel-shade" aria-hidden="true"></span>
+            <span class="panel-label"><span class="panel-name">Engineering</span><span class="visually-hidden">: structures, mechanics, electronics and design</span></span>
+            <span class="panel-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+          </a>
+        </li>
+        <li class="panel" data-slot="mathematics" style="--focus: 50% 52%" data-reveal="media">
+          <a class="panel-link" href="mathematics/index.html">
+            <span class="panel-art"><img src="assets/art/mathematics-graded-800.webp" srcset="assets/art/mathematics-graded-800.webp 800w, assets/art/mathematics-graded-1600.webp 1600w" sizes="(min-width: 1080px) 42vw, 100vw" alt="" decoding="async"></span>
+            <span class="panel-shade" aria-hidden="true"></span>
+            <span class="panel-label"><span class="panel-name">Mathematics</span><span class="visually-hidden">: number, algebra, geometry, calculus and statistics</span></span>
+            <span class="panel-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg></span>
+          </a>
+        </li>
+      </ul>
+      <svg class="panel-rims" aria-hidden="true" data-reveal="fade">
+        <defs>
+          <!-- Autoplay's hand-over drop (home.js): translucent glass, darker above and frosted below, its
+               free surface catching the light in purples. -->
+          <linearGradient id="drop-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14162c" stop-opacity="0.78"/><stop offset="0.45" stop-color="#6c76c4" stop-opacity="0.7"/><stop offset="1" stop-color="#f6efcf" stop-opacity="0.9"/></linearGradient>
+          <linearGradient id="drop-prism" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7c87dd"/><stop offset="0.35" stop-color="#aeb5f0"/><stop offset="0.55" stop-color="#f7f0d2"/><stop offset="0.75" stop-color="#e9d78b"/><stop offset="1" stop-color="#7c87dd"/></linearGradient>
+          <radialGradient id="divot-glow"><stop offset="0" stop-color="#f7f0d2" stop-opacity="0.75"/><stop offset="0.45" stop-color="#e9d78b" stop-opacity="0.28"/><stop offset="1" stop-color="#e9d78b" stop-opacity="0"/></radialGradient>
+        </defs>
+      </svg>
+    </nav>
+  </section>
+
+  <!-- 02 · Interactive Mechanics in Action, a CATION lesson. The experiment is "Can sound cancel sound?", a live
+       one (assets/sound/, a copy of cation/art/sound).
+       Two wave sources on a pearlescent surface, rendered by a shader. The section is a scroll track that pins
+       the heading and the experiment (data-lesson-track, data-lesson-pin); scrolling through it moves the camera
+       in to the midpoint between the sources and turns source B from in step to opposite, then hands the visitor
+       the phase slider (assets/sound/js/lesson.js). The bridge lesson it replaced is still in assets/js/lesson.js,
+       no longer loaded. -->
+  <section class="story adapt" id="adaptive" aria-labelledby="adapt-title" data-lesson-track>
+    <div class="adapt-pin" data-lesson-pin>
+      <header class="story-head">
+        <div class="story-main" data-reveal>
+          <h2 class="story-title" id="adapt-title">Interactive Mechanics in Action</h2>
+        </div>
+        <div class="story-side" data-reveal>
+          <p class="story-lede">Beyond static text. We create models to make complex science completely intuitive.</p>
+        </div>
+      </header>
+
+      <div class="wave-stage" data-reveal>
+        <iframe class="wave-frame" src="assets/sound/surface.html" loading="lazy" title="Lesson: two wave sources on a rippling surface, standing in for sound. Scroll to move closer to the point halfway between them, where the waves add when in step and cancel when opposite, then change the phase of source B yourself."></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- After 02 · Learning personalized to you: one optics question, "Why does light bend in glass?", taught in different
+       ways. The stage is a live Three.js scene (assets/js/personal/): white light traced with Snell's law at 24
+       wavelengths through a flint prism; one slider sets the angle of incidence. The five method icons are inline SVG
+       pictograms of the learning styles (cube, compass, chart, steps, conversation).
+       Choosing a method (up to two) changes the lesson in the caption: assets/js/personal/methods.js. -->
+  <section class="story pz" id="personal" aria-labelledby="pz-title">
+    <header class="pz-head">
+      <h2 class="pz-title" id="pz-title" data-reveal>Learning personalized <span class="pz-accent">to you.</span></h2>
+      <p class="pz-lede" data-reveal>One concept, taught in different ways.</p>
+    </header>
+
+    <div class="pz-grid">
+      <figure class="stage" aria-labelledby="stage-title" data-reveal>
+        <div class="stage-view">
+          <canvas class="stage-canvas" role="img" aria-label="A white beam of light enters a glass prism, bends towards the normal, and leaves on the far side split into a spectrum that lands on the floor."></canvas>
+          <div class="stage-labels" aria-hidden="true">
+            <span class="tag tag-angle" data-label="theta1"><i>θ<sub>1</sub></i><b data-v="theta1">54.1°</b></span>
+            <span class="tag tag-angle" data-label="theta2"><i>θ<sub>2</sub></i><b data-v="theta2">30.0°</b></span>
+            <span class="tag tag-medium" data-label="air"><span>Air</span><b>n = 1.00</b></span>
+            <span class="tag tag-medium" data-label="glass"><span data-v="glassName">Flint glass</span><b data-v="glassN">n = 1.62</b></span>
+          </div>
+          <p class="stage-hint" aria-hidden="true">Drag to turn</p>
+        </div>
+        <label class="stage-angle">
+          <span class="stage-angle-head"><span>Angle of incidence</span><output data-v="thetaOut">54.1°</output></span>
+          <input type="range" min="0" max="85" step="0.1" value="54.1" data-ctl="theta">
+        </label>
+        <div class="stage-room" aria-hidden="true"></div>
+        <figcaption class="stage-copy">
+          <h3 class="stage-title" id="stage-title">Why does light bend in glass?</h3>
+          <div class="stage-lesson" aria-live="polite"><p class="stage-text">Light travels more slowly in glass than in air. Crossing the surface at an angle, it changes direction.</p></div>
+        </figcaption>
+      </figure>
+
+      <div class="methods">
+        <p class="methods-head" id="methods-head" data-reveal>Choose up to two ways to learn it</p>
+        <div class="methods-list" role="group" aria-labelledby="methods-head">
+          <button type="button" class="method" data-ap="visual" aria-pressed="true" data-reveal>
+            <span class="method-art" aria-hidden="true"><svg class="mi" viewBox="0 0 32 32"><path class="mi-accent mi-face" d="M16 4.5 26 10.25 16 16 6 10.25Z"/><path d="M16 4.5 26 10.25V21.75L16 27.5 6 21.75V10.25ZM6 10.25 16 16 26 10.25M16 16V27.5"/></svg></span>
+            <span class="method-name">Visual &amp; spatial</span>
+            <span class="method-tick" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m5.5 10.4 3 3 6-6.6"/></svg></span>
+          </button>
+          <button type="button" class="method" data-ap="exploratory" aria-pressed="false" data-reveal>
+            <span class="method-art" aria-hidden="true"><svg class="mi" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path class="mi-accent mi-solid" d="M21.3 10.7 18.5 18.5 13.5 13.5Z"/><path d="M21.3 10.7 18.5 18.5 10.7 21.3 13.5 13.5Z"/></svg></span>
+            <span class="method-name">Exploratory</span>
+            <span class="method-tick" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m5.5 10.4 3 3 6-6.6"/></svg></span>
+          </button>
+          <button type="button" class="method" data-ap="analytical" aria-pressed="false" data-reveal>
+            <span class="method-art" aria-hidden="true"><svg class="mi" viewBox="0 0 32 32"><path d="M5 5V27H27"/><path class="mi-accent mi-line" d="M9.5 21 14 15.5 18.5 18.5 25 9"/><circle class="mi-dot" cx="9.5" cy="21" r="1.6"/><circle class="mi-dot" cx="14" cy="15.5" r="1.6"/><circle class="mi-dot" cx="18.5" cy="18.5" r="1.6"/><circle class="mi-dot" cx="25" cy="9" r="1.6"/></svg></span>
+            <span class="method-name">Analytical</span>
+            <span class="method-tick" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m5.5 10.4 3 3 6-6.6"/></svg></span>
+          </button>
+          <button type="button" class="method" data-ap="structured" aria-pressed="false" data-reveal>
+            <span class="method-art" aria-hidden="true"><svg class="mi" viewBox="0 0 32 32"><circle class="mi-accent mi-solid" cx="7.5" cy="7.5" r="2.5"/><circle class="mi-accent mi-solid" cx="7.5" cy="16" r="2.5"/><circle cx="7.5" cy="24.5" r="2.5"/><path d="M7.5 10V13.5M7.5 18.5V22M13.5 7.5H26M13.5 16H23M13.5 24.5H25"/></svg></span>
+            <span class="method-name">Structured</span>
+            <span class="method-tick" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m5.5 10.4 3 3 6-6.6"/></svg></span>
+          </button>
+          <button type="button" class="method" data-ap="conversational" aria-pressed="false" data-reveal>
+            <span class="method-art" aria-hidden="true"><svg class="mi" viewBox="0 0 32 32"><path d="M8 4.5H20A3.5 3.5 0 0 1 23.5 8V14A3.5 3.5 0 0 1 20 17.5H9.5L5.5 21V17A3.5 3.5 0 0 1 4.5 14V8A3.5 3.5 0 0 1 8 4.5Z"/><path class="mi-accent mi-bubble" d="M13 12.5H24A3.5 3.5 0 0 1 27.5 16V22A3.5 3.5 0 0 1 26.5 24.5V28.5L22.5 25.5H13A3.5 3.5 0 0 1 9.5 22V16A3.5 3.5 0 0 1 13 12.5Z"/><path class="mi-talk" d="M14.5 19H14.6M18.5 19H18.6M22.5 19H22.6"/></svg></span>
+            <span class="method-name">Conversational</span>
+            <span class="method-tick" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="m5.5 10.4 3 3 6-6.6"/></svg></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- What personalised teaching is for, in two figures. Placeholders for the concept: CATION has measured
+         neither yet. Replace them with real results, or remove this, before the page is shown as fact (as with the
+         hero's rating). Both are data attributes on .pz-proof; target.js draws the bars from them. -->
+    <div class="pz-proof" data-cut="42" data-retain="2.7">
+      <div class="pz-figures">
+        <p class="pz-fig" data-reveal><span class="pz-fig-num"><span data-fig="cut">42</span><span class="hero-title-accent">%</span></span><span class="pz-fig-label">less time to reach the same mastery.</span></p>
+        <p class="pz-fig" data-reveal><span class="pz-fig-num"><span data-fig="retain">2.7</span><span class="hero-title-accent">×</span></span><span class="pz-fig-label">more remembered a month later.</span></p>
+      </div>
+      <div class="pz-bars" data-reveal>
+        <div class="pz-bar-group" role="img" data-group="cut" aria-label="Time to mastery: conventional learning 100, with CATION 58.">
+          <p class="pz-bar-title">Time to mastery</p>
+          <div class="pz-bar"><span class="pz-bar-name">Conventional</span><span class="pz-bar-track"><span class="pz-bar-fill" style="--v: 1"></span></span><span class="pz-bar-value">100</span></div>
+          <div class="pz-bar is-cation"><span class="pz-bar-name">With CATION</span><span class="pz-bar-track"><span class="pz-bar-fill" style="--v: 0.58"></span></span><span class="pz-bar-value">58</span></div>
+        </div>
+        <div class="pz-bar-group" role="img" data-group="retain" aria-label="Remembered a month later: conventional learning 1 times, with CATION 2.7 times.">
+          <p class="pz-bar-title">Remembered a month later</p>
+          <div class="pz-bar"><span class="pz-bar-name">Conventional</span><span class="pz-bar-track"><span class="pz-bar-fill" style="--v: 0.37"></span></span><span class="pz-bar-value">1×</span></div>
+          <div class="pz-bar is-cation"><span class="pz-bar-name">With CATION</span><span class="pz-bar-track"><span class="pz-bar-fill" style="--v: 1"></span></span><span class="pz-bar-value">2.7×</span></div>
+        </div>
+        <p class="story-note"><span aria-hidden="true"></span>Time to mastery is relative to conventional learning: lower is better.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Curiosity becomes capability: four stages of one structural-engineering thread, from a question to a
+       design. The gold-to-periwinkle path is drawn by assets/js/route.js and fills as the section scrolls past;
+       each marker lights when the path reaches it. On wide screens .route-run holds the section still while the
+       path draws. Stage images live in assets/stages/; Ask and Apply are built from licensed Unsplash photos. -->
+  <div class="route-run">
+    <section class="story route" id="route" aria-labelledby="route-title">
+      <svg class="route-path" aria-hidden="true"></svg>
+      <div class="route-grid">
+        <header class="route-head">
+          <h2 class="route-title" id="route-title" data-reveal><span>Curiosity</span> <span>becomes</span> <span class="hero-title-accent">capability.</span></h2>
+          <p class="route-lede" data-reveal>Your next challenge adjusts<br class="br-route"> as you progress.</p>
+        </header>
+        <ol class="route-stages">
+          <li class="route-stage" style="--ratio: 3 / 2; --focus: 50% 50%">
+            <div class="stage-visual">
+              <h3 class="stage-label"><span class="stage-num">01<span class="stage-marker" aria-hidden="true"></span></span><span class="stage-name">Ask</span></h3>
+              <figure class="stage-media"><img src="assets/stages/ask.jpg" width="3000" height="2000" alt="The Bay Bridge in San Francisco, its towers receding across the water under a pale evening sky." loading="lazy" decoding="async"></figure>
+            </div>
+            <div class="stage-copy">
+              <p class="stage-title">Why do bridges stay up?</p>
+              <p class="stage-text">Start with a real question<br class="br-route"> from the world around you.</p>
+            </div>
+          </li>
+          <li class="route-stage" style="--ratio: 4 / 3; --focus: 50% 50%">
+            <div class="stage-visual">
+              <h3 class="stage-label"><span class="stage-num">02<span class="stage-marker" aria-hidden="true"></span></span><span class="stage-name">Understand</span></h3>
+              <figure class="stage-media"><img src="assets/stages/understand.png" width="1536" height="1024" alt="A truss diagram: arrows mark compression along the top chord and tension along the bottom." loading="lazy" decoding="async"></figure>
+            </div>
+            <div class="stage-copy">
+              <p class="stage-title">Explore the forces at work.</p>
+              <p class="stage-text">Learn how tension and<br class="br-route"> compression keep structures<br class="br-route"> stable.</p>
+            </div>
+          </li>
+          <li class="route-stage" style="--ratio: 1 / 1; --focus: 85% 50%">
+            <div class="stage-visual">
+              <h3 class="stage-label"><span class="stage-num">03<span class="stage-marker" aria-hidden="true"></span></span><span class="stage-name">Experiment</span></h3>
+              <figure class="stage-media"><img src="assets/stages/experiment.png" width="1536" height="1024" alt="An illustrative simulation: a stress map of a loaded truss above a load and displacement curve." loading="lazy" decoding="async"></figure>
+            </div>
+            <div class="stage-copy">
+              <p class="stage-title">Test and see what happens.</p>
+              <p class="stage-text">Run simulations, adjust<br class="br-route"> variables, and discover<br class="br-route"> the limits.</p>
+            </div>
+          </li>
+          <li class="route-stage" style="--ratio: 4 / 5; --focus: 50% 50%; --focus-stacked: 50% 35%">
+            <div class="stage-visual">
+              <h3 class="stage-label"><span class="stage-num">04<span class="stage-marker" aria-hidden="true"></span></span><span class="stage-name">Apply</span></h3>
+              <figure class="stage-media"><img src="assets/stages/apply.jpg" width="2698" height="2449" alt="A cable-stayed bridge split down its tower: the left half drawn as a blueprint, the right half photographed at sunset." loading="lazy" decoding="async"></figure>
+            </div>
+            <div class="stage-copy">
+              <p class="stage-title">Design a solution.</p>
+              <p class="stage-text">Apply what you’ve learned<br class="br-route"> to build and test your<br class="br-route"> own model.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </div>
+
+  <!-- 04 · Closing: Concept 4, "Abstract Convergence" (cation/art/closing/reference-concept-4.webp). The light is drawn
+       in code, one WebGL fragment shader in assets/js/finale.js; the words and the button are ordinary HTML. -->
+  <section class="finale" aria-labelledby="finale-title">
+    <canvas class="finale-canvas" aria-hidden="true"></canvas>
+    <div class="finale-frame">
+      <div class="finale-copy">
+        <h2 class="finale-title" id="finale-title" data-reveal><span class="finale-word">Edu<span class="hero-title-accent">cation.</span></span> <span class="finale-sub">Reimagined.</span></h2>
+        <p class="finale-lede" data-reveal>From curiosity to capability.</p>
+        <a class="btn btn-lime finale-btn" href="explore/index.html" data-reveal>Start learning <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11.5M9 3.5 13.5 8 9 12.5"/></svg></a>
+      </div>
+    </div>
+  </section>
+  </main>
+  <footer class="home-footer">
+    <a class="wordmark" href="index.html" aria-label="CATION home"><svg viewBox="0 0 140 22" aria-hidden="true"><path d="M19.29 3.01A11.3 11.3 0 1 0 19.29 18.99M27.5 22 38 0 48.5 22M30.6 15.5h14.8M49 0h19M58.5 0v22M79 0v22M123 22V0l17 22V0"/><circle cx="103" cy="11" r="11.3"/></svg></a>
+    <nav class="home-footer-nav" aria-label="Footer">
+      <a href="explore/index.html">Explore</a>
+      <a href="programs/index.html">Programs</a>
+      <a href="about/index.html">About</a>
+    </nav>
+    <p class="home-footer-note">A design concept by Nevka Systems. Course outlines are published; lessons and labs are in development.</p>
+  </footer>
+</body>
+</html>

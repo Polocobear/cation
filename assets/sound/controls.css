@@ -1,0 +1,178 @@
+/* CATION · "Can sound cancel sound?" — the annotations and controls over the visual (js/annotate.js,
+   js/controls.js). Tokens follow the CATION site (assets/css/base.css): Satoshi, near-black, white type,
+   silver-grey support text, a restrained lavender accent, hairlines. */
+
+.xp {
+  --text: #f3f3f1;
+  --text-2: rgba(243, 243, 241, 0.8);
+  --text-3: rgba(243, 243, 241, 0.6);
+  --line: rgba(255, 255, 255, 0.1);
+  --lavender: #a487ea;
+  --lavender-2: #c4b2f6;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --pad: clamp(14px, 2.2vw, 26px);
+  --close: 0;  /* annotate.js: the camera, 0 = Observe, 1 = Close */
+  --halo: 0 0 2px rgba(4, 5, 8, 0.9), 0 0 8px rgba(4, 5, 8, 0.85), 0 0 18px rgba(4, 5, 8, 0.7);
+  position: fixed; inset: 0;
+  font-family: 'Satoshi', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  pointer-events: none;
+  user-select: none;
+}
+.xp button, .xp input { font: inherit; color: inherit; }
+.xp :focus-visible { outline: 1.5px solid var(--lavender-2); outline-offset: 2px; }
+.xp > * { z-index: 1; }
+.xp-vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* A soft shade along the bottom seats the captions on the surface; it deepens as the camera closes in. */
+.xp::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 38%;
+  background: linear-gradient(to top, rgba(5, 6, 9, 0.66), rgba(5, 6, 9, 0.3) 45%, rgba(5, 6, 9, 0));
+  opacity: calc(0.25 + 0.75 * var(--close));
+}
+
+/* ---------- the source labels ---------- */
+
+.xp-src {
+  position: absolute; left: 0; top: 0; margin: 0;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.01em; color: var(--text-2); white-space: nowrap;
+  text-shadow: var(--halo);
+}
+/* Once its source is out of view, the label waits at the edge of the frame, pointing toward it. */
+.xp-src i { display: none; font-style: normal; font-weight: 400; color: var(--text-3); }
+.xp-src.is-off i { display: inline; }
+
+/* ---------- the listening point ---------- */
+
+/* Placed at the surface's rest level over the midpoint; the dot rides the surface's height there, between
+   two short marks that stay at rest. */
+.xp-point {
+  position: absolute; left: 0; top: 0; width: 0; height: 0;
+  opacity: clamp(0, (var(--close) - 0.62) * 3.2, 1);
+}
+.xp-level {
+  position: absolute; left: -20px; top: -0.5px; width: 40px; height: 1px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0 13px, transparent 13px 27px, rgba(255, 255, 255, 0.7) 27px);
+  box-shadow: 0 0 6px rgba(4, 5, 8, 0.6);
+}
+.xp-dot {
+  position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(4, 5, 8, 0.35), 0 0 10px rgba(255, 255, 255, 0.35);
+  will-change: transform;
+}
+.xp-word {
+  position: absolute; left: 30px; top: -9px;
+  font-size: 12.5px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap;
+  text-shadow: var(--halo);
+}
+
+/* ---------- the bottom: captions, then the slider ---------- */
+
+.xp-bottom {
+  position: absolute; left: var(--pad); right: var(--pad); bottom: var(--pad);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  text-align: center;
+}
+.xp-captions { display: grid; max-width: 40ch; text-wrap: balance; }
+.xp-cap {
+  grid-area: 1 / 1; align-self: end; margin: 0;
+  font-size: clamp(15px, 1.35vw, 19px); font-weight: 500; line-height: 1.4; letter-spacing: -0.005em;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.22s ease-in, transform 0.3s ease-in;
+}
+/* One line at a time: the outgoing caption clears before the next fades in. */
+.xp-cap.is-on { opacity: 1; transform: none; transition: opacity 0.5s var(--ease-out) 0.2s, transform 0.6s var(--ease-out) 0.2s; }
+
+/* While source B turns, how far out of step it is. */
+.xp-meta {
+  margin: 0; font-size: 12.5px; font-weight: 500; color: var(--text-3); letter-spacing: 0.01em;
+  opacity: 0; transition: opacity 0.4s var(--ease-out);
+}
+.xp-meta b { font-weight: 600; color: var(--lavender-2); font-variant-numeric: tabular-nums; }
+.xp:is([data-beat='shift'], [data-beat='cancel']) .xp-meta { opacity: 1; }
+
+/* The slider, shown in the last beat: a hairline track, a lavender fill and ticks at the quarter turns. */
+.xp-phase {
+  display: flex; align-items: center; gap: 14px; height: 34px; margin-top: -4px;
+  cursor: pointer; pointer-events: auto;
+  opacity: 0; transform: translateY(8px); visibility: hidden;
+  transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out), visibility 0s 0.6s;
+}
+.xp.is-trying .xp-phase { opacity: 1; transform: none; visibility: visible; transition-delay: 0.1s, 0.1s, 0s; }
+.xp-label { font-size: 13px; font-weight: 500; color: var(--text-3); white-space: nowrap; }
+.xp-phase output {
+  min-width: 4ch; text-align: right;
+  font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.01em;
+}
+.xp-slider { position: relative; display: block; width: clamp(180px, 24vw, 320px); }
+.xp-phase input {
+  --fill: 0%;
+  --thumb: 14px;
+  display: block; width: 100%; height: 30px; margin: 0;
+  -webkit-appearance: none; appearance: none; background: none; cursor: pointer;
+}
+.xp-phase input::-webkit-slider-runnable-track {
+  height: 2px; border-radius: 2px;
+  background: linear-gradient(to right, var(--lavender) var(--fill), rgba(255, 255, 255, 0.2) var(--fill));
+}
+.xp-phase input::-moz-range-track { height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.2); }
+.xp-phase input::-moz-range-progress { height: 2px; border-radius: 2px; background: var(--lavender); }
+.xp-phase input::-webkit-slider-thumb {
+  -webkit-appearance: none; width: var(--thumb); height: var(--thumb); margin-top: calc(1px - var(--thumb) / 2);
+  border-radius: 50%; background: var(--text);
+  box-shadow: 0 0 0 0 rgba(196, 178, 246, 0), 0 1px 6px rgba(0, 0, 0, 0.55);
+  transition: box-shadow 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+.xp-phase input::-moz-range-thumb {
+  width: var(--thumb); height: var(--thumb); border: 0; border-radius: 50%; background: var(--text);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+.xp-phase:hover input::-webkit-slider-thumb, .xp-phase input:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px rgba(196, 178, 246, 0.22), 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+.xp-phase input:active::-webkit-slider-thumb { transform: scale(1.12); }
+.xp-phase input:focus-visible { outline: none; }
+.xp-phase input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px #0b0c10, 0 0 0 3.5px var(--lavender-2); }
+.xp-phase input:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 2px #0b0c10, 0 0 0 3.5px var(--lavender-2); }
+.xp-ticks { position: absolute; left: 0; right: 0; top: 50%; height: 0; pointer-events: none; }
+.xp-ticks i {
+  position: absolute; top: 5px; width: 1px; height: 4px; background: rgba(255, 255, 255, 0.28);
+  left: calc(var(--thumb, 14px) / 2 + (100% - var(--thumb, 14px)) * var(--at));
+}
+.xp-ticks i:nth-child(1) { --at: 0; }
+.xp-ticks i:nth-child(2) { --at: 0.25; }
+.xp-ticks i:nth-child(3) { --at: 0.5; }
+.xp-ticks i:nth-child(4) { --at: 0.75; }
+.xp-ticks i:nth-child(5) { --at: 1; }
+
+/* ---------- pause, in the corner ---------- */
+
+.xp-play {
+  position: absolute; top: calc(var(--pad) - 6px); right: calc(var(--pad) - 6px);
+  display: grid; place-items: center;
+  width: 34px; height: 34px; border: 0; border-radius: 50%;
+  background: rgba(9, 10, 14, 0.3); color: var(--text-3); cursor: pointer; pointer-events: auto;
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: background-color 0.3s var(--ease-out), color 0.3s;
+}
+.xp-play:hover { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+.xp-play svg { width: 10px; height: 10px; }
+
+/* ---------- phones ---------- */
+
+@media (max-width: 640px) {
+  .xp-captions { max-width: 30ch; }
+  .xp-phase { gap: 10px; align-self: stretch; justify-content: center; }
+  .xp-slider { flex: 1; width: auto; max-width: 260px; }
+  .xp-label { font-size: 12px; }
+  .xp-src { font-size: 11px; }
+  /* The word sits above the point, clear of the source labels at the edges. */
+  .xp-word { font-size: 12px; left: 0; top: -34px; transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xp *, .xp *::before, .xp *::after { transition: none !important; }
+}

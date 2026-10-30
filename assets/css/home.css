@@ -1,0 +1,295 @@
+/* CATION homepage. On desktop the whole composition is drawn in reference pixels of the approved
+   1672 × 941 design: --s is one of those pixels at the current viewport, so every measurement
+   below reads straight off the mock-up. Panel shapes are computed in home.js. */
+
+.page-home {
+  --s: min(calc(100vw / 1672), calc(100svh / 941));
+  --hs: var(--s);
+}
+
+/* ---------- Hero copy ---------- */
+
+.hero { position: relative; }
+.hero-title {
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  color: var(--text);
+  font-kerning: normal;
+}
+.hero-title span { display: block; }
+/* "anything." is drawn as an outline carrying light that runs from Soft Gold into Periwinkle, drifting
+   slowly across the word, with a faint glow. The light is clipped to the letters (outline included)
+   and the letters are filled with the page colour, so only the outer half of the stroke shows it. */
+.hero-title-accent {
+  background: linear-gradient(100deg, #e9d78b 0%, #f7f0d2 13%, #e9d78b 25%, #aab1ef 39%, #7c87dd 47%, #e9d78b 61%, #f7f0d2 73%, #b3b9f0 87%, #7c87dd 100%) 0 50% / 220% 100%;
+  filter: drop-shadow(0 0 0.09em rgba(124, 135, 221, 0.45));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: var(--bg);
+  -webkit-text-stroke: 0.045em transparent;
+  /* Outlines show where letters overlap, so the word is tracked a little looser than the solid ones. */
+  letter-spacing: 0.02em;
+  /* The fill only paints inside the box, so give it room for the y and g below the tight line height
+     without moving anything. */
+  padding: 0.06em 0 0.32em;
+  margin: -0.06em 0 -0.32em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title-accent { animation: accent-drift 9s ease-in-out infinite alternate; }
+}
+@keyframes accent-drift { to { background-position: 100% 50%; } }
+.hero-lede { font-weight: 300; color: var(--text-2); }
+.hero-lede-text { display: block; }
+.hero-lede-lead { color: var(--text); }
+.hero-facts { display: flex; flex-wrap: wrap; color: var(--text-3); }
+.hero-facts li + li { border-left: 1px solid var(--line-2); }
+.hero-facts strong { margin-right: 0.3em; font-weight: 500; color: var(--text); }
+.hero-rating { display: flex; align-items: center; gap: 0.55em; color: var(--text-3); }
+.hero-stars { display: inline-flex; gap: 0.16em; }
+.hero-stars svg { width: 1.1em; height: 1.1em; fill: var(--gold); }
+/* The row turns from gold to periwinkle towards the last star. */
+.hero-stars svg:nth-child(4) { fill: #b9bbe6; }
+.hero-stars svg:nth-child(5) { fill: var(--periwinkle); }
+.hero-rating-score { font-weight: 500; color: var(--text); }
+
+/* ---------- Panels: shared ---------- */
+
+.panels { position: relative; }
+.panel { position: relative; }
+.panel-link {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+.panel-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--art-fallback, #15121f);
+  transform-origin: 50% 50%;
+}
+.panel-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus, 50% 50%);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.disciplines.is-shaped .panel-art img { opacity: 0; transition: opacity 0.8s var(--ease-out); }
+.disciplines.is-shaped .panel-art img.is-loaded { opacity: 1; }
+/* Shown only until an artwork file exists in the slot. */
+.panel[data-slot='science'] { --art-fallback: radial-gradient(80% 60% at 50% 46%, #6a54b4 0, #2a2050 46%, #0d0b17 100%); }
+.panel[data-slot='technology'] { --art-fallback: radial-gradient(80% 60% at 50% 48%, #30397a 0, #171a3a 46%, #0a0b16 100%); }
+.panel[data-slot='engineering'] { --art-fallback: radial-gradient(80% 60% at 50% 50%, #6b4a6a 0, #2b1d33 46%, #0e0a12 100%); }
+.panel[data-slot='mathematics'] { --art-fallback: radial-gradient(80% 60% at 50% 48%, #545a74 0, #1e2130 46%, #0b0c12 100%); }
+
+/* Panel grade. The artwork files are graded copies of the photographs: a Soft Gold (#E9D78B) and Periwinkle
+   (#7C87DD) split tone, baked by cation/exports/panel-grade (see its README). These two layers light them, and sit
+   inside .panel-art so they move with the artwork. The first is a soft-light pass: a pale key from one side, a
+   periwinkle fill from the other and a falloff that deepens the edges. The second turns the key side gold
+   without lifting the shadows. Each subject places its own light. */
+.panel-art { isolation: isolate; }
+.panel-art::before, .panel-art::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.panel-art::before {
+  z-index: 1;
+  background:
+    radial-gradient(var(--key-size) at var(--key-at), rgba(240, 230, 196, var(--key)), rgba(240, 230, 196, 0) 100%),
+    radial-gradient(var(--fill-size) at var(--fill-at), rgba(124, 135, 221, var(--fill)), rgba(124, 135, 221, 0) 100%),
+    radial-gradient(130% 100% at var(--fall-at), rgba(6, 7, 16, 0) 52%, rgba(6, 7, 16, var(--fall)) 100%);
+  mix-blend-mode: soft-light;
+  opacity: 0.78;
+}
+.panel-art::after {
+  z-index: 2;
+  background: radial-gradient(var(--key-size) at var(--key-at), rgba(233, 215, 139, var(--warm)), rgba(233, 215, 139, 0) 100%);
+  mix-blend-mode: color;
+  opacity: 0.9;
+}
+/* Science: warm from the stage lamp behind the slide, cool from the bench. */
+.panel[data-slot='science'] { --key-at: 64% 48%; --key-size: 58% 46%; --key: 0.75; --warm: 0.6; --fill-at: 12% 78%; --fill-size: 70% 50%; --fill: 0.55; --fall-at: 55% 40%; --fall: 0.45; }
+/* Technology: gold rakes across the tiles from the right, periwinkle along the left edge strip. */
+.panel[data-slot='technology'] { --key-at: 78% 36%; --key-size: 64% 34%; --key: 0.75; --warm: 0.5; --fill-at: 6% 62%; --fill-size: 54% 56%; --fill: 0.6; --fall-at: 50% 48%; --fall: 0.5; }
+/* Engineering: gold on the upper blades, periwinkle into the bright lower-left backdrop. */
+.panel[data-slot='engineering'] { --key-at: 74% 20%; --key-size: 70% 52%; --key: 0.7; --warm: 0.45; --fill-at: 10% 88%; --fill-size: 72% 50%; --fill: 0.7; --fall-at: 42% 46%; --fall: 0.5; }
+/* Mathematics: warm at the protractor's centre, cooling towards the rim. */
+.panel[data-slot='mathematics'] { --key-at: 34% 56%; --key-size: 58% 42%; --key: 0.7; --warm: 0.35; --fill-at: 82% 18%; --fill-size: 70% 50%; --fill: 0.6; --fall-at: 40% 52%; --fall: 0.4; }
+
+.panel-shade, .panel-shade::after { position: absolute; inset: 0; pointer-events: none; }
+.panel-shade { background: linear-gradient(180deg, rgba(9, 11, 13, 0.62) 0, rgba(9, 11, 13, 0.18) 22%, rgba(9, 11, 13, 0) 38%); }
+.panel-shade::after {
+  content: '';
+  background: var(--bg);
+  opacity: 0.12;
+  transition: opacity 0.7s var(--ease-out);
+}
+.disciplines[data-active] .panel:not(.is-active) .panel-shade::after { opacity: 0.46; }
+.disciplines[data-active] .panel.is-active .panel-shade::after { opacity: 0; }
+
+.panel-label { position: absolute; left: 0; top: 0; transform-origin: 0 0; white-space: nowrap; }
+.panel-name {
+  display: block;
+  line-height: 1.22;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: letter-spacing 0.7s var(--ease-out);
+}
+/* The active label opens up, the way the approved design sets SCIENCE wider than its neighbours. */
+.panel.is-active .panel-name { letter-spacing: 0.25em; }
+
+.panel-go {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.62);
+  color: var(--text);
+  transition: background-color 0.35s var(--ease-out), color 0.35s var(--ease-out), box-shadow 0.35s, opacity 0.25s;
+}
+.panel-go svg { width: 42%; height: auto; transition: transform 0.45s var(--ease-out); }
+.panel.is-active .panel-go { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9); }
+.panel.is-active .panel-link:hover .panel-go { background: rgba(255, 255, 255, 0.14); }
+.panel.is-active .panel-link:active .panel-go,
+.panel.is-active .panel-link:focus-visible .panel-go { background: var(--text); color: var(--bg); }
+.panel.is-active .panel-link:hover .panel-go svg { transform: translateX(1px); }
+
+/* Rims and divots are drawn over the panels in one SVG. */
+.panel-rims { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.rim { fill: none; stroke: rgba(255, 255, 255, 0.17); stroke-width: 1; transition: stroke 0.5s, stroke-width 0.2s; }
+.rim.is-active { stroke: rgba(174, 181, 240, 0.5); }
+.rim.is-focus { stroke: #aeb5f0; stroke-width: 2; }
+.divot-glow { opacity: 0; transition: opacity 0.6s var(--ease-out); }
+.divot-ring { fill: rgba(9, 11, 13, 0); stroke: rgba(255, 255, 255, 0.66); stroke-width: 1.15; transition: fill 0.45s, stroke 0.45s; }
+.divot-core { fill: #fff; }
+.divot.is-active .divot-glow { opacity: 1; }
+.divot.is-active .divot-ring { fill: var(--gold); stroke: #f7f0d2; }
+
+/* Autoplay (home.js): the current panel's edge lights up as its timer, and a drop of liquid carries
+   the light across the gutter to the next panel. A divot holding the drop hides its dot. */
+.trace {
+  fill: none; stroke: var(--gold); stroke-width: 2.5; stroke-linecap: round; opacity: 0;
+  filter: drop-shadow(0 0 5px rgba(124, 135, 221, 0.8));
+}
+.drop { fill: url(#drop-body); }
+.drop-edge { fill: none; stroke: url(#drop-prism); stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 0 3px rgba(124, 135, 221, 0.85)); }
+.disciplines:not(.is-cycling) :is(.trace, .drop, .drop-edge) { display: none; }
+.divot { transition: opacity 0.2s; }
+.divot.is-wet { opacity: 0; }
+
+/* Logo concept preview: the monogram's spokes in the divot turn a twelfth of a turn when it opens. */
+.divot-spokes {
+  fill: none; stroke: rgba(255, 255, 255, 0.86); stroke-width: 1;
+  transform-box: fill-box; transform-origin: center;
+  transition: transform 0.8s var(--ease-out), stroke 0.45s;
+}
+.divot.is-active .divot-spokes { stroke: var(--lavender-ink); transform: rotate(30deg); }
+
+/* ================= Desktop composition ================= */
+
+@media (min-width: 1080px) and (min-height: 600px) {
+  /* The headline and description keep their place under the header. The gallery, at the size that
+     fits the first screen, sits --drop reference pixels lower on its own, so its foot runs on past the
+     fold; the hero grows by the same amount so the next section still starts below it. */
+  .page-home { --drop: 395; }
+  .page-home .site-header { margin-bottom: calc(-2 * var(--s)); }
+  .hero {
+    --gallery-top: calc(var(--drop) * var(--s));
+    height: calc(100vh - 121 * var(--s) + var(--gallery-top)); height: calc(100svh - 121 * var(--s) + var(--gallery-top));
+  }
+
+  .hero-copy { position: absolute; left: calc(58 * var(--s)); top: calc(76 * var(--s)); }
+  /* With the gallery lowered the headline has the width to run as one line. */
+  .hero-title { font-size: calc(99 * var(--s)); line-height: calc(90 * var(--s)); margin-left: calc(-3 * var(--s)); white-space: nowrap; }
+  .hero-title span { display: inline; }
+  /* The description holds the space from the headline down to the button, so the button and counts
+     keep their place beside the gallery (the button 469 reference pixels down the hero). Its last line
+     sits a little above the line of the gallery's top edge (--drop). */
+  .hero-lede {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: calc(28 * var(--s));
+    max-width: calc(560 * var(--s));
+    min-height: calc(241 * var(--s));
+    padding-bottom: calc((435 - var(--drop) + 28) * var(--s));
+    box-sizing: border-box;
+    font-size: max(15px, calc(23.5 * var(--s)));
+    line-height: calc(31 * var(--s));
+    letter-spacing: 0.002em;
+  }
+  .hero-cta { margin-top: calc(34 * var(--s)); height: calc(52 * var(--s)); padding: 0 calc(24 * var(--s)) 0 calc(28 * var(--s)); font-size: max(14px, calc(16.5 * var(--s))); }
+  .hero-facts { margin-top: calc(40 * var(--s)); font-size: max(12px, calc(14.5 * var(--s))); line-height: 1.2; }
+  .hero-facts li { padding: 0 calc(18 * var(--s)); }
+  .hero-facts li:first-child { padding-left: 0; }
+  .hero-rating { margin-top: calc(24 * var(--s)); font-size: max(12px, calc(14.5 * var(--s))); }
+
+  .disciplines { position: absolute; left: calc(352 * var(--s)); right: calc(39 * var(--s)); top: var(--gallery-top); bottom: 0; }
+
+  /* Before home.js shapes them, the panels are plain rounded columns. */
+  .panels { display: flex; gap: calc(10 * var(--s)); height: 100%; padding-left: calc(136 * var(--s)); }
+  .panel { flex: 1; }
+  .panel-link { height: 100%; border-radius: calc(10 * var(--s)); }
+  .panel-label { transform: translate(calc(29 * var(--s)), calc(38 * var(--s))); }
+  .panel-go { left: auto; right: calc(20 * var(--s)); top: calc(30 * var(--s)); }
+
+  .disciplines.is-shaped .panels { display: block; position: absolute; inset: 0; padding: 0; }
+  .disciplines.is-shaped .panel { position: absolute; inset: 0; pointer-events: none; }
+  .disciplines.is-shaped .panel-link { position: absolute; inset: 0; border-radius: 0; pointer-events: auto; outline: none; }
+  .disciplines.is-shaped .panel-art { right: auto; width: var(--art-w, 50%); will-change: transform; }
+  .disciplines.is-shaped .panel-label, .disciplines.is-shaped .panel-go { left: 0; top: 0; right: auto; will-change: transform; }
+
+  .panel-name { font-size: max(11px, calc(15 * var(--s))); }
+  .panel-go { width: calc(35 * var(--s)); height: calc(35 * var(--s)); }
+}
+
+/* ================= Stacked composition (phones, tablets, short windows) ================= */
+
+@media (max-width: 1079px), (max-height: 599px) {
+  .page-home { --s: 1px; }
+  .br-wide { display: none; }
+  .hero { padding: 0 20px; }
+  .hero-copy { padding: 22px 0 30px; }
+  .hero-title { font-size: clamp(54px, 15.4vw, 104px); line-height: 0.88; margin-left: -0.03em; }
+  .hero-lede { margin-top: 22px; max-width: 30ch; font-size: 18px; line-height: 1.45; }
+  .hero-cta { margin-top: 26px; height: 50px; padding: 0 22px 0 26px; font-size: 16px; }
+  .hero-facts { gap: 10px 0; margin-top: 28px; font-size: 13.5px; line-height: 1.2; }
+  .hero-facts li { padding: 0 14px; }
+  .hero-facts li:first-child { padding-left: 0; }
+  .hero-rating { margin-top: 18px; font-size: 13.5px; }
+
+  .disciplines { position: relative; }
+  .panels { display: flex; flex-direction: column; gap: 8px; }
+  .panel-link { height: 96px; border-radius: 14px; }
+  .panel:first-child .panel-link { height: 380px; }
+  .panel-label { transform: translate(20px, 18px); }
+  .panel-go { left: auto; right: 18px; top: 18px; }
+
+  .disciplines.is-shaped { height: var(--stack-h, auto); }
+  .disciplines.is-shaped .panels { display: block; position: absolute; inset: 0; }
+  .disciplines.is-shaped .panel { position: absolute; inset: 0; pointer-events: none; }
+  .disciplines.is-shaped .panel-link { position: absolute; inset: 0; height: auto; border-radius: 0; pointer-events: auto; outline: none; }
+  .disciplines.is-shaped .panel-art { bottom: auto; height: var(--art-h, 100%); will-change: transform; }
+  .disciplines.is-shaped .panel-label, .disciplines.is-shaped .panel-go { left: 0; top: 0; right: auto; will-change: transform; }
+
+  .panel-name { font-size: 14px; letter-spacing: 0.26em; }
+  .panel-go { width: 38px; height: 38px; }
+  .panel-shade {
+    background:
+      linear-gradient(90deg, rgba(9, 11, 13, 0.6) 0, rgba(9, 11, 13, 0) 62%),
+      linear-gradient(180deg, rgba(9, 11, 13, 0.55) 0, rgba(9, 11, 13, 0) 110px);
+  }
+  .disciplines[data-active] .panel:not(.is-active) .panel-shade::after { opacity: 0.56; }
+}
+
+/* Opening a discipline crossfades the page and morphs the chosen panel into that page's plate. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-group(plate) { animation-duration: 0.55s; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.35s; }
+}
