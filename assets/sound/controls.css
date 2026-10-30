@@ -18,6 +18,8 @@
   --close: 0;  /* annotate.js: the camera, 0 = Observe, 1 = Close */
   --halo: 0 0 calc(2 * var(--z)) rgba(4, 5, 8, 0.9), 0 0 calc(8 * var(--z)) rgba(4, 5, 8, 0.85), 0 0 calc(18 * var(--z)) rgba(4, 5, 8, 0.7);
   position: fixed; inset: 0;
+  /* The base size sets the captions' measure (ch), so it scales with them. */
+  font-size: calc(16 * var(--z));
   font-family: 'Satoshi', 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -35,6 +37,14 @@
   background: linear-gradient(to top, rgba(5, 6, 9, 0.66), rgba(5, 6, 9, 0.3) 45%, rgba(5, 6, 9, 0));
   opacity: calc(0.25 + 0.75 * var(--close));
 }
+/* Under the caption that opens with the question, a deeper shade keeps it readable over the bright rings; it clears
+   as the guided lesson moves on. */
+.xp::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 52%;
+  background: linear-gradient(to top, rgba(5, 6, 9, 0.78), rgba(5, 6, 9, 0.4) 45%, rgba(5, 6, 9, 0));
+  opacity: 0; transition: opacity 0.6s var(--ease-out);
+}
+.xp:has(.xp-cap.is-on .xp-cap-title)::after { opacity: 1; }
 
 /* ---------- the source labels ---------- */
 
@@ -87,6 +97,12 @@
   text-shadow: 0 1px calc(14 * var(--z)) rgba(0, 0, 0, 0.7);
   opacity: 0; transform: translateY(calc(6 * var(--z)));
   transition: opacity 0.22s ease-in, transform 0.3s ease-in;
+}
+/* The lesson's question heads the opening caption, which says what the scene is in quieter type. */
+.xp-cap:has(.xp-cap-title) { color: var(--text-2); font-weight: 400; }
+.xp-cap-title {
+  display: block; margin-bottom: calc(6 * var(--z));
+  font-size: clamp(21 * var(--z), 1.9vw, 27 * var(--z)); font-weight: 600; line-height: 1.2; letter-spacing: -0.015em; color: var(--text);
 }
 /* One line at a time: the outgoing caption clears before the next fades in. */
 .xp-cap.is-on { opacity: 1; transform: none; transition: opacity 0.5s var(--ease-out) 0.2s, transform 0.6s var(--ease-out) 0.2s; }

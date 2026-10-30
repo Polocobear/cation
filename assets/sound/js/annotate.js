@@ -8,11 +8,15 @@
 
 import { WAVE, MIDPOINT, sample, gain } from './field.js';
 
+// The opening line says what the scene is, under the lesson's question, until the waves meet at the midpoint.
+// Unguided, the one-line caption opens the same way.
+const TITLE = '<span class="xp-cap-title">Can sound cancel sound?</span> ';
 const CAPTIONS = {
+  intro: `${TITLE}Two speakers play the same note, drawn here as ripples. Scroll to see what happens where their waves meet.`,
   add: 'Here, the waves move together. Their effects add.',
   cancel: 'Now they move in opposite directions. At this point, they cancel.',
   try: 'Try changing the phase yourself.',
-  still: 'In step, the waves add here. Half a cycle apart, they cancel. Try changing the phase yourself.',
+  still: `${TITLE}Two speakers play the same note, drawn here as ripples. In step, their waves add here. Half a cycle apart, they cancel. Try changing the phase yourself.`,
 };
 const PAD = 14;  // px between a label and the frame's edge
 
@@ -80,7 +84,7 @@ export function mountAnnotations(root, wave, lesson) {
     if (beat === 'shift') return phase < 15 ? 'add' : phase < 165 ? '' : 'cancel';
     if (beat === 'cancel') return 'cancel';
     if (beat === 'try') return 'try';
-    return '';
+    return 'intro';
   }
 
   lesson.onChange(({ beat, phase, guided }) => {
@@ -91,7 +95,7 @@ export function mountAnnotations(root, wave, lesson) {
     if (cap !== shown) {
       for (const [id, line] of Object.entries(lines)) line.classList.toggle('is-on', id === cap);
       shown = cap;
-      if (cap && CAPTIONS[cap] !== said) live.textContent = said = CAPTIONS[cap];
+      if (cap && lines[cap].textContent !== said) live.textContent = said = lines[cap].textContent;
     }
     const deg = `${Math.round(phase)}°`;
     if (metaDeg.textContent !== deg) metaDeg.textContent = deg;
