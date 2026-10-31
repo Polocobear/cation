@@ -148,6 +148,21 @@ if (strip) {
     const d = ((((want - at()) % P) + P * 1.5) % P) - P / 2;
     glideTo(user + d);
   });
+  // A facet that grows (atlas.css) grows towards the middle of the window, and the first time, asks for its sharper
+  // image. The way is chosen as the pointer comes in, not while it moves inside, so a grown facet never turns round.
+  const BIG = '(max-width: 1079px) 96vw, 70vw';
+  const ready = (facet) => {
+    const r = facet.getBoundingClientRect();
+    facet.style.setProperty('--dir', r.left + r.width / 2 > W / 2 ? 1 : -1);
+    const img = facet.querySelector('img');
+    if (img.sizes !== BIG) img.sizes = BIG;
+  };
+  strip.addEventListener('pointerover', (e) => {
+    const facet = e.target.closest('.facet');
+    if (facet && e.pointerType === 'mouse' && !facet.contains(e.relatedTarget)) ready(facet);
+  });
+  strip.addEventListener('focusin', (e) => { const facet = e.target.closest('.facet'); if (facet) ready(facet); });
+
   // Left and right step along the strip; up and down cross between the rows.
   strip.addEventListener('keydown', (e) => {
     const i = links.indexOf(document.activeElement);
