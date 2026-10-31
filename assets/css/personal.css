@@ -15,10 +15,10 @@
   letter-spacing: -0.05em;
   text-wrap: balance;
 }
-/* The hero's accent: an outline carrying light from Soft Gold into Periwinkle (as .hero-title-accent). */
+/* The hero's accent (as .hero-title-accent), in Soft Gold only: the same light and glow as the 42%'s sign below. */
 .pz-accent {
-  background: linear-gradient(100deg, #e9d78b 0%, #f7f0d2 13%, #e9d78b 25%, #aab1ef 39%, #7c87dd 47%, #e9d78b 61%, #f7f0d2 73%, #b3b9f0 87%, #7c87dd 100%) 0 50% / 220% 100%;
-  filter: drop-shadow(0 0 0.09em rgba(124, 135, 221, 0.45));
+  background: linear-gradient(100deg, #e9d78b 0%, #f7f0d2 16%, #e9d78b 32%, #c9b46c 50%, #e9d78b 68%, #f7f0d2 84%, #e9d78b 100%) 0 50% / 220% 100%;
+  filter: drop-shadow(0 0 0.09em rgba(233, 215, 139, 0.4));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
