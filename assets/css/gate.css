@@ -1,6 +1,6 @@
 /* The question, into 04 · Subjects. "Every discovery begins with a" over one large hollow "?": Satoshi Black's own glyph,
    drawn as the brand's accent words are (.hero-title-accent in home.css), lit from Soft Gold through warm white into
-   Periwinkle, and glowing as "capability." does in section 03. The section holds still
+   Periwinkle, and glowing like a lit tube. The section holds still
    while it is scrolled through, and gate.js moves the viewpoint into the "?" and through its dot. The subjects section
    (atlas.css) waits further back the whole time, as it is, seen only through the glyph's hollow, and comes forward
    until it is the scene. --gate-run is how far that takes; --gate-line is the outline's width, in ems of the glyph. */
@@ -29,11 +29,16 @@
 
 .gate-glow, .gate-line { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .gate.is-live :is(.gate-glow, .gate-line) { height: 100svh; }
-/* The glow, as "capability."'s (home-sections.css): copies of the outline in its own light, blurred close in and wide,
-   under the hollow so it shows only outside. gate.js keeps their size in step with the outline. */
-.gate-glow path, .gate-line path { fill: none; stroke: url(#gate-light); stroke-linejoin: round; }
-.gate-glow { filter: blur(var(--glow, 20px)); opacity: 0.6; }
-.gate-glow-wide { filter: blur(var(--glow-wide, 64px)); opacity: 0.6; }
+/* A lit tube: the outline in deep Soft Gold through a short warm-white crossing into Periwinkle, a softened white-hot
+   core along its middle, and its own light close round it, tight and saturated, with a faint wide halo. The glow sits
+   under the hollow, so it shows only outside and the black around the line stays black. gate.js keeps the core and
+   glow in step with the outline. */
+.gate-glow path, .gate-line path { fill: none; stroke-linejoin: round; }
+.gate-glow path { stroke: url(#gate-glow-light); }
+.gate-line path { stroke: url(#gate-light); }
+.gate-line .gate-core { stroke: url(#gate-core-light); opacity: 0.75; }
+.gate-glow { filter: blur(var(--glow, 9px)); opacity: 0.9; }
+.gate-glow-wide { filter: blur(var(--glow-wide, 36px)); opacity: 0.28; }
 
 .gate-window { position: relative; background: var(--bg); }
 .gate-depth { display: grid; align-content: center; transform-origin: 50% 50%; }

@@ -15,6 +15,8 @@ if (gate) {
   const box = gate.querySelector('.gate-mark-box');
   const svgs = [...gate.querySelectorAll('.gate-glow, .gate-line')];
   const paths = svgs.map((s) => s.querySelector('path'));
+  const core = gate.querySelector('.gate-core');
+  const soften = gate.querySelector('#gate-core-soft feGaussianBlur');
   const win = gate.querySelector('.gate-window');
   const depth = gate.querySelector('.gate-depth');
   const fog = gate.querySelector('.gate-fog');
@@ -81,10 +83,12 @@ if (gate) {
     const vb = `${(-ox / kk).toFixed(3)} ${(-oy / kk).toFixed(3)} ${(W / kk).toFixed(3)} ${(H / kk).toFixed(3)}`;
     for (const s of svgs) s.setAttribute('viewBox', vb);
     for (const p of paths) p.setAttribute('stroke-width', (line / kk).toFixed(3));
-    // The glow, as "capability."'s in section 03 (home-sections.css): the outline's own light, blurred, close in and wide,
-    // behind the hollow so it shows only outside, at the same proportions to the outline (0.07em and 0.22em to 0.045em).
-    gate.style.setProperty('--glow', `${Math.min(48, line * 1.55).toFixed(1)}px`);
-    gate.style.setProperty('--glow-wide', `${Math.min(140, line * 4.9).toFixed(1)}px`);
+    // The core runs half the outline's width, softened by a quarter of that; the glow sits close (two-thirds of the
+    // outline's width) with a faint halo wider out.
+    core.setAttribute('stroke-width', (line * 0.5 / kk).toFixed(3));
+    soften.setAttribute('stdDeviation', (line * 0.12 / kk).toFixed(3));
+    gate.style.setProperty('--glow', `${Math.min(30, line * 0.65).toFixed(1)}px`);
+    gate.style.setProperty('--glow-wide', `${Math.min(110, line * 2.6).toFixed(1)}px`);
 
     if (still) {
       // The question gives way to the subjects in place.
