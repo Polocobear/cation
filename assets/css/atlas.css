@@ -11,29 +11,6 @@
   padding-top: var(--space-section);
 }
 
-/* ---------- The heading: one quiet line, with the count and how to move the strip ---------- */
-
-.atlas-head {
-  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
-  gap: calc(14 * var(--z)) calc(32 * var(--z));
-  max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter);
-  margin-bottom: clamp(28 * var(--z), 3vw, 52 * var(--z));
-}
-@media (min-width: 1080px) and (min-height: 600px) {
-  .atlas-head { max-width: none; padding-inline: calc(58 * var(--s)) calc(55 * var(--s)); }
-}
-.atlas-title { font-size: clamp(30 * var(--z), 2.9vw, 52 * var(--z)); font-weight: 500; line-height: 1.05; letter-spacing: -0.035em; }
-.atlas-hint {
-  display: flex; align-items: center; gap: calc(12 * var(--z));
-  font-size: calc(14 * var(--z)); line-height: 1.4; color: var(--text-3); white-space: nowrap;
-}
-.atlas-hint-icon { width: calc(28 * var(--z)); height: calc(10 * var(--z)); color: var(--text-4); }
-.atlas-hint-swipe { display: none; }
-@media (hover: none) {
-  .atlas-hint-drag { display: none; }
-  .atlas-hint-swipe { display: inline; }
-}
-
 /* ---------- The strip ---------- */
 
 .atlas-strip {
@@ -184,8 +161,6 @@
 @media (max-width: 1079px) { .atlas { --b: min(48vw, 42svh); } }
 @media (max-width: 719px) {
   .atlas { --b: min(78vw, 52svh); padding-top: calc(var(--space-section) * 0.75); }
-  .atlas-head { flex-direction: column; align-items: flex-start; }
-  .atlas-title { font-size: calc(30 * var(--z)); }
   /* With no pointer to light a facet, the middle of the strip is lit and the sides fall away. */
   .atlas-strip::after {
     background:
