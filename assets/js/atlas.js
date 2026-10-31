@@ -33,7 +33,7 @@ if (strip) {
 
   const measure = () => {
     const was = P;
-    b = set.querySelector('.facet').offsetWidth;
+    b = set.querySelector('.facet.is-apex').offsetWidth / 2;   // its box is two bases wide
     P = 4 * b;
     W = strip.clientWidth;
     home = W / 2 - title.getBoundingClientRect().left;
@@ -142,20 +142,19 @@ if (strip) {
   strip.addEventListener('focusin', (e) => {
     const i = links.indexOf(e.target);
     if (i < 0) return;
-    const r = e.target.getBoundingClientRect();
-    if (r.left >= W * 0.06 && r.right <= W * 0.94) return;
+    // The link fills the facet's whole box, which is wider than the facet; the facet is the middle base of it.
+    const r = e.target.getBoundingClientRect(), c = r.left + r.width / 2;
+    if (c - b / 2 >= W * 0.06 && c + b / 2 <= W * 0.94) return;
     const want = Math.floor(i / 2) * b / 2 + b / 2;
     const d = ((((want - at()) % P) + P * 1.5) % P) - P / 2;
     glideTo(user + d);
   });
-  // A facet that grows (atlas.css) grows towards the middle of the window, and the first time, asks for its sharper
-  // image. The way is chosen as the pointer comes in, not while it moves inside, so a grown facet never turns round.
-  const BIG = '(max-width: 1079px) 96vw, 70vw';
+  // A facet that grows from a corner (atlas.css) grows towards the middle of the window. The way is chosen as the
+  // pointer comes in, not while it moves inside, so an open facet never turns round.
   const ready = (facet) => {
+    if (!facet.classList.contains('is-corner')) return;
     const r = facet.getBoundingClientRect();
-    facet.style.setProperty('--dir', r.left + r.width / 2 > W / 2 ? 1 : -1);
-    const img = facet.querySelector('img');
-    if (img.sizes !== BIG) img.sizes = BIG;
+    facet.classList.toggle('grows-left', r.left + r.width / 2 > W / 2);
   };
   strip.addEventListener('pointerover', (e) => {
     const facet = e.target.closest('.facet');

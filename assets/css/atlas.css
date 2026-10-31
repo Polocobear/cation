@@ -1,7 +1,8 @@
 /* 04 · Subjects: the range there is to explore, between the path of section 03 and the closing scene. One surface of
    triangles in two rows, every edge shared, wider than the window; atlas.js repeats it to either side and moves it as
    one piece. --b is a facet's base and --h its height, so the strip is 2 × --h tall and repeats every 4 × --b. Every
-   image carries the same grade (cation/art/atlas/grade.html), shown dimmed until a facet is pointed at or focused. */
+   image carries the same grade (cation/art/atlas/grade.html), shown dimmed until a facet is pointed at or focused.
+   The sets don't form stacking contexts of their own, so a facet that opens over the next set's still covers it. */
 
 .atlas {
   --b: min(35vw, 53svh);
@@ -51,50 +52,64 @@
 .atlas-strip.is-dragging { cursor: grabbing; }
 .atlas-track { position: absolute; left: 0; top: 0; width: calc(4.5 * var(--b)); height: 100%; }
 .atlas-strip.is-live .atlas-track { width: 0; will-change: transform; }
-.atlas-set { position: absolute; left: 0; top: 0; width: calc(4 * var(--b)); height: 100%; translate: calc(var(--copy, 0) * 4 * var(--b)) 0; }
+.atlas-set { position: absolute; left: calc(var(--copy, 0) * 4 * var(--b)); top: 0; width: calc(4 * var(--b)); height: 100%; }
 .atlas-list { position: absolute; inset: 0; }
 
+/* A facet's box covers every triangle it can grow into, and its picture fills the box at one scale; the clip shows the
+   facet. A top-row ▲ or bottom-row ▼ grows from its point, so its box is two bases wide; the others grow from a corner,
+   towards the middle of the window (atlas.js adds .grows-left), so theirs is three. --rest and --grown are the two
+   triangles, as fractions of the box; --lx and --ly place the label at the middle of whichever is showing. */
 .facet {
-  position: absolute;
-  left: calc(var(--j) * var(--b) / 2); top: calc(var(--row) * var(--h));
-  width: var(--b); height: var(--h);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  position: absolute; top: 0; height: calc(2 * var(--h));
+  left: calc((var(--j) - 1) * var(--b) / 2); width: calc(2 * var(--b));
   z-index: 0;
-  /* The corner it grows from (below): the apex of a top-row ▲ or a bottom-row ▼, otherwise the corner on the outer
-     edge farthest from the middle of the window, which atlas.js picks with --dir (1 grows left, -1 right). */
-  --dir: 1;
-  transform-origin: calc(50% + var(--row) * var(--dir) * 50%) calc(var(--row) * 100%);
-  transition: scale 0.4s var(--ease-out), z-index 0s linear 0.4s;
+  clip-path: var(--rest);
+  transition: clip-path 0.5s var(--ease-in-out), z-index 0.5s linear;
 }
-.facet.is-down {
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transform-origin: calc(50% + (1 - var(--row)) * var(--dir) * 50%) calc(var(--row) * 100%);
+.facet.is-corner { left: calc(var(--j) * var(--b) / 2 - var(--b)); width: calc(3 * var(--b)); }
+.facet.is-apex.is-up {
+  --rest: polygon(50% 0, 75% 50%, 25% 50%); --grown: polygon(50% 0, 100% 100%, 0 100%);
+  --lx: 50%; --ly: 31.5%; --lx-grown: 50%; --ly-grown: 63%;
 }
+.facet.is-apex.is-down {
+  --rest: polygon(25% 50%, 75% 50%, 50% 100%); --grown: polygon(0 0, 100% 0, 50% 100%);
+  --lx: 50%; --ly: 68.5%; --lx-grown: 50%; --ly-grown: 37%;
+}
+.facet.is-corner.is-down {
+  --rest: polygon(33.333% 0, 66.667% 0, 50% 50%); --grown: polygon(33.333% 0, 100% 0, 66.667% 100%);
+  --lx: 50%; --ly: 18.5%; --lx-grown: 66.667%; --ly-grown: 37%;
+}
+.facet.is-corner.is-down.grows-left { --grown: polygon(0 0, 66.667% 0, 33.333% 100%); --lx-grown: 33.333%; }
+.facet.is-corner.is-up {
+  --rest: polygon(50% 50%, 66.667% 100%, 33.333% 100%); --grown: polygon(66.667% 0, 100% 100%, 33.333% 100%);
+  --lx: 50%; --ly: 81.5%; --lx-grown: 66.667%; --ly-grown: 63%;
+}
+.facet.is-corner.is-up.grows-left { --grown: polygon(33.333% 0, 66.667% 100%, 0 100%); --lx-grown: 33.333%; }
+
 .facet-link { position: absolute; inset: 0; display: block; background: #0a0c18; -webkit-tap-highlight-color: transparent; }
 .facet-link:focus-visible { outline: none; }
 .facet img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   opacity: 0.66;
-  transform-origin: 50% 60%;
-  transition: opacity 0.6s var(--ease-out), scale 1.4s var(--ease-out);
+  transition: opacity 0.6s var(--ease-out);
   pointer-events: none;
 }
-.facet.is-down img { transform-origin: 50% 40%; }
 
-/* The facet's own edge, drawn inside it and lit with it. */
-.facet-edge { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #efe4bd; opacity: 0; transition: opacity 0.5s var(--ease-out); pointer-events: none; }
+/* The grown triangle's edge, which comes up once it has opened. A corner facet carries one for each way it can grow. */
+.facet-edge { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #efe4bd; opacity: 0; transition: opacity 0.15s linear; pointer-events: none; }
 .facet-edge polygon { stroke-width: 2; vector-effect: non-scaling-stroke; }
+.facet .edge-left, .facet.grows-left .edge-right { display: none; }
+.facet.grows-left .edge-left { display: inline; }
 
-/* The name sits at the facet's centre, a little towards its wide end, with its discipline over it, so the labels
+/* The name sits at the middle of the facet, a little towards its wide end, with its discipline over it, so the labels
    zigzag along the strip one to a triangle. */
 .facet-label {
-  position: absolute; left: 0; right: 0; top: 63%; translate: 0 -50%;
+  position: absolute; left: var(--lx); top: var(--ly); translate: -50% -50%;
   display: flex; flex-direction: column-reverse; align-items: center; gap: calc(var(--b) * 0.009);
-  text-align: center; pointer-events: none;
-  transition: opacity 0.4s var(--ease-out), scale 0.4s var(--ease-out);
+  text-align: center; white-space: nowrap; pointer-events: none;
+  transition: opacity 0.4s var(--ease-out), left 0.5s var(--ease-in-out), top 0.5s var(--ease-in-out), scale 0.5s var(--ease-in-out);
 }
 .facet.is-off .facet-label { opacity: 0; }
-.facet.is-down .facet-label { top: 37%; }
 .facet-name {
   font-size: max(17 * var(--z), var(--b) * 0.042); font-weight: 500; line-height: 1.1; letter-spacing: -0.015em;
   color: var(--text-2); text-shadow: 0 1px 16px rgba(4, 5, 12, 0.7);
@@ -106,26 +121,39 @@
   transition: color 0.5s var(--ease-out);
 }
 
-/* One facet lit, the rest held back a little further. Nothing moves but the picture inside, settling in slightly. */
+/* One facet lit, the rest held back a little further. */
 .atlas-strip:not(.is-dragging) .facet-link:hover img,
-.facet-link:focus-visible img { opacity: 1; scale: 1.035; }
+.facet-link:focus-visible img { opacity: 1; }
 .atlas-strip:not(.is-dragging):has(.facet-link:hover) .facet-link:not(:hover) img,
-.atlas-strip:has(.facet-link:focus-visible) .facet-link:not(:focus-visible) img { opacity: 0.4; }
-.atlas-strip:not(.is-dragging) .facet-link:hover .facet-edge,
-.facet-link:focus-visible .facet-edge { opacity: 0.6; }
+.atlas-strip:has(.facet-link:focus-visible) .facet-link:not(:focus-visible) img { opacity: 0.36; }
 .atlas-strip:not(.is-dragging) .facet-link:hover .facet-name,
 .facet-link:focus-visible .facet-name { color: var(--text); }
 .atlas-strip:not(.is-dragging) .facet-link:hover .facet-kind,
 .facet-link:focus-visible .facet-kind { color: var(--gold); }
 
-/* Held for a beat, or focused, a facet doubles from one of its corners into a triangle of its own shape over the three
-   it shares that corner's space with, and stays so until the pointer leaves it. Its name grows by a quarter, not double. */
+/* Held for a beat, or focused, the facet opens: its window widens from one corner into a triangle of its own shape,
+   twice the size, over the three it shares that space with. The picture stays put and the window reveals more of it.
+   It opens quickly and settles slowly, closes a little faster, and stays open until the pointer leaves it. */
 @media (hover: hover) {
-  .atlas-strip:not(.is-dragging) .facet:hover { z-index: 3; scale: 2; transition: scale 0.6s var(--ease-out) 0.12s, z-index 0s; }
-  .atlas-strip:not(.is-dragging) .facet:hover .facet-label { scale: 0.62; transition: opacity 0.4s var(--ease-out), scale 0.6s var(--ease-out) 0.12s; }
+  .atlas-strip:not(.is-dragging) .facet:hover {
+    z-index: 3; clip-path: var(--grown);
+    transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, z-index 0s;
+  }
+  .atlas-strip:not(.is-dragging) .facet:hover .facet-label {
+    left: var(--lx-grown); top: var(--ly-grown); scale: 1.18;
+    transition: opacity 0.4s var(--ease-out), left 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, top 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, scale 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
+  }
+  .atlas-strip:not(.is-dragging) .facet:hover .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.55s; }
 }
-.facet:has(.facet-link:focus-visible) { z-index: 3; scale: 2; transition: scale 0.6s var(--ease-out), z-index 0s; }
-.facet:has(.facet-link:focus-visible) .facet-label { scale: 0.62; transition: opacity 0.4s var(--ease-out), scale 0.6s var(--ease-out); }
+.facet:has(.facet-link:focus-visible) {
+  z-index: 3; clip-path: var(--grown);
+  transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1), z-index 0s;
+}
+.facet:has(.facet-link:focus-visible) .facet-label {
+  left: var(--lx-grown); top: var(--ly-grown); scale: 1.18;
+  transition: opacity 0.4s var(--ease-out), left 0.85s cubic-bezier(0.16, 1, 0.3, 1), top 0.85s cubic-bezier(0.16, 1, 0.3, 1), scale 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.facet:has(.facet-link:focus-visible) .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.4s; }
 
 /* The lattice: hairlines along every shared edge, which also cover the seams between neighbouring facets. */
 .atlas-lattice { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; fill: none; stroke: rgba(240, 232, 212, 0.13); pointer-events: none; }
