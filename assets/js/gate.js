@@ -2,8 +2,8 @@
 // and how far it has scrolled sets where the viewpoint is: at rest it looks at "Every discovery begins with a ?", then
 // it moves into the "?" and through its dot. Nearer things grow faster than farther ones: the words and the lit outline
 // sit on one plane, growing past the edges of the window, while the subjects section (atlas.css, atlas.js), as it is,
-// sits further back, seen only through the glyph's hollow, and comes forward more slowly, out of the dark, until the
-// dot has opened past every edge and the section is the whole scene. Everything follows the scroll position, so it
+// sits further back, seen only through the dot, and comes forward more slowly, out of the dark, until the dot has
+// opened past every edge and the section is the whole scene. Everything follows the scroll position, so it
 // plays backwards, and at any speed.
 
 const gate = document.querySelector('.gate');
@@ -15,8 +15,7 @@ if (gate) {
   const box = gate.querySelector('.gate-mark-box');
   const svgs = [...gate.querySelectorAll('.gate-glow, .gate-line')];
   const paths = svgs.map((s) => s.querySelector('path'));
-  const core = gate.querySelector('.gate-core');
-  const soften = gate.querySelector('#gate-core-soft feGaussianBlur');
+  const drift = gate.querySelector('.gate-line animateTransform');
   const win = gate.querySelector('.gate-window');
   const depth = gate.querySelector('.gate-depth');
   const fog = gate.querySelector('.gate-fog');
@@ -78,17 +77,13 @@ if (gate) {
     const fade = smooth(1.02, 1.8, S);
     title.style.opacity = fade ? 1 - fade : '';
     const ox = Cx + (bx - Fx) * S, oy = Cy + (by - Fy) * S, kk = u * S;
-    // Nearer, the outline widens, but more slowly than the glyph, so the opening stays a line of light, not a band.
-    const line = line0 * S ** 0.35;
+    // Nearer, the outline widens, but far more slowly than the glyph, so the opening stays a fine line of light.
+    const line = line0 * S ** 0.2;
     const vb = `${(-ox / kk).toFixed(3)} ${(-oy / kk).toFixed(3)} ${(W / kk).toFixed(3)} ${(H / kk).toFixed(3)}`;
     for (const s of svgs) s.setAttribute('viewBox', vb);
     for (const p of paths) p.setAttribute('stroke-width', (line / kk).toFixed(3));
-    // The core runs half the outline's width, softened by a quarter of that; the glow sits close (two-thirds of the
-    // outline's width) with a faint halo wider out.
-    core.setAttribute('stroke-width', (line * 0.5 / kk).toFixed(3));
-    soften.setAttribute('stdDeviation', (line * 0.12 / kk).toFixed(3));
-    gate.style.setProperty('--glow', `${Math.min(30, line * 0.65).toFixed(1)}px`);
-    gate.style.setProperty('--glow-wide', `${Math.min(110, line * 2.6).toFixed(1)}px`);
+    // The glow is sized from the outline (gate.css).
+    gate.style.setProperty('--line', `${line.toFixed(2)}px`);
 
     if (still) {
       // The question gives way to the subjects in place.
@@ -96,8 +91,10 @@ if (gate) {
       plane.style.opacity = 1 - f;
       for (const s of svgs) s.style.opacity = 1 - f;
       gate.classList.toggle('is-open', f > 0.5);
+      settle();
       win.style.clipPath = f > 0.5 ? 'none' : 'inset(50%)';
       depth.style.transform = '';
+      depth.style.clipPath = '';
       depth.style.visibility = '';
       fog.style.opacity = 1 - f;
       return;
@@ -109,23 +106,41 @@ if (gate) {
     const dx = ox + DOT.x * kk, dy = oy + DOT.y * kk;
     const open = Math.hypot(Math.max(dx, W - dx), Math.max(dy, H - dy)) < DOT.r * kk - line;
     gate.classList.toggle('is-open', open);
+    settle();
     win.style.clipPath = open ? 'none' : `path('${outline(ox, oy, kk)}')`;
 
-    // The far plane: the subjects, which start at three-eighths of their size and arrive at their own, and come out of
-    // the dark as they near.
+    // The far plane: the subjects, which start at three-eighths of their size and arrive at their own. They are seen
+    // only through the dot, the rest of the hollow staying dark, and come out of the dark once the dot is large enough
+    // to frame them.
     const E = 0.375 ** (1 - k);
+    const Tx = (Dx - Fx) * E, Ty = (Dy - Fy) * E;
     gate.classList.toggle('is-moving', k > 0 && k < 1);
-    depth.style.transform = k < 1 ? `translate(${((Dx - Fx) * E).toFixed(2)}px, ${((Dy - Fy) * E).toFixed(2)}px) scale(${E.toFixed(4)})` : '';
-    const dark = 1 - smooth(1.2, 7, S);
+    depth.style.transform = k < 1 ? `translate(${Tx.toFixed(2)}px, ${Ty.toFixed(2)}px) scale(${E.toFixed(4)})` : '';
+    // The dot's inside edge, in the subjects' own coordinates: q = C + T + (p − C) · E, scaled about the middle.
+    depth.style.clipPath = open ? '' : `circle(${((DOT.r * kk - line / 2) / E).toFixed(1)}px at ${(Cx + (dx - Cx - Tx) / E).toFixed(1)}px ${(Cy + (dy - Cy - Ty) / E).toFixed(1)}px)`;
+    const dark = 1 - smooth(2.5, 9, S);
     fog.style.opacity = dark.toFixed(3);
     depth.style.visibility = dark > 0.995 ? 'hidden' : '';
   };
   const schedule = () => { if (live) frame ||= requestAnimationFrame(draw); };
 
+  // The light drifts along the outline as it does through the hero's accent words (home.css), only while the section
+  // is near the window and the viewpoint isn't through, and not at all with Reduce Motion.
+  const svg = drift.ownerSVGElement;
+  let drifting = false, begun = false;
+  const settle = () => {
+    const on = live && !reduce.matches && !gate.classList.contains('is-open');
+    if (on === drifting) return;
+    drifting = on;
+    if (!on) return svg.pauseAnimations();
+    if (!begun) { drift.beginElement(); begun = true; }
+    svg.unpauseAnimations();
+  };
+
   // Only drawn while the section is near the window.
-  new IntersectionObserver(([e]) => { live = e.isIntersecting; last = -1; schedule(); }, { rootMargin: '25% 0px' }).observe(gate);
+  new IntersectionObserver(([e]) => { live = e.isIntersecting; last = -1; schedule(); settle(); }, { rootMargin: '25% 0px' }).observe(gate);
   addEventListener('scroll', schedule, { passive: true });
-  reduce.addEventListener('change', () => { last = -1; schedule(); });
+  reduce.addEventListener('change', () => { last = -1; schedule(); settle(); });
   new ResizeObserver(() => { measure(); last = -1; schedule(); }).observe(stage);
 
   // A key that reaches the subjects before the viewpoint is through carries the page to the end of the approach.
