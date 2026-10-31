@@ -1,41 +1,43 @@
-/* 04 · The question, then the subjects. "Every discovery begins with a" over one enormous hollow "?": Satoshi Black's own
-   glyph, outlined in light from Soft Gold through warm white into Periwinkle and glowing like the brand's accent words
-   (.hero-title-accent in home.css). The section holds still while it is scrolled through, and gate.js moves the
-   viewpoint into the "?" and through its dot. The subjects strip (atlas.css) waits further back the whole time, seen
-   only through the glyph's hollow, and comes forward until it is the scene. --gate-run is how far that takes. */
+/* The question, into 04 · Subjects. "Every discovery begins with a" over one large hollow "?": Satoshi Black's own glyph,
+   drawn as the brand's accent words are (.hero-title-accent in home.css): the outline, and the glow outside it, in the
+   accent's proportions to the letter, lit from Soft Gold through warm white into Periwinkle. The section holds still
+   while it is scrolled through, and gate.js moves the viewpoint into the "?" and through its dot. The subjects section
+   (atlas.css) waits further back the whole time, as it is, seen only through the glyph's hollow, and comes forward
+   until it is the scene. --gate-run is how far that takes; --gate-line is the outline's width, in ems of the glyph. */
 
 .gate {
   --gate-run: 150vh;
-  --b: min(42vw, 62svh);
+  --gate-line: 0.026;
   position: relative;
-  padding-top: 0;
-  margin-top: max(0px, calc(var(--space-section) - 18svh));
+  margin-top: max(0px, calc(var(--space-section) - 16svh));
 }
 
-/* Without the script nothing is pinned: the question, then the strip below it. (With Reduce Motion the stage is still
-   held, but nothing travels: the question gives way to the strip in place.) */
+/* Without the script nothing is pinned: the question, then the subjects below it. (With Reduce Motion the stage is
+   still held, but nothing travels: the question gives way to the subjects in place.) */
 .gate-stage { position: relative; }
 .gate-plane {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: clamp(20 * var(--z), 3.4svh, 44 * var(--z));
+  gap: clamp(26 * var(--z), 4.4svh, 56 * var(--z));
   min-height: 100svh; padding: 0 var(--gutter);
   text-align: center;
   transform-origin: 0 0;
 }
-.gate-title { font-size: clamp(30 * var(--z), 3.3vw, 62 * var(--z)); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; }
-/* The space the "?" stands in. The outline itself is drawn over the whole stage (below), so it can grow past this box. */
-.gate-mark-box { height: min(56svh, 118vw); aspect-ratio: 515 / 767; flex: none; }
+.gate-title { font-size: clamp(34 * var(--z), 4.1vw, 76 * var(--z)); font-weight: 500; line-height: 1.05; letter-spacing: -0.04em; }
+/* The space the "?" stands in: a little under half the window, so the line above it holds its own. The outline is
+   drawn over the whole stage (below), so it can grow past this box. */
+.gate-mark-box { position: relative; height: min(46svh, 100vw); aspect-ratio: 515 / 767; flex: none; }
 
-.gate-mark-box { position: relative; }
 .gate-glow, .gate-line { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .gate.is-live :is(.gate-glow, .gate-line) { height: 100svh; }
 /* The accent's construction: the glyph filled with the page and lit by its outline, its glow only outside it. */
 .gate-glow path { fill: var(--bg); stroke: var(--bg); }
-.gate-glow { filter: drop-shadow(0 0 var(--glow, 10px) rgba(124, 135, 221, 0.45)); }
+.gate-glow { filter: drop-shadow(0 0 var(--glow, 24px) rgba(124, 135, 221, 0.45)); }
 .gate-line path { fill: none; stroke: url(#gate-light); stroke-linejoin: round; }
 
 .gate-window { position: relative; background: var(--bg); }
 .gate-depth { display: grid; align-content: center; transform-origin: 50% 50%; }
+/* The space above the subjects is the stage's here, not the section's own. */
+.gate-depth > .atlas { padding-top: 0; }
 .gate-fog { position: absolute; inset: 0; background: var(--bg); opacity: 0; pointer-events: none; }
 
 /* ---------- Live: one stage held in the window while the section scrolls past ---------- */
@@ -49,24 +51,11 @@
 .gate.is-live .gate-line { z-index: 4; }
 .gate.is-live .gate-depth { position: absolute; inset: 0; }
 .gate.is-live.is-moving .gate-depth { will-change: transform; }
-/* Seen from further back, the strip still runs past both sides of the opening: its copies are left showing, and the
-   stage is the edge of the window, softened there instead of at the strip's own ends. */
-.gate.is-live .atlas-strip.is-live { overflow: visible; }
-.gate.is-live .atlas-strip::after { display: none; }
-.gate.is-live .gate-window::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg, rgba(9, 11, 13, 0.92) 0, rgba(9, 11, 13, 0.5) 4%, rgba(9, 11, 13, 0) 11%, rgba(9, 11, 13, 0) 89%, rgba(9, 11, 13, 0.5) 96%, rgba(9, 11, 13, 0.92) 100%);
-}
-/* Until the viewpoint is through, the strip can't be taken hold of. */
+/* Until the viewpoint is through, the subjects can't be taken hold of. */
 .gate.is-live:not(.is-open) .gate-window { pointer-events: none; }
 .gate.is-open :is(.gate-glow, .gate-line) { visibility: hidden; }
 
-@media (max-width: 1079px) { .gate { --b: min(56vw, 46svh); } }
 @media (max-width: 719px) {
-  .gate { --gate-run: 130vh; --b: min(92vw, 50svh); margin-top: max(0px, calc(var(--space-section) * 0.75 - 18svh)); }
-  .gate-mark-box { height: min(46svh, 104vw); }
-  /* With no pointer to light a facet, the middle is lit and the sides fall away, as on the strip alone. */
-  .gate.is-live .gate-window::after {
-    background: linear-gradient(90deg, rgba(9, 11, 13, 0.72) 0, rgba(9, 11, 13, 0) 24%, rgba(9, 11, 13, 0) 76%, rgba(9, 11, 13, 0.72) 100%);
-  }
+  .gate { --gate-run: 130vh; margin-top: max(0px, calc(var(--space-section) * 0.75 - 16svh)); }
+  .gate-mark-box { height: min(42svh, 96vw); }
 }
