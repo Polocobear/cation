@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Home · CATION</title>
+  <meta name="description" content="The CATION student dashboard: the course in progress, your courses, the Understanding Map and what's coming up.">
+  <meta name="theme-color" content="#090b0d">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="home" href="../index.html">
+  <link rel="stylesheet" href="../assets/css/fonts.css">
+  <link rel="stylesheet" href="../assets/css/base.css?v=20261030-16">
+  <link rel="stylesheet" href="../assets/css/app.css?v=20261031-1">
+  <script type="module" src="../assets/js/app/main.js?v=20261031-1"></script>
+</head>
+<body class="app">
+  <svg class="defs" width="0" height="0" aria-hidden="true">
+    <linearGradient id="q-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9d78b"/><stop offset="0.45" stop-color="#f0ebdf"/><stop offset="1" stop-color="#7c87dd"/></linearGradient>
+    <linearGradient id="perf-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6f79cf"/><stop offset="1" stop-color="#c9cdf6"/></linearGradient>
+    <linearGradient id="perf-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7c87dd" stop-opacity="0.3"/><stop offset="1" stop-color="#7c87dd" stop-opacity="0"/></linearGradient>
+  </svg>
+  <a class="skip-link" href="#main">Skip to the dashboard</a>
+
+  <!-- The student application: a sidebar, a top bar and one view at a time (assets/js/app/shell.js routes between them
+       by the address's #/ path). Home is the dashboard; the other views reuse its panels. Everything about the learner
+       is sample data (assets/js/app/data/sample-learner.js), and the page says so in the top bar. -->
+  <div class="app-shell">
+    <nav class="app-nav" aria-label="Application">
+      <a class="app-logo" href="../index.html" aria-label="CATION website">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M21.51 9.49A8.5 8.5 0 1 0 21.51 21.51" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="21.51" cy="21.51" r="2.4" fill="var(--gold)"/></svg>
+      </a>
+      <ul class="app-nav-list">
+        <li><a href="#/" data-route="home">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20h-5.5v-5.5h-5V20H4z"/></svg><span>Home</span></a></li>
+        <li><a href="#/courses" data-route="courses">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5c2.7-1 5.3-1 8 .7 2.7-1.7 5.3-1.7 8-.7v13c-2.7-1-5.3-1-8 .7-2.7-1.7-5.3-1.7-8-.7z"/><path d="M12 6.2v13"/></svg><span>My Courses</span></a></li>
+        <li><a href="#/knowledge" data-route="knowledge">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2.6"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="7" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/><circle cx="5.5" cy="17.5" r="1.8"/><path d="m6.5 7.2 3.4 3M17.4 8.2l-3.2 2.4M16.3 17.3l-2.4-3.4M7 16.5l3-2.6"/></svg><span>Knowledge</span></a></li>
+        <li><a href="#/calendar" data-route="calendar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg><span>Calendar</span></a></li>
+        <li><button type="button" class="nav-q" data-q-open aria-haspopup="dialog">
+          <svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg><span>Q</span></button></li>
+      </ul>
+      <ul class="app-nav-list app-nav-foot">
+        <li><a href="#/settings" data-route="settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M18 6l-1.6 1.6M7.6 16.4 6 18M18 18l-1.6-1.6M7.6 7.6 6 6"/></svg><span>Settings</span></a></li>
+        <li><a href="../index.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4.5h4.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H14"/><path d="M10.5 8 6.5 12l4 4M6.5 12H16"/></svg><span>Website</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="app-main">
+      <header class="app-top">
+        <div class="app-greeting">
+          <h1 id="greeting">Welcome back.</h1>
+          <p id="greeting-line"></p>
+        </div>
+        <div class="app-tools">
+          <span class="sample-chip" title="No accounts, lessons or assessments exist yet. Progress, time and results shown here are sample data.">Prototype · sample data</span>
+          <div class="search" data-menu role="search">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4.5 4.5"/></svg>
+            <input id="search" type="search" placeholder="Search courses and topics, or ask Q…" autocomplete="off" spellcheck="false"
+              role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list" aria-label="Search the catalogue or ask Q">
+            <kbd class="search-key" aria-hidden="true"><span data-mod>⌘</span> K</kbd>
+            <div class="popover search-results" id="search-results" role="listbox" aria-label="Search results" hidden></div>
+          </div>
+          <div class="tool" data-menu>
+            <button type="button" class="icon-btn" id="bell" aria-label="Notifications" aria-haspopup="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2h-14z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>
+              <span class="dot" hidden></span>
+            </button>
+            <div class="popover notes" id="notes" hidden></div>
+          </div>
+          <div class="tool" data-menu>
+            <button type="button" class="avatar" id="me" aria-label="Your account" aria-haspopup="true"></button>
+            <div class="popover account" id="account" hidden></div>
+          </div>
+        </div>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <noscript><p class="noscript">The dashboard needs JavaScript. The <a href="../explore/index.html">course catalogue</a> works without it.</p></noscript>
+
+        <div class="view dash" data-view="home">
+          <section class="feature" aria-labelledby="feature-title" id="feature"></section>
+          <section class="card courses" aria-labelledby="courses-title" id="courses"></section>
+          <section class="card umap" aria-labelledby="map-title" id="umap"></section>
+          <section class="card tasks" aria-labelledby="tasks-title" id="tasks"></section>
+          <section class="card study" aria-labelledby="study-title" id="study"></section>
+          <section class="card done" aria-labelledby="done-title" id="done"></section>
+          <section class="card perf" aria-labelledby="perf-title" id="perf"></section>
+        </div>
+
+        <div class="view page" data-view="courses" hidden></div>
+        <div class="view page" data-view="knowledge" hidden></div>
+        <div class="view page" data-view="calendar" hidden></div>
+        <div class="view page" data-view="settings" hidden></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Q, CATION's teaching assistant. Not connected to any AI service yet: the panel says so and sends nothing. -->
+  <div class="q-panel" id="q-panel" role="dialog" aria-modal="false" aria-labelledby="q-title" hidden>
+    <div class="q-head">
+      <svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>
+      <div>
+        <h2 id="q-title">Q</h2>
+        <p>Teaching assistant · prototype</p>
+      </div>
+      <button type="button" class="icon-btn" data-q-close aria-label="Close Q"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+    </div>
+    <div class="q-body" id="q-body"></div>
+  </div>
+</body>
+</html>
