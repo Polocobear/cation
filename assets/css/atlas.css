@@ -1,0 +1,147 @@
+/* 04 · Subjects: the range there is to explore, between the path of section 03 and the closing scene. One surface of
+   triangles in two rows, every edge shared, wider than the window; atlas.js repeats it to either side and moves it as
+   one piece. --b is a facet's base and --h its height, so the strip is 2 × --h tall and repeats every 4 × --b. Every
+   image carries the same grade (cation/art/atlas/grade.html), shown dimmed until a facet is pointed at or focused. */
+
+.atlas {
+  --b: min(35vw, 53svh);
+  --h: calc(var(--b) * 0.6);
+  position: relative;
+  padding-top: var(--space-section);
+}
+
+/* ---------- The heading: one quiet line, with the count and how to move the strip ---------- */
+
+.atlas-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: calc(14 * var(--z)) calc(32 * var(--z));
+  max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter);
+  margin-bottom: clamp(28 * var(--z), 3vw, 52 * var(--z));
+}
+@media (min-width: 1080px) and (min-height: 600px) {
+  .atlas-head { max-width: none; padding-inline: calc(58 * var(--s)) calc(55 * var(--s)); }
+}
+.atlas-title { font-size: clamp(30 * var(--z), 2.9vw, 52 * var(--z)); font-weight: 500; line-height: 1.05; letter-spacing: -0.035em; }
+.atlas-hint {
+  display: flex; align-items: center; gap: calc(12 * var(--z));
+  font-size: calc(14 * var(--z)); line-height: 1.4; color: var(--text-3); white-space: nowrap;
+}
+.atlas-hint-icon { width: calc(28 * var(--z)); height: calc(10 * var(--z)); color: var(--text-4); }
+.atlas-hint-swipe { display: none; }
+@media (hover: none) {
+  .atlas-hint-drag { display: none; }
+  .atlas-hint-swipe { display: inline; }
+}
+
+/* ---------- The strip ---------- */
+
+.atlas-strip {
+  position: relative;
+  height: calc(2 * var(--h));
+  /* Without the script it simply scrolls; atlas.js takes over and moves the track instead. */
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+}
+.atlas-strip.is-live {
+  overflow: hidden; overflow: clip;
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-user-select: none; user-select: none;
+}
+.atlas-strip.is-dragging { cursor: grabbing; }
+.atlas-track { position: absolute; left: 0; top: 0; width: calc(4.5 * var(--b)); height: 100%; }
+.atlas-strip.is-live .atlas-track { width: 0; will-change: transform; }
+.atlas-set { position: absolute; left: 0; top: 0; width: calc(4 * var(--b)); height: 100%; translate: calc(var(--copy, 0) * 4 * var(--b)) 0; }
+.atlas-list { position: absolute; inset: 0; }
+
+.facet {
+  position: absolute;
+  left: calc(var(--j) * var(--b) / 2); top: calc(var(--row) * var(--h));
+  width: var(--b); height: var(--h);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.facet.is-down { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.facet-link { position: absolute; inset: 0; display: block; background: #0a0c18; -webkit-tap-highlight-color: transparent; }
+.facet-link:focus-visible { outline: none; }
+.facet img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0.66;
+  transform-origin: 50% 60%;
+  transition: opacity 0.6s var(--ease-out), scale 1.4s var(--ease-out);
+  pointer-events: none;
+}
+.facet.is-down img { transform-origin: 50% 40%; }
+
+/* The facet's own edge, drawn inside it and lit with it. */
+.facet-edge { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #efe4bd; opacity: 0; transition: opacity 0.5s var(--ease-out); pointer-events: none; }
+.facet-edge polygon { stroke-width: 2; vector-effect: non-scaling-stroke; }
+
+/* The name sits at the facet's centre, a little towards its wide end, with its discipline over it, so the labels
+   zigzag along the strip one to a triangle. */
+.facet-label {
+  position: absolute; left: 0; right: 0; top: 63%; translate: 0 -50%;
+  display: flex; flex-direction: column-reverse; align-items: center; gap: calc(var(--b) * 0.009);
+  text-align: center; pointer-events: none;
+  transition: opacity 0.4s var(--ease-out);
+}
+.facet.is-off .facet-label { opacity: 0; }
+.facet.is-down .facet-label { top: 37%; }
+.facet-name {
+  font-size: max(17 * var(--z), var(--b) * 0.042); font-weight: 500; line-height: 1.1; letter-spacing: -0.015em;
+  color: var(--text-2); text-shadow: 0 1px 16px rgba(4, 5, 12, 0.7);
+  transition: color 0.5s var(--ease-out);
+}
+.facet-kind {
+  font-size: max(10 * var(--z), var(--b) * 0.0195); font-weight: 500; line-height: 1.2; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-4);
+  transition: color 0.5s var(--ease-out);
+}
+
+/* One facet lit, the rest held back a little further. Nothing moves but the picture inside, settling in slightly. */
+.atlas-strip:not(.is-dragging) .facet-link:hover img,
+.facet-link:focus-visible img { opacity: 1; scale: 1.035; }
+.atlas-strip:not(.is-dragging):has(.facet-link:hover) .facet-link:not(:hover) img,
+.atlas-strip:has(.facet-link:focus-visible) .facet-link:not(:focus-visible) img { opacity: 0.4; }
+.atlas-strip:not(.is-dragging) .facet-link:hover .facet-edge,
+.facet-link:focus-visible .facet-edge { opacity: 0.6; }
+.atlas-strip:not(.is-dragging) .facet-link:hover .facet-name,
+.facet-link:focus-visible .facet-name { color: var(--text); }
+.atlas-strip:not(.is-dragging) .facet-link:hover .facet-kind,
+.facet-link:focus-visible .facet-kind { color: var(--gold); }
+
+/* The lattice: hairlines along every shared edge, which also cover the seams between neighbouring facets. */
+.atlas-lattice { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; fill: none; stroke: rgba(240, 232, 212, 0.13); pointer-events: none; }
+.atlas-lattice path { stroke-width: 1; vector-effect: non-scaling-stroke; }
+
+/* The ends fade into the page, and the lower row darkens towards the closing scene below. */
+.atlas-strip::after {
+  content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(9, 11, 13, 0.92) 0, rgba(9, 11, 13, 0.5) 4%, rgba(9, 11, 13, 0) 11%, rgba(9, 11, 13, 0) 89%, rgba(9, 11, 13, 0.5) 96%, rgba(9, 11, 13, 0.92) 100%),
+    linear-gradient(180deg, rgba(9, 11, 13, 0) 55%, rgba(9, 11, 13, 0.4) 100%);
+}
+
+/* ---------- Arriving: the facets come up from the left, column by column ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .atlas-strip.is-live:not(.is-in) :is(.facet, .atlas-lattice) { opacity: 0; }
+  .atlas-strip.is-in .facet { animation: atlas-in 1.3s var(--ease-out) both; animation-delay: calc(max(0, var(--copy, 0) * 8 + var(--j)) * 70ms); }
+  .atlas-strip.is-in .atlas-lattice { animation: atlas-in 1.6s var(--ease-out) 0.2s both; }
+}
+@keyframes atlas-in { from { opacity: 0; } }
+
+/* ---------- Tablets and phones: larger facets, fewer at a time ---------- */
+
+@media (max-width: 1079px) { .atlas { --b: min(48vw, 42svh); } }
+@media (max-width: 719px) {
+  .atlas { --b: min(78vw, 52svh); padding-top: calc(var(--space-section) * 0.75); }
+  .atlas-head { flex-direction: column; align-items: flex-start; }
+  .atlas-title { font-size: calc(30 * var(--z)); }
+  /* With no pointer to light a facet, the middle of the strip is lit and the sides fall away. */
+  .atlas-strip::after {
+    background:
+      linear-gradient(90deg, rgba(9, 11, 13, 0.72) 0, rgba(9, 11, 13, 0) 24%, rgba(9, 11, 13, 0) 76%, rgba(9, 11, 13, 0.72) 100%),
+      linear-gradient(180deg, rgba(9, 11, 13, 0) 55%, rgba(9, 11, 13, 0.4) 100%);
+  }
+  .facet img { opacity: 0.72; }
+}

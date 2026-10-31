@@ -1,4 +1,4 @@
-/* 04 · Closing: Concept 4, "Abstract Convergence" (cation/art/closing/reference-concept-4.webp). A full-width scene of
+/* 05 · Closing: Concept 4, "Abstract Convergence" (cation/art/closing/reference-concept-4.webp). A full-width scene of
    light, drawn by finale.js, under the page's last words. .finale-frame is the reference's 1204 × 792 composition
    scaled to the window: the words sit in it by percentage and size by its width (cqw), and finale.js takes the
    convergence point (--cv-y) and the light's scale from it, so type and light stay registered at every size.
@@ -10,7 +10,7 @@
   --w: min(100vw, 152svh);
   position: relative;
   height: calc(var(--w) / 1.52 + var(--finale-tail));
-  /* The quiet top of the scene is part of the gap from section 03: together they make one section space. */
+  /* The quiet top of the scene is part of the gap from section 04: together they make one section space. */
   margin-top: max(48 * var(--z), calc(var(--space-section) - var(--w) / 1.52 * 0.2));
   overflow: hidden;
   isolation: isolate;
