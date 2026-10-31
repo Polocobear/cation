@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="assets/css/home-sections.css?v=20261030-18">
   <link rel="stylesheet" href="assets/css/personal.css?v=20261030-19">
   <link rel="stylesheet" href="assets/css/atlas.css?v=20261031-5">
+  <link rel="stylesheet" href="assets/css/gate.css?v=20261031-1">
   <link rel="stylesheet" href="assets/css/finale.css?v=20261030-3">
   <!-- Three.js for the optics stage, pinned to an exact release (MIT). The sound surface loads its own in its frame. -->
   <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
@@ -20,7 +21,8 @@
   <script type="module" src="assets/js/home.js?v=20261030-3"></script>
   <script type="module" src="assets/js/route.js?v=20261030-3"></script>
   <script type="module" src="assets/js/personal/main.js?v=20261030-16"></script>
-  <script type="module" src="assets/js/atlas.js?v=20261031-5"></script>
+  <script type="module" src="assets/js/atlas.js?v=20261031-6"></script>
+  <script type="module" src="assets/js/gate.js?v=20261031-1"></script>
   <script type="module" src="assets/js/finale.js?v=20261031-1"></script>
 </head>
 <body class="page-home">
@@ -291,102 +293,115 @@
     </section>
   </div>
 
-  <!-- 04 · Subjects: the range there is to explore. Sixteen subjects as one surface of triangles in two rows, every
-       edge shared, running on past both sides of the window; assets/js/atlas.js sets the strip out three times so it
-       never ends, and moves it by drag, swipe, sideways scroll and the arrow keys. Every image has been through the
-       same grade (cation/art/atlas/grade.html), so photos and renders read as one family. -->
-  <section class="atlas" id="subjects" aria-labelledby="atlas-title">
-    <header class="atlas-head">
-      <h2 class="atlas-title" id="atlas-title" data-reveal>Find something worth exploring.</h2>
-      <p class="atlas-hint" data-reveal="fade"><span>16 subjects</span><svg class="atlas-hint-icon" viewBox="0 0 28 10" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M1 5h26M5 1 1 5l4 4M23 1l4 4-4 4"/></svg><span class="atlas-hint-drag">Drag to explore</span><span class="atlas-hint-swipe">Swipe to explore</span></p>
-    </header>
-    <div class="atlas-strip">
-      <div class="atlas-track">
-        <div class="atlas-set">
-          <ul class="atlas-list" aria-label="Subjects">
-          <li class="facet is-up is-apex" style="--j: 0; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/physics-1440.webp?v=20261031-3" srcset="assets/atlas/physics-960.webp?v=20261031-3 960w, assets/atlas/physics-1440.webp?v=20261031-3 1440w, assets/atlas/physics-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Physics</span><span class="facet-kind">Science</span></span>
-            <a class="facet-link" href="courses/inside-the-particle-zoo/index.html" draggable="false"><span class="visually-hidden">Physics, Science</span></a>
-          </li>
-          <li class="facet is-down is-apex" style="--j: 0; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/optics-1440.webp?v=20261031-3" srcset="assets/atlas/optics-960.webp?v=20261031-3 960w, assets/atlas/optics-1440.webp?v=20261031-3 1440w, assets/atlas/optics-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Optics</span><span class="facet-kind">Science</span></span>
-            <a class="facet-link" href="science/index.html" draggable="false"><span class="visually-hidden">Optics, Science</span></a>
-          </li>
-          <li class="facet is-down is-corner" style="--j: 1; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/energy-2160.webp?v=20261031-3" srcset="assets/atlas/energy-1440.webp?v=20261031-3 1440w, assets/atlas/energy-2160.webp?v=20261031-3 2160w, assets/atlas/energy-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Energy</span><span class="facet-kind">Engineering</span></span>
-            <a class="facet-link" href="engineering/index.html" draggable="false"><span class="visually-hidden">Energy, Engineering</span></a>
-          </li>
-          <li class="facet is-up is-corner" style="--j: 1; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/mechanics-2160.webp?v=20261031-3" srcset="assets/atlas/mechanics-1440.webp?v=20261031-3 1440w, assets/atlas/mechanics-2160.webp?v=20261031-3 2160w, assets/atlas/mechanics-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Mechanics</span><span class="facet-kind">Science</span></span>
-            <a class="facet-link" href="courses/forces-and-motion/index.html" draggable="false"><span class="visually-hidden">Mechanics, Science</span></a>
-          </li>
-          <li class="facet is-up is-apex" style="--j: 2; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/structures-1440.webp?v=20261031-3" srcset="assets/atlas/structures-960.webp?v=20261031-3 960w, assets/atlas/structures-1440.webp?v=20261031-3 1440w, assets/atlas/structures-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Structures</span><span class="facet-kind">Engineering</span></span>
-            <a class="facet-link" href="courses/forces-in-structures/index.html" draggable="false"><span class="visually-hidden">Structures, Engineering</span></a>
-          </li>
-          <li class="facet is-down is-apex" style="--j: 2; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/materials-1440.webp?v=20261031-3" srcset="assets/atlas/materials-960.webp?v=20261031-3 960w, assets/atlas/materials-1440.webp?v=20261031-3 1440w, assets/atlas/materials-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Materials</span><span class="facet-kind">Engineering</span></span>
-            <a class="facet-link" href="courses/stress-strain-failure/index.html" draggable="false"><span class="visually-hidden">Materials, Engineering</span></a>
-          </li>
-          <li class="facet is-down is-corner" style="--j: 3; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/chemistry-2160.webp?v=20261031-3" srcset="assets/atlas/chemistry-1440.webp?v=20261031-3 1440w, assets/atlas/chemistry-2160.webp?v=20261031-3 2160w, assets/atlas/chemistry-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Chemistry</span><span class="facet-kind">Science</span></span>
-            <a class="facet-link" href="courses/chemistry-of-change/index.html" draggable="false"><span class="visually-hidden">Chemistry, Science</span></a>
-          </li>
-          <li class="facet is-up is-corner" style="--j: 3; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/biology-2160.webp?v=20261031-3" srcset="assets/atlas/biology-1440.webp?v=20261031-3 1440w, assets/atlas/biology-2160.webp?v=20261031-3 2160w, assets/atlas/biology-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Biology</span><span class="facet-kind">Science</span></span>
-            <a class="facet-link" href="science/index.html" draggable="false"><span class="visually-hidden">Biology, Science</span></a>
-          </li>
-          <li class="facet is-up is-apex" style="--j: 4; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/data-1440.webp?v=20261031-3" srcset="assets/atlas/data-960.webp?v=20261031-3 960w, assets/atlas/data-1440.webp?v=20261031-3 1440w, assets/atlas/data-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Data</span><span class="facet-kind">Technology</span></span>
-            <a class="facet-link" href="courses/machine-learning-explained/index.html" draggable="false"><span class="visually-hidden">Data, Technology</span></a>
-          </li>
-          <li class="facet is-down is-apex" style="--j: 4; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/computing-1440.webp?v=20261031-3" srcset="assets/atlas/computing-960.webp?v=20261031-3 960w, assets/atlas/computing-1440.webp?v=20261031-3 1440w, assets/atlas/computing-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Computing</span><span class="facet-kind">Technology</span></span>
-            <a class="facet-link" href="courses/how-computers-think/index.html" draggable="false"><span class="visually-hidden">Computing, Technology</span></a>
-          </li>
-          <li class="facet is-down is-corner" style="--j: 5; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/mathematics-2160.webp?v=20261031-3" srcset="assets/atlas/mathematics-1440.webp?v=20261031-3 1440w, assets/atlas/mathematics-2160.webp?v=20261031-3 2160w, assets/atlas/mathematics-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Mathematics</span><span class="facet-kind">Mathematics</span></span>
-            <a class="facet-link" href="courses/algebra-from-the-ground-up/index.html" draggable="false"><span class="visually-hidden">Mathematics, Mathematics</span></a>
-          </li>
-          <li class="facet is-up is-corner" style="--j: 5; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/calculus-2160.webp?v=20261031-3" srcset="assets/atlas/calculus-1440.webp?v=20261031-3 1440w, assets/atlas/calculus-2160.webp?v=20261031-3 2160w, assets/atlas/calculus-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Calculus</span><span class="facet-kind">Mathematics</span></span>
-            <a class="facet-link" href="courses/calculus-mathematics-of-change/index.html" draggable="false"><span class="visually-hidden">Calculus, Mathematics</span></a>
-          </li>
-          <li class="facet is-up is-apex" style="--j: 6; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/systems-1440.webp?v=20261031-3" srcset="assets/atlas/systems-960.webp?v=20261031-3 960w, assets/atlas/systems-1440.webp?v=20261031-3 1440w, assets/atlas/systems-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Systems</span><span class="facet-kind">Mathematics</span></span>
-            <a class="facet-link" href="courses/chaos-and-dynamical-systems/index.html" draggable="false"><span class="visually-hidden">Systems, Mathematics</span></a>
-          </li>
-          <li class="facet is-down is-apex" style="--j: 6; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/electronics-1440.webp?v=20261031-3" srcset="assets/atlas/electronics-960.webp?v=20261031-3 960w, assets/atlas/electronics-1440.webp?v=20261031-3 1440w, assets/atlas/electronics-1920.webp?v=20261031-3 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Electronics</span><span class="facet-kind">Engineering</span></span>
-            <a class="facet-link" href="courses/circuits-and-sensors/index.html" draggable="false"><span class="visually-hidden">Electronics, Engineering</span></a>
-          </li>
-          <li class="facet is-down is-corner" style="--j: 7; --row: 0">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/robotics-2160.webp?v=20261031-3" srcset="assets/atlas/robotics-1440.webp?v=20261031-3 1440w, assets/atlas/robotics-2160.webp?v=20261031-3 2160w, assets/atlas/robotics-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Robotics</span><span class="facet-kind">Technology</span></span>
-            <a class="facet-link" href="technology/index.html" draggable="false"><span class="visually-hidden">Robotics, Technology</span></a>
-          </li>
-          <li class="facet is-up is-corner" style="--j: 7; --row: 1">
-            <div class="facet-view" aria-hidden="true"><img src="assets/atlas/design-2160.webp?v=20261031-3" srcset="assets/atlas/design-1440.webp?v=20261031-3 1440w, assets/atlas/design-2160.webp?v=20261031-3 2160w, assets/atlas/design-2880.webp?v=20261031-3 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
-            <span class="facet-label" aria-hidden="true"><span class="facet-name">Design</span><span class="facet-kind">Engineering</span></span>
-            <a class="facet-link" href="engineering/index.html" draggable="false"><span class="visually-hidden">Design, Engineering</span></a>
-          </li>
-          </ul>
-          <svg class="atlas-lattice" viewBox="0 0 40 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6H40M-5 0L5 12M-5 0L-15 12M5 0L15 12M5 0L-5 12M15 0L25 12M15 0L5 12M25 0L35 12M25 0L15 12M35 0L45 12M35 0L25 12M45 0L55 12M45 0L35 12"/></svg>
+  <!-- 04 · The question, then the subjects. "Every discovery begins with a ?", the "?" Satoshi Black's own glyph, outlined
+       and lit like the brand's accent words. assets/js/gate.js holds the section while it is scrolled through and
+       moves the viewpoint into the "?" and through its dot, to the subjects waiting behind it: sixteen as one surface
+       of triangles in two rows, every edge shared, running on past both sides of the window. assets/js/atlas.js sets
+       the strip out three times so it never ends, and moves it by drag, swipe, sideways scroll and the arrow keys.
+       Every image carries the hero panels' grade (cation/art/grade, applied by cation/art/atlas/grade.html), so photos,
+       renders and the panels read as one family. -->
+  <section class="atlas gate" id="subjects" aria-labelledby="gate-title">
+    <div class="gate-stage">
+      <div class="gate-plane">
+        <h2 class="gate-title" id="gate-title" data-reveal>Every discovery begins with a<span class="visually-hidden"> question.</span></h2>
+        <div class="gate-mark-box">
+          <svg class="gate-glow" viewBox="0 0 515 767" aria-hidden="true" data-reveal="fade"><path d="M302 553L163 553L163 532Q163 483 179.5 449.5Q196 416 221.5 391Q247 366 272 346Q293 329 310.5 313Q328 297 338.5 277.5Q349 258 349 234Q349 205 338.5 185Q328 165 308.5 154.5Q289 144 260 144Q230 144 207.5 158Q185 172 173 197.5Q161 223 161 258L0 258Q0 181 33.5 123Q67 65 126.5 32.5Q186 0 264 0Q343 0 399 26.5Q455 53 485 103Q515 153 515 223Q515 277 495 314.5Q475 352 445.5 377Q416 402 387 422Q353 445 327.5 470Q302 495 302 532ZM237 767Q199 767 172 740.5Q145 714 145 677Q145 639 172 612.5Q199 586 237 586Q275 586 302 613Q329 640 329 677Q329 713 302 740Q275 767 237 767Z" stroke-width="7"/></svg>
+          <svg class="gate-line" viewBox="0 0 515 767" aria-hidden="true" data-reveal="fade"><defs><linearGradient id="gate-light" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="515" y2="0"><stop offset="0" stop-color="#e9d78b"/><stop offset="0.26" stop-color="#f0e3b2"/><stop offset="0.46" stop-color="#f0ebdf"/><stop offset="0.66" stop-color="#c8c9f2"/><stop offset="0.84" stop-color="#9aa3ec"/><stop offset="1" stop-color="#7c87dd"/></linearGradient></defs><path d="M302 553L163 553L163 532Q163 483 179.5 449.5Q196 416 221.5 391Q247 366 272 346Q293 329 310.5 313Q328 297 338.5 277.5Q349 258 349 234Q349 205 338.5 185Q328 165 308.5 154.5Q289 144 260 144Q230 144 207.5 158Q185 172 173 197.5Q161 223 161 258L0 258Q0 181 33.5 123Q67 65 126.5 32.5Q186 0 264 0Q343 0 399 26.5Q455 53 485 103Q515 153 515 223Q515 277 495 314.5Q475 352 445.5 377Q416 402 387 422Q353 445 327.5 470Q302 495 302 532ZM237 767Q199 767 172 740.5Q145 714 145 677Q145 639 172 612.5Q199 586 237 586Q275 586 302 613Q329 640 329 677Q329 713 302 740Q275 767 237 767Z" stroke-width="7"/></svg>
         </div>
+      </div>
+      <div class="gate-window">
+        <div class="gate-depth">
+        <div class="atlas-strip">
+          <div class="atlas-track">
+            <div class="atlas-set">
+              <ul class="atlas-list" aria-label="Subjects">
+              <li class="facet is-up is-apex" style="--j: 0; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/physics-1440.webp?v=20261031-4" srcset="assets/atlas/physics-960.webp?v=20261031-4 960w, assets/atlas/physics-1440.webp?v=20261031-4 1440w, assets/atlas/physics-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Physics</span><span class="facet-kind">Science</span></span>
+                <a class="facet-link" href="courses/inside-the-particle-zoo/index.html" draggable="false"><span class="visually-hidden">Physics, Science</span></a>
+              </li>
+              <li class="facet is-down is-apex" style="--j: 0; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/optics-1440.webp?v=20261031-4" srcset="assets/atlas/optics-960.webp?v=20261031-4 960w, assets/atlas/optics-1440.webp?v=20261031-4 1440w, assets/atlas/optics-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Optics</span><span class="facet-kind">Science</span></span>
+                <a class="facet-link" href="science/index.html" draggable="false"><span class="visually-hidden">Optics, Science</span></a>
+              </li>
+              <li class="facet is-down is-corner" style="--j: 1; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/energy-2160.webp?v=20261031-4" srcset="assets/atlas/energy-1440.webp?v=20261031-4 1440w, assets/atlas/energy-2160.webp?v=20261031-4 2160w, assets/atlas/energy-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Energy</span><span class="facet-kind">Engineering</span></span>
+                <a class="facet-link" href="engineering/index.html" draggable="false"><span class="visually-hidden">Energy, Engineering</span></a>
+              </li>
+              <li class="facet is-up is-corner" style="--j: 1; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/mechanics-2160.webp?v=20261031-4" srcset="assets/atlas/mechanics-1440.webp?v=20261031-4 1440w, assets/atlas/mechanics-2160.webp?v=20261031-4 2160w, assets/atlas/mechanics-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Mechanics</span><span class="facet-kind">Science</span></span>
+                <a class="facet-link" href="courses/forces-and-motion/index.html" draggable="false"><span class="visually-hidden">Mechanics, Science</span></a>
+              </li>
+              <li class="facet is-up is-apex" style="--j: 2; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/structures-1440.webp?v=20261031-4" srcset="assets/atlas/structures-960.webp?v=20261031-4 960w, assets/atlas/structures-1440.webp?v=20261031-4 1440w, assets/atlas/structures-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Structures</span><span class="facet-kind">Engineering</span></span>
+                <a class="facet-link" href="courses/forces-in-structures/index.html" draggable="false"><span class="visually-hidden">Structures, Engineering</span></a>
+              </li>
+              <li class="facet is-down is-apex" style="--j: 2; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/materials-1440.webp?v=20261031-4" srcset="assets/atlas/materials-960.webp?v=20261031-4 960w, assets/atlas/materials-1440.webp?v=20261031-4 1440w, assets/atlas/materials-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Materials</span><span class="facet-kind">Engineering</span></span>
+                <a class="facet-link" href="courses/stress-strain-failure/index.html" draggable="false"><span class="visually-hidden">Materials, Engineering</span></a>
+              </li>
+              <li class="facet is-down is-corner" style="--j: 3; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/chemistry-2160.webp?v=20261031-4" srcset="assets/atlas/chemistry-1440.webp?v=20261031-4 1440w, assets/atlas/chemistry-2160.webp?v=20261031-4 2160w, assets/atlas/chemistry-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Chemistry</span><span class="facet-kind">Science</span></span>
+                <a class="facet-link" href="courses/chemistry-of-change/index.html" draggable="false"><span class="visually-hidden">Chemistry, Science</span></a>
+              </li>
+              <li class="facet is-up is-corner" style="--j: 3; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/biology-2160.webp?v=20261031-4" srcset="assets/atlas/biology-1440.webp?v=20261031-4 1440w, assets/atlas/biology-2160.webp?v=20261031-4 2160w, assets/atlas/biology-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Biology</span><span class="facet-kind">Science</span></span>
+                <a class="facet-link" href="science/index.html" draggable="false"><span class="visually-hidden">Biology, Science</span></a>
+              </li>
+              <li class="facet is-up is-apex" style="--j: 4; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/data-1440.webp?v=20261031-4" srcset="assets/atlas/data-960.webp?v=20261031-4 960w, assets/atlas/data-1440.webp?v=20261031-4 1440w, assets/atlas/data-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Data</span><span class="facet-kind">Technology</span></span>
+                <a class="facet-link" href="courses/machine-learning-explained/index.html" draggable="false"><span class="visually-hidden">Data, Technology</span></a>
+              </li>
+              <li class="facet is-down is-apex" style="--j: 4; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/computing-1440.webp?v=20261031-4" srcset="assets/atlas/computing-960.webp?v=20261031-4 960w, assets/atlas/computing-1440.webp?v=20261031-4 1440w, assets/atlas/computing-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Computing</span><span class="facet-kind">Technology</span></span>
+                <a class="facet-link" href="courses/how-computers-think/index.html" draggable="false"><span class="visually-hidden">Computing, Technology</span></a>
+              </li>
+              <li class="facet is-down is-corner" style="--j: 5; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/mathematics-2160.webp?v=20261031-4" srcset="assets/atlas/mathematics-1440.webp?v=20261031-4 1440w, assets/atlas/mathematics-2160.webp?v=20261031-4 2160w, assets/atlas/mathematics-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Mathematics</span><span class="facet-kind">Mathematics</span></span>
+                <a class="facet-link" href="courses/algebra-from-the-ground-up/index.html" draggable="false"><span class="visually-hidden">Mathematics, Mathematics</span></a>
+              </li>
+              <li class="facet is-up is-corner" style="--j: 5; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/calculus-2160.webp?v=20261031-4" srcset="assets/atlas/calculus-1440.webp?v=20261031-4 1440w, assets/atlas/calculus-2160.webp?v=20261031-4 2160w, assets/atlas/calculus-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Calculus</span><span class="facet-kind">Mathematics</span></span>
+                <a class="facet-link" href="courses/calculus-mathematics-of-change/index.html" draggable="false"><span class="visually-hidden">Calculus, Mathematics</span></a>
+              </li>
+              <li class="facet is-up is-apex" style="--j: 6; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/systems-1440.webp?v=20261031-4" srcset="assets/atlas/systems-960.webp?v=20261031-4 960w, assets/atlas/systems-1440.webp?v=20261031-4 1440w, assets/atlas/systems-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="50,0 100,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Systems</span><span class="facet-kind">Mathematics</span></span>
+                <a class="facet-link" href="courses/chaos-and-dynamical-systems/index.html" draggable="false"><span class="visually-hidden">Systems, Mathematics</span></a>
+              </li>
+              <li class="facet is-down is-apex" style="--j: 6; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/electronics-1440.webp?v=20261031-4" srcset="assets/atlas/electronics-960.webp?v=20261031-4 960w, assets/atlas/electronics-1440.webp?v=20261031-4 1440w, assets/atlas/electronics-1920.webp?v=20261031-4 1920w" sizes="(max-width: 719px) 156vw, (max-width: 1079px) 96vw, 70vw" width="1920" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 50,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Electronics</span><span class="facet-kind">Engineering</span></span>
+                <a class="facet-link" href="courses/circuits-and-sensors/index.html" draggable="false"><span class="visually-hidden">Electronics, Engineering</span></a>
+              </li>
+              <li class="facet is-down is-corner" style="--j: 7; --row: 0">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/robotics-2160.webp?v=20261031-4" srcset="assets/atlas/robotics-1440.webp?v=20261031-4 1440w, assets/atlas/robotics-2160.webp?v=20261031-4 2160w, assets/atlas/robotics-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="33.333,0 100,0 66.667,100"/><polygon class="edge-left" points="0,0 66.667,0 33.333,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Robotics</span><span class="facet-kind">Technology</span></span>
+                <a class="facet-link" href="technology/index.html" draggable="false"><span class="visually-hidden">Robotics, Technology</span></a>
+              </li>
+              <li class="facet is-up is-corner" style="--j: 7; --row: 1">
+                <div class="facet-view" aria-hidden="true"><img src="assets/atlas/design-2160.webp?v=20261031-4" srcset="assets/atlas/design-1440.webp?v=20261031-4 1440w, assets/atlas/design-2160.webp?v=20261031-4 2160w, assets/atlas/design-2880.webp?v=20261031-4 2880w" sizes="(max-width: 719px) 234vw, (max-width: 1079px) 144vw, 105vw" width="2880" height="1152" alt="" loading="lazy" decoding="async" draggable="false"><svg class="facet-edge" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon class="edge-right" points="66.667,0 100,100 33.333,100"/><polygon class="edge-left" points="33.333,0 66.667,100 0,100"/></svg></div>
+                <span class="facet-label" aria-hidden="true"><span class="facet-name">Design</span><span class="facet-kind">Engineering</span></span>
+                <a class="facet-link" href="engineering/index.html" draggable="false"><span class="visually-hidden">Design, Engineering</span></a>
+              </li>
+              </ul>
+              <svg class="atlas-lattice" viewBox="0 0 40 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6H40M-5 0L5 12M-5 0L-15 12M5 0L15 12M5 0L-5 12M15 0L25 12M15 0L5 12M25 0L35 12M25 0L15 12M35 0L45 12M35 0L25 12M45 0L55 12M45 0L35 12"/></svg>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="gate-fog"></div>
       </div>
     </div>
   </section>

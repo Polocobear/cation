@@ -61,7 +61,12 @@
 .gate.is-live:not(.is-open) .gate-window { pointer-events: none; }
 .gate.is-open :is(.gate-glow, .gate-line) { visibility: hidden; }
 
+@media (max-width: 1079px) { .gate { --b: min(56vw, 46svh); } }
 @media (max-width: 719px) {
-  .gate { --gate-run: 130vh; --b: min(80vw, 46svh); margin-top: max(0px, calc(var(--space-section) * 0.75 - 18svh)); }
+  .gate { --gate-run: 130vh; --b: min(92vw, 50svh); margin-top: max(0px, calc(var(--space-section) * 0.75 - 18svh)); }
   .gate-mark-box { height: min(46svh, 104vw); }
+  /* With no pointer to light a facet, the middle is lit and the sides fall away, as on the strip alone. */
+  .gate.is-live .gate-window::after {
+    background: linear-gradient(90deg, rgba(9, 11, 13, 0.72) 0, rgba(9, 11, 13, 0) 24%, rgba(9, 11, 13, 0) 76%, rgba(9, 11, 13, 0.72) 100%);
+  }
 }

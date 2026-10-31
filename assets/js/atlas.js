@@ -25,7 +25,7 @@ if (strip) {
   let b = 0;      // a facet's base
   let P = 0;      // the strip repeats every 4 bases
   let W = 0;      // the window onto it
-  let home = 0;   // where Physics' left corner meets the heading's left edge
+  let home = 0;   // where Physics sits: its left corner under the heading's left edge, if there is a heading
   let user = 0;
   let drift = 0;
   let frame = 0;
@@ -36,7 +36,8 @@ if (strip) {
     b = set.querySelector('.facet.is-apex').offsetWidth / 2;   // its box is two bases wide
     P = 4 * b;
     W = strip.clientWidth;
-    home = W / 2 - title.getBoundingClientRect().left;
+    // Under the question (gate.js) there is no heading: the strip arrives with Physics in the middle of the window.
+    home = title ? W / 2 - title.getBoundingClientRect().left : b / 2;
     if (was) user *= P / was;
   };
 
