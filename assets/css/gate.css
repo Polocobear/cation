@@ -17,7 +17,7 @@
 .gate-stage { position: relative; }
 .gate-plane {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: clamp(26 * var(--z), 4.4svh, 56 * var(--z));
+  gap: clamp(44 * var(--z), 7.5svh, 104 * var(--z));
   min-height: 100svh; padding: 0 var(--gutter);
   text-align: center;
   transform-origin: 0 0;
@@ -33,12 +33,23 @@
 .gate-glow path { fill: var(--bg); stroke: var(--bg); }
 .gate-glow { filter: drop-shadow(0 0 var(--glow, 24px) rgba(124, 135, 221, 0.45)); }
 .gate-line path { fill: none; stroke: url(#gate-light); stroke-linejoin: round; }
+/* Near the light the outline burns brighter, as "capability."'s does near the path's light (home-sections.css). */
+.gate-line .gate-rim { stroke: #fffaf0; }
+/* The light streaming out past the outline (gate.js draws it), behind the words. */
+.gate-rays { position: absolute; z-index: -1; pointer-events: none; }
 
 .gate-window { position: relative; background: var(--bg); }
 .gate-depth { display: grid; align-content: center; transform-origin: 50% 50%; }
 /* The space above the subjects is the stage's here, not the section's own. */
 .gate-depth > .atlas { padding-top: 0; }
-.gate-fog { position: absolute; inset: 0; background: var(--bg); opacity: 0; pointer-events: none; }
+/* The pane: dark, lit by the light behind the window (gate.js places it), until the subjects come through. */
+.gate-fog {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  background:
+    radial-gradient(var(--pane-r, 0px) calc(var(--pane-r, 0px) * 1.15) at var(--pane-x, 50%) var(--pane-y, 50%),
+      rgba(240, 227, 178, 0.5), rgba(200, 201, 242, 0.3) 32%, rgba(124, 135, 221, 0.15) 64%, rgba(124, 135, 221, 0.05) 100%),
+    var(--bg);
+}
 
 /* ---------- Live: one stage held in the window while the section scrolls past ---------- */
 
@@ -54,6 +65,12 @@
 /* Until the viewpoint is through, the subjects can't be taken hold of. */
 .gate.is-live:not(.is-open) .gate-window { pointer-events: none; }
 .gate.is-open :is(.gate-glow, .gate-line) { visibility: hidden; }
+
+/* The light arrives with the outline, as the reveal brings it in (base.css). */
+@media screen and (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .gate:has(.gate-line:not(.is-in)) :is(.gate-rays, .gate-window) { visibility: hidden; }
+  .gate:has(.gate-line.is-in:not(.is-done)) :is(.gate-rays, .gate-window) { animation: reveal-fade 0.9s var(--ease-fade) backwards; }
+}
 
 @media (max-width: 719px) {
   .gate { --gate-run: 130vh; margin-top: max(0px, calc(var(--space-section) * 0.75 - 16svh)); }
