@@ -55,16 +55,17 @@
 .atlas-set { position: absolute; left: calc(var(--copy, 0) * 4 * var(--b)); top: 0; width: calc(4 * var(--b)); height: 100%; }
 .atlas-list { position: absolute; inset: 0; }
 
-/* A facet's box covers every triangle it can grow into, and its picture fills the box at one scale; the clip shows the
-   facet. A top-row ▲ or bottom-row ▼ grows from its point, so its box is two bases wide; the others grow from a corner,
+/* A facet's box covers every triangle it can grow into, and its picture fills the box at one scale; the clip on its view
+   shows the facet. The link over it keeps the resting triangle as its only hit area, even while the view is open, so
+   pointing at a triangle the open one covers opens that one instead. A top-row ▲ or bottom-row ▼ grows from its point, so its box is two bases wide; the others grow from a corner,
    towards the middle of the window (atlas.js adds .grows-left), so theirs is three. --rest and --grown are the two
    triangles, as fractions of the box; --lx and --ly place the label at the middle of whichever is showing. */
 .facet {
   position: absolute; top: 0; height: calc(2 * var(--h));
   left: calc((var(--j) - 1) * var(--b) / 2); width: calc(2 * var(--b));
   z-index: 0;
-  clip-path: var(--rest);
-  transition: clip-path 0.5s var(--ease-in-out), z-index 0.5s linear;
+  pointer-events: none;
+  transition: z-index 0.5s linear;
 }
 .facet.is-corner { left: calc(var(--j) * var(--b) / 2 - var(--b)); width: calc(3 * var(--b)); }
 .facet.is-apex.is-up {
@@ -86,7 +87,12 @@
 }
 .facet.is-corner.is-up.grows-left { --grown: polygon(33.333% 0, 66.667% 100%, 0 100%); --lx-grown: 33.333%; }
 
-.facet-link { position: absolute; inset: 0; display: block; background: #0a0c18; -webkit-tap-highlight-color: transparent; }
+.facet-view {
+  position: absolute; inset: 0; background: #0a0c18;
+  clip-path: var(--rest);
+  transition: clip-path 0.5s var(--ease-in-out);
+}
+.facet-link { position: absolute; inset: 0; display: block; clip-path: var(--rest); pointer-events: auto; -webkit-tap-highlight-color: transparent; }
 .facet-link:focus-visible { outline: none; }
 .facet img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
@@ -122,38 +128,35 @@
 }
 
 /* One facet lit, the rest held back a little further. */
-.atlas-strip:not(.is-dragging) .facet-link:hover img,
-.facet-link:focus-visible img { opacity: 1; }
-.atlas-strip:not(.is-dragging):has(.facet-link:hover) .facet-link:not(:hover) img,
-.atlas-strip:has(.facet-link:focus-visible) .facet-link:not(:focus-visible) img { opacity: 0.36; }
-.atlas-strip:not(.is-dragging) .facet-link:hover .facet-name,
-.facet-link:focus-visible .facet-name { color: var(--text); }
-.atlas-strip:not(.is-dragging) .facet-link:hover .facet-kind,
-.facet-link:focus-visible .facet-kind { color: var(--gold); }
+.atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) img,
+.facet:has(> .facet-link:focus-visible) img { opacity: 1; }
+.atlas-strip:not(.is-dragging):has(.facet-link:hover) .facet:not(:has(> .facet-link:hover)) img,
+.atlas-strip:has(.facet-link:focus-visible) .facet:not(:has(> .facet-link:focus-visible)) img { opacity: 0.36; }
+.atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) .facet-name,
+.facet:has(> .facet-link:focus-visible) .facet-name { color: var(--text); }
+.atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) .facet-kind,
+.facet:has(> .facet-link:focus-visible) .facet-kind { color: var(--gold); }
 
 /* Held for a beat, or focused, the facet opens: its window widens from one corner into a triangle of its own shape,
    twice the size, over the three it shares that space with. The picture stays put and the window reveals more of it.
-   It opens quickly and settles slowly, closes a little faster, and stays open until the pointer leaves it. */
+   It opens quickly and settles slowly, closes a little faster, and stays open while the pointer is on the triangle it
+   opened from; moving onto any other resting triangle, covered or not, opens that one. */
 @media (hover: hover) {
-  .atlas-strip:not(.is-dragging) .facet:hover {
-    z-index: 3; clip-path: var(--grown);
-    transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, z-index 0s;
-  }
-  .atlas-strip:not(.is-dragging) .facet:hover .facet-label {
+  .atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) { z-index: 3; transition: z-index 0s; }
+  .atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) .facet-view { clip-path: var(--grown); transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s; }
+  .atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) .facet-label {
     left: var(--lx-grown); top: var(--ly-grown); scale: 1.18;
     transition: opacity 0.4s var(--ease-out), left 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, top 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s, scale 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
   }
-  .atlas-strip:not(.is-dragging) .facet:hover .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.55s; }
+  .atlas-strip:not(.is-dragging) .facet:has(> .facet-link:hover) .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.55s; }
 }
-.facet:has(.facet-link:focus-visible) {
-  z-index: 3; clip-path: var(--grown);
-  transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1), z-index 0s;
-}
-.facet:has(.facet-link:focus-visible) .facet-label {
+.facet:has(> .facet-link:focus-visible) { z-index: 3; transition: z-index 0s; }
+.facet:has(> .facet-link:focus-visible) .facet-view { clip-path: var(--grown); transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+.facet:has(> .facet-link:focus-visible) .facet-label {
   left: var(--lx-grown); top: var(--ly-grown); scale: 1.18;
   transition: opacity 0.4s var(--ease-out), left 0.85s cubic-bezier(0.16, 1, 0.3, 1), top 0.85s cubic-bezier(0.16, 1, 0.3, 1), scale 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.facet:has(.facet-link:focus-visible) .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.4s; }
+.facet:has(> .facet-link:focus-visible) .facet-edge { opacity: 0.5; transition: opacity 0.5s var(--ease-out) 0.4s; }
 
 /* The lattice: hairlines along every shared edge, which also cover the seams between neighbouring facets. */
 .atlas-lattice { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; z-index: 1; fill: none; stroke: rgba(240, 232, 212, 0.13); pointer-events: none; }
