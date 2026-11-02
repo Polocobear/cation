@@ -3,9 +3,9 @@
 // actions taken) and the rest follows. The records are the sample learner for now (data/sample-learner.js).
 // Every module of the app is imported with the same ?v= stamp, so a release never mixes old and new files.
 
-import { catalogue } from './data/catalogue.js?v=20261102-2';
-import { paths } from './data/paths.js?v=20261102-2';
-import * as learnerData from './data/sample-learner.js?v=20261102-2';
+import { catalogue } from './data/catalogue.js?v=20261102-3';
+import { paths } from './data/paths.js?v=20261102-3';
+import * as learnerData from './data/sample-learner.js?v=20261102-3';
 
 // Site links are written root-relative, as in the site's own pages, and resolved against the site's root, which the
 // page names in <link rel="home"> (a hosted copy may live below the root of its domain).
@@ -128,7 +128,7 @@ for (const e of learnerData.activity) {
   c[e.kind]++;
   perDay.set(k, c);
 }
-const LEVELS = [1, 3, 5, 8];                         // actions in a day for each step up the heatmap's scale
+const LEVELS = [1, 3, 5, 8];                         // actions in a day for each step up the gold scale
 
 const dayOf = (date) => {
   const counts = perDay.get(dayKey(date)) || { problem: 0, practice: 0, lesson: 0 };
@@ -137,11 +137,13 @@ const dayOf = (date) => {
 };
 
 export const rhythm = (() => {
-  // The heatmap: 53 weeks of Monday-to-Sunday columns, the last of them this week.
-  const monday = dayOffset(-((today.getDay() + 6) % 7));
-  const days = [];
-  for (let i = -52 * 7; i < 7; i++) days.push(dayOf(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i)));
-  const past = days.filter((d) => !d.future);
+  // The year: the last twelve calendar months, this one last, each a list of its days.
+  const months = Array.from({ length: 12 }, (_, i) => {
+    const first = new Date(today.getFullYear(), today.getMonth() - 11 + i, 1);
+    const count = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+    return { first, days: Array.from({ length: count }, (_, d) => dayOf(new Date(first.getFullYear(), first.getMonth(), d + 1))) };
+  });
+  const past = months.flatMap((m) => m.days).filter((d) => !d.future);
 
   const todayDone = dayOf(dayOffset(0)).total > 0;
   let streak = 0;
@@ -150,11 +152,10 @@ export const rhythm = (() => {
   for (const d of past) { run = d.total ? run + 1 : 0; longest = Math.max(longest, run); }
 
   return {
-    days,
+    months,
     week: Array.from({ length: 7 }, (_, i) => dayOf(dayOffset(i - 6))),     // the last seven days, today last
     todayDone, streak, longest,
-    activeDays: past.slice(-365).filter((d) => d.total).length,
-    actions: past.slice(-365).reduce((n, d) => n + d.total, 0),
+    activeDays: past.filter((d) => d.total).length,
   };
 })();
 

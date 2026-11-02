@@ -2,8 +2,8 @@
 // account menu and Q. Q is not connected to any AI service yet: its panel says so, shows what it would start from, and
 // sends nothing anywhere.
 
-import { h, icon, menu } from './ui.js?v=20261102-2';
-import { catalogue, enrolled, featured, learner, url } from './model.js?v=20261102-2';
+import { h, icon, menu } from './ui.js?v=20261102-3';
+import { catalogue, enrolled, featured, learner, url } from './model.js?v=20261102-3';
 
 // Older addresses (#/courses, #/knowledge) open My Learning, where their contents now live.
 const ROUTES = { '': 'home', learning: 'learning', courses: 'learning', knowledge: 'learning', settings: 'settings' };
