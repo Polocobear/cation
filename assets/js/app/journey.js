@@ -3,13 +3,13 @@
 // the course outline, the only page a chapter has so far. The current chapter carries the next lesson and the one
 // action that matters, Continue learning, with Q beside it. Below the path: the learner's other courses, kept small.
 
-import { h, icon } from './ui.js?v=20261102-4';
-import { ART } from './art.js?v=20261102-4';
-import { journey, others, url } from './model.js?v=20261102-4';
+import { h, icon, Q_MARK } from './ui.js?v=20261102-5';
+import { ART } from './art.js?v=20261102-5';
+import { journey, others, url } from './model.js?v=20261102-5';
+import { LESSON, lesson } from './store.js?v=20261102-5';
 
 const NS = 'http://www.w3.org/2000/svg';
 const two = (n) => String(n).padStart(2, '0');
-const Q_MARK = '<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>';
 
 // Where each milestone sits, as percentages of the path's box: a gentle rise from lower left to upper right that
 // leaves the upper left for the course's name.
@@ -75,11 +75,14 @@ export function renderJourney(el, { onAsk }) {
       h('p', { class: 'now-meta' },
         h('span', { class: 'pips', 'aria-hidden': 'true' },
           Array.from({ length: ch.lessons }, (_, k) => h('i', { class: k + 1 < p.lesson ? 'is-done' : k + 1 === p.lesson ? 'is-now' : '' }))),
-        `Lesson ${p.lesson} of ${ch.lessons}`),
+        h('span', {}, `Lesson ${p.lesson} of ${ch.lessons}`, course.next && ` · ${course.next.title}`)),
       h('div', { class: 'now-acts' },
         h('a', { class: 'continue', href: resume, html: `Continue learning${icon('arrow')}` }),
-        h('button', { type: 'button', class: 'ask-q', 'data-q': '', onclick: () => onAsk({ name: ch.name }), html: `${Q_MARK}Ask Q` })),
-      !course.next && h('p', { class: 'continue-note' }, 'Lessons are in development, so this opens the course outline.'));
+        h('button', { type: 'button', class: 'ask-q', onclick: () => onAsk({ name: ch.name }), html: `${Q_MARK}Ask Q` })),
+      !course.next && (course.slug === LESSON.course && lesson().completedAt
+        ? h('p', { class: 'continue-note' }, `You’ve finished lesson ${LESSON.number}. Lesson ${LESSON.number + 1} is still being written, so this opens the course outline. `,
+          h('a', { href: `${LESSON.href}/1` }, `Revisit lesson ${LESSON.number}`))
+        : h('p', { class: 'continue-note' }, 'Lessons are in development, so this opens the course outline.')));
 
     return h('li', {
       class: `chapter is-${ch.state}`, style: `--x: ${x}%; --y: ${y}%; --i: ${i}`,

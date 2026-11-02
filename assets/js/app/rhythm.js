@@ -4,8 +4,8 @@
 // from yesterday until today's first action. The chart follows how long the learner has been here: the year for a
 // year or more, otherwise a month at a time back to the month they joined.
 
-import { h, icon, dateLabel } from './ui.js?v=20261102-4';
-import { rhythm, revisit } from './model.js?v=20261102-4';
+import { h, icon, dateLabel } from './ui.js?v=20261102-5';
+import { rhythm, revisit } from './model.js?v=20261102-5';
 
 const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 const DAY = { weekday: 'short', day: 'numeric', month: 'short' };
@@ -25,8 +25,7 @@ function says(d) {
 
 // One tip for the whole rail, placed over whatever is pointed at or chosen.
 function tipper() {
-  const tip = h('div', { class: 'tip', hidden: true });
-  document.body.append(tip);
+  const tip = document.querySelector('body > .tip') || document.body.appendChild(h('div', { class: 'tip', hidden: true }));
   return {
     show(target, text) {
       const r = target.getBoundingClientRect();

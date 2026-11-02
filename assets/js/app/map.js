@@ -3,8 +3,8 @@
 // and neighbours; choosing one (click, Enter or Space) opens what it is, the record behind its state, what it builds
 // on and leads to, and the way into the course. The arrow keys move between concepts by direction.
 
-import { h, icon } from './ui.js?v=20261102-4';
-import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js?v=20261102-4';
+import { h, icon } from './ui.js?v=20261102-5';
+import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js?v=20261102-5';
 
 const NS = 'http://www.w3.org/2000/svg';
 const ago = (n) => (n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`);
@@ -91,8 +91,8 @@ export function renderMap(el, { onAsk, headingId = 'map-title', more = true } = 
       before.length ? h('p', { class: 'rel' }, 'Builds on', chips(before, 'from')) : null,
       after.length ? h('p', { class: 'rel' }, 'Leads to', chips(after, 'to')) : null,
       h('div', { class: 'acts' },
-        h('a', { href: map.course.outline, html: `${verb}${icon('arrow')}` }),
-        h('button', { type: 'button', 'data-q': '', onclick: () => onAsk?.(c), html: `<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>Ask Q` })));
+        c.id === 'pair-production' ? h('a', { href: '#/lesson', html: `Open lesson 3${icon('arrow')}` }) : h('a', { href: map.course.outline, html: `${verb}${icon('arrow')}` }),
+        h('button', { type: 'button', onclick: () => onAsk?.(c), html: `<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>Ask Q` })));
     el.append(detail);
     relight();
   };

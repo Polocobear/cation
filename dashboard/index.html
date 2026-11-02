@@ -11,8 +11,8 @@
   <link rel="home" href="../index.html">
   <link rel="stylesheet" href="../assets/css/fonts.css">
   <link rel="stylesheet" href="../assets/css/base.css?v=20261030-16">
-  <link rel="stylesheet" href="../assets/css/app.css?v=20261102-4">
-  <script type="module" src="../assets/js/app/main.js?v=20261102-4"></script>
+  <link rel="stylesheet" href="../assets/css/app.css?v=20261102-5">
+  <script type="module" src="../assets/js/app/main.js?v=20261102-5"></script>
 </head>
 <body class="app">
   <svg class="defs" width="0" height="0" aria-hidden="true">
@@ -21,8 +21,9 @@
   <a class="skip-link" href="#main">Skip to the dashboard</a>
 
   <!-- The student application: a rail of navigation and one view at a time (assets/js/app/shell.js routes between
-       them by the address's #/ path). Home is the learning path beside the Learning Rhythm rail. Everything about the
-       learner is sample data (assets/js/app/data/sample-learner.js), and the page says so at the top right. -->
+       them by the address's #/ path): Home (the learning path beside the Learning Rhythm rail), My Learning, the
+       lesson (#/lesson), the study room (#/session) and Ask Q (#/q). Everything about the learner is sample data
+       (assets/js/app/data/sample-learner.js), and the page says so at the top right. -->
   <div class="app-shell">
     <nav class="app-nav" aria-label="Application">
       <a class="app-logo" href="../index.html" aria-label="CATION website">
@@ -36,10 +37,12 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5 12 4l8 3.5-8 3.5z"/><path d="m4 12 8 3.5 8-3.5"/><path d="m4 16.5 8 3.5 8-3.5"/></svg><span>My Learning</span></a></li>
         <li><a class="nav-item" href="../explore/index.html">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.4 8.6-2 4.8-4.8 2 2-4.8z"/></svg><span>Explore</span></a></li>
+        <li><a class="nav-item" href="#/session" data-route="session">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6.5" width="12" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3"/></svg><span>Sessions</span></a></li>
         <li><button type="button" class="nav-item" data-search-open aria-haspopup="dialog" aria-keyshortcuts="Meta+K Control+K /">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.5 15.5 4.5 4.5"/></svg><span>Search</span></button></li>
-        <li><button type="button" class="nav-item nav-q" data-q-open aria-haspopup="dialog">
-          <svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg><span>Q</span></button></li>
+        <li><a class="nav-item nav-q" href="#/q" data-route="q">
+          <svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg><span>Q</span></a></li>
       </ul>
     </nav>
 
@@ -65,6 +68,9 @@
         </div>
 
         <div class="view page" data-view="learning" hidden></div>
+        <div class="view lesson" data-view="lesson" hidden></div>
+        <div class="view ask" data-view="q" hidden></div>
+        <div class="view room" data-view="session" hidden></div>
         <div class="view page" data-view="settings" hidden></div>
       </main>
     </div>
@@ -83,17 +89,5 @@
     </div>
   </div>
 
-  <!-- Q, CATION's teaching assistant. Not connected to any AI service yet: the panel says so and sends nothing. -->
-  <div class="q-panel" id="q-panel" role="dialog" aria-modal="false" aria-labelledby="q-title" hidden>
-    <div class="q-head">
-      <svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>
-      <div>
-        <h2 id="q-title">Q</h2>
-        <p>Teaching assistant · prototype</p>
-      </div>
-      <button type="button" class="icon-btn" data-q-close aria-label="Close Q"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
-    </div>
-    <div class="q-body" id="q-body"></div>
-  </div>
 </body>
 </html>

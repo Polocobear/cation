@@ -26,7 +26,21 @@ const PATHS = {
   subject: '<circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="12" r="8.5"/>',
   module: '<path d="M4.5 7h15M4.5 12h15M4.5 17h9"/>',
   lock: '<rect x="6" y="10.5" width="12" height="9" rx="2"/><path d="M8.8 10.5V8a3.2 3.2 0 0 1 6.4 0v2.5"/>',
+  back: '<path d="M20 12H5M10.5 6.5 5 12l5.5 5.5"/>',
+  restart: '<path d="M5 12a7 7 0 1 0 2.1-5"/><path d="M6.5 3.5v4h4"/>',
+  send: '<path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/>',
+  plus: '<path d="M12 5.5v13M5.5 12h13"/>',
+  mic: '<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/>',
+  micOff: '<rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5M4 4l16 16"/>',
+  cam: '<rect x="3.5" y="6.5" width="12" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3"/>',
+  camOff: '<rect x="3.5" y="6.5" width="12" height="11" rx="2.5"/><path d="m15.5 10.5 5-3v9l-5-3M3 4l17 16"/>',
+  leave: '<path d="M14 4.5h4.5v15H14M10.5 8 6.5 12l4 4M6.5 12h9"/>',
+  panel: '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M14.5 4.5v15"/>',
+  screen: '<rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/>',
 };
+
+// Q's mark: a ring and a tail that starts inside it, stroked with the light defined in the page (#q-light).
+export const Q_MARK = '<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>';
 export const icon = (name, cls = 'i') =>
   `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name]}</svg>`;
 

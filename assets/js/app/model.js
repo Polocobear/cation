@@ -2,15 +2,18 @@
 // here rather than stored, so a real record only has to say what happened (lessons finished, answers given, learning
 // actions taken) and the rest follows. The records are the sample learner for now (data/sample-learner.js).
 // Every module of the app is imported with the same ?v= stamp, so a release never mixes old and new files.
+// What this device has recorded (store.js: the lesson's progress, answers, learning events) is added to the sample
+// records, and refresh() works everything out again when it changes.
 
-import { catalogue } from './data/catalogue.js?v=20261102-4';
-import { paths } from './data/paths.js?v=20261102-4';
-import * as learnerData from './data/sample-learner.js?v=20261102-4';
+import { catalogue } from './data/catalogue.js?v=20261102-5';
+import { paths } from './data/paths.js?v=20261102-5';
+import * as learnerData from './data/sample-learner.js?v=20261102-5';
+import * as store from './store.js?v=20261102-5';
 
 // Site links are written root-relative, as in the site's own pages, and resolved against the site's root, which the
 // page names in <link rel="home"> (a hosted copy may live below the root of its domain).
 const root = new URL('.', document.querySelector('link[rel="home"]')?.href || location.origin + '/');
-export const url = (path) => (/^[a-z]+:/i.test(path) ? path : new URL(path.replace(/^\//, ''), root).href);
+export const url = (path) => (/^([a-z]+:|#)/i.test(path) ? path : new URL(path.replace(/^\//, ''), root).href);
 
 const disciplines = new Map(catalogue.disciplines.map((d) => [d.slug, d]));
 const subjects = new Map(catalogue.subjects.map((s) => [s.slug, s]));
@@ -58,89 +61,107 @@ function progress(course, done) {
 
 export const STATUS = { active: 'In progress', complete: 'Completed', new: 'Not started' };
 
-export const enrolled = learnerData.enrolments.map((e) => {
-  const course = courses.get(e.course);
-  const subject = subjects.get(course.subject);
+export let enrolled, featured, journey, others, map, revisit, rhythm;
+
+// The course with the lesson built so far takes its progress from that lesson: its Continue opens the step reached,
+// and once the lesson is finished it counts as done.
+function courseList() {
+  const saved = store.lesson(), L = store.LESSON;
+  return learnerData.enrolments.map((e) => {
+    const course = courses.get(e.course);
+    const subject = subjects.get(course.subject);
+    const ours = e.course === L.course;
+    const done = ours && saved.completedAt ? Math.max(e.done, L.inCourse) : e.done;
+    const next = ours ? !saved.completedAt && { title: L.title, href: `${L.href}/${saved.reached}` } : e.next && { ...e.next, href: url(e.next.href) };
+    return {
+      ...course,
+      subjectName: subject.name,
+      disciplineName: disciplines.get(course.discipline).name,
+      href: url(`/courses/${course.slug}/`),
+      outline: url(`/courses/${course.slug}/#syllabus-title`),
+      thumb: url(`/assets/app/thumb-${e.thumb}.webp?v=20261031-1`),
+      picture: url(e.picture),
+      lastDay: e.lastDay,
+      next: next || null,
+      progress: progress(course, done),
+    };
+  });
+}
+
+// The Understanding Map: the sample practice records, with this device's answers added.
+function understandingMap(list) {
+  const u = learnerData.understanding, mine = store.practice();
+  const mapCourse = list.find((c) => c.slug === u.course);
   return {
-    ...course,
-    subjectName: subject.name,
-    disciplineName: disciplines.get(course.discipline).name,
-    href: url(`/courses/${course.slug}/`),
-    outline: url(`/courses/${course.slug}/#syllabus-title`),
-    thumb: url(`/assets/app/thumb-${e.thumb}.webp?v=20261031-1`),
-    picture: url(e.picture),
-    lastDay: e.lastDay,
-    next: e.next && { ...e.next, href: url(e.next.href) },
-    progress: progress(course, e.done),
+    course: mapCourse,
+    focus: u.focus,
+    concepts: u.concepts.map((c) => {
+      const practice = c.practice + (mine[c.id] || '');
+      return {
+        ...c,
+        practice,
+        lastDay: mine[c.id] ? 0 : c.lastDay,
+        state: stateOf(practice),
+        answered: practice.length,
+        right: [...practice].filter((a) => a === '1').length,
+        recent: [...practice.slice(-8)].filter((a) => a === '1').length,
+        moduleName: mapCourse.modules[c.module].name,
+      };
+    }),
+    links: u.links.map(([from, to, why]) => ({ from, to, why })),
   };
-});
+}
 
-// The course to pick up again: the most recently studied one that isn't finished.
-export const featured = enrolled.find((c) => c.progress.status === 'active');
-
-// Its learning path: each chapter (module) finished, in progress or still locked, with its art and line (paths.js).
-// Every chapter opens the course outline, the only page each has so far.
-export const journey = {
-  course: featured,
-  chapters: featured.modules.map((m, i) => ({
-    number: i + 1,
-    name: m.name,
-    lessons: m.lessons,
-    state: i < featured.progress.module ? 'done' : i === featured.progress.module ? 'current' : 'locked',
-    ...(paths[featured.slug]?.[i] || {}),
-    href: featured.outline,
-  })),
-};
-
-// The other courses worth going back to, most recently studied first.
-export const others = enrolled.filter((c) => c !== featured && c.progress.status !== 'complete').slice(0, 3);
-
-// ---------------------------------------------------------------- the Understanding Map
-
-const u = learnerData.understanding;
-const mapCourse = enrolled.find((c) => c.slug === u.course);
-export const map = {
-  course: mapCourse,
-  focus: u.focus,
-  concepts: u.concepts.map((c) => ({
-    ...c,
-    state: stateOf(c.practice),
-    answered: c.practice.length,
-    right: [...c.practice].filter((a) => a === '1').length,
-    recent: [...c.practice.slice(-8)].filter((a) => a === '1').length,
-    moduleName: mapCourse.modules[c.module].name,
-  })),
-  links: u.links.map(([from, to, why]) => ({ from, to, why })),
-};
-
-// The one concept worth revisiting now, if any: the first the map says needs review.
-export const revisit = map.concepts.find((c) => c.state === 'review') || null;
+export function refresh() {
+  enrolled = courseList();
+  // The course to pick up again: the most recently studied one that isn't finished.
+  featured = enrolled.find((c) => c.progress.status === 'active');
+  // Its learning path: each chapter (module) finished, in progress or still locked, with its art and line (paths.js).
+  // Every chapter opens the course outline, the only page each has so far.
+  journey = {
+    course: featured,
+    chapters: featured.modules.map((m, i) => ({
+      number: i + 1,
+      name: m.name,
+      lessons: m.lessons,
+      state: i < featured.progress.module ? 'done' : i === featured.progress.module ? 'current' : 'locked',
+      ...(paths[featured.slug]?.[i] || {}),
+      href: featured.outline,
+    })),
+  };
+  // The other courses worth going back to, most recently studied first.
+  others = enrolled.filter((c) => c !== featured && c.progress.status !== 'complete').slice(0, 3);
+  map = understandingMap(enrolled);
+  // The one concept worth revisiting now, if any: the first the map says needs review.
+  revisit = map.concepts.find((c) => c.state === 'review') || null;
+  rhythm = rhythmOf([...learnerData.activity, ...store.events()]);
+}
 
 // ---------------------------------------------------------------- learning rhythm
 
 // The learning events (data/sample-learner.js) counted by day. A day is active when it has at least one. The streak
 // counts back from yesterday when nothing has happened yet today, so the morning never shows a broken run.
 const dayKey = (d) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-const perDay = new Map();
-for (const e of learnerData.activity) {
-  const k = dayKey(e.at);
-  const c = perDay.get(k) || { problem: 0, practice: 0, lesson: 0 };
-  c[e.kind]++;
-  perDay.set(k, c);
-}
 const LEVELS = [1, 3, 5, 8];                         // actions in a day for each step up the heatmap's scale
 const joined = learnerData.learner.joined;
 const joinedDay = new Date(joined.getFullYear(), joined.getMonth(), joined.getDate());
 
-const dayOf = (date) => {
-  const counts = perDay.get(dayKey(date)) || { problem: 0, practice: 0, lesson: 0 };
-  const total = counts.problem + counts.practice + counts.lesson;
-  return { date, counts, total, level: LEVELS.filter((n) => total >= n).length, future: date > today, before: date < joinedDay };
-};
+const rhythmOf = (activity) => {
+  const perDay = new Map();
+  for (const e of activity) {
+    const k = dayKey(e.at);
+    const c = perDay.get(k) || { problem: 0, practice: 0, lesson: 0 };
+    c[e.kind]++;
+    perDay.set(k, c);
+  }
+  const dayOf = (date) => {
+    const counts = perDay.get(dayKey(date)) || { problem: 0, practice: 0, lesson: 0 };
+    const total = counts.problem + counts.practice + counts.lesson;
+    return { date, counts, total, level: LEVELS.filter((n) => total >= n).length, future: date > today, before: date < joinedDay };
+  };
 
-// The activity chart follows how long the learner has been here: a learner of a year or more sees the year, as 53
-// Monday-to-Sunday weeks; anyone newer sees a month at a time, from the month they joined to this one.
-export const rhythm = (() => {
+  // The activity chart follows how long the learner has been here: a learner of a year or more sees the year, as 53
+  // Monday-to-Sunday weeks; anyone newer sees a month at a time, from the month they joined to this one.
   const view = (today - joinedDay) / 864e5 >= 365 ? 'year' : 'month';
 
   const monday = dayOffset(-((today.getDay() + 6) % 7));
@@ -166,7 +187,9 @@ export const rhythm = (() => {
     todayDone, streak, longest,
     activeDays: past.slice(-365).filter((d) => d.total).length,
   };
-})();
+};
+
+refresh();
 
 export const learner = learnerData.learner;
 export const SAMPLE = learnerData.SAMPLE;

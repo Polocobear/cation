@@ -1,28 +1,35 @@
-// The application around the home page: routing between views by the address's #/ path, the catalogue search, the
-// account menu and Q. Q is not connected to any AI service yet: its panel says so, shows what it would start from, and
-// sends nothing anywhere.
+// The application around the home page: routing between views by the address's #/ path, the catalogue search and the
+// account menu. Q, the lesson and the study room are views of their own (ask.js, lesson.js, session.js).
 
-import { h, icon, menu } from './ui.js?v=20261102-4';
-import { catalogue, enrolled, featured, learner, url } from './model.js?v=20261102-4';
+import { h, icon, menu, Q_MARK } from './ui.js?v=20261102-5';
+import { catalogue, enrolled, learner, url } from './model.js?v=20261102-5';
 
 // Older addresses (#/courses, #/knowledge) open My Learning, where their contents now live.
-const ROUTES = { '': 'home', learning: 'learning', courses: 'learning', knowledge: 'learning', settings: 'settings' };
-const TITLES = { home: 'Home', learning: 'My Learning', settings: 'Settings' };
-const Q_MARK = '<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>';
+const ROUTES = {
+  '': 'home', learning: 'learning', courses: 'learning', knowledge: 'learning',
+  lesson: 'lesson', q: 'q', session: 'session', settings: 'settings',
+};
+const TITLES = { home: 'Home', learning: 'My Learning', lesson: 'Can light turn into matter?', q: 'Ask Q', session: 'Study room', settings: 'Settings' };
+const LIGHTS = { lesson: 'learning' };                 // the rail item a view lights up when it has none of its own
 
 // ---------------------------------------------------------------- views
 
 // Each view draws itself the first time it is shown; `enter` runs every time, with what follows the view's name in
-// the address (#/learning/conservation opens that concept on the map).
+// the address (#/learning/conservation opens that concept on the map, #/lesson/3 the lesson's third step), and
+// `leave` when another view takes its place.
 export function router(views) {
   const drawn = new Set();
+  let current = null;
   const go = (first) => {
     const [path, param] = location.hash.replace(/^#\/?/, '').split('/');
     const name = ROUTES[path] || 'home';
+    if (current && current !== name) views[current].leave?.();
+    current = name;
     const el = document.querySelector(`.view[data-view="${name}"]`);
     for (const v of document.querySelectorAll('.view')) v.hidden = v !== el;
+    document.body.dataset.view = name;
     for (const a of document.querySelectorAll('[data-route]')) {
-      if (a.dataset.route === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      if (a.dataset.route === (LIGHTS[name] || name)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     }
     if (!drawn.has(name)) { views[name].draw(el); drawn.add(name); }
     views[name].enter?.(el, param);
@@ -31,41 +38,6 @@ export function router(views) {
   };
   addEventListener('hashchange', () => go(false));
   go(true);
-}
-
-// ---------------------------------------------------------------- Q
-
-export function q() {
-  const panel = document.getElementById('q-panel'), body = document.getElementById('q-body');
-  const navButton = document.querySelector('[data-q-open]');
-  let opener = null;
-  const close = () => {
-    if (panel.hidden) return;
-    panel.hidden = true;
-    navButton.setAttribute('aria-expanded', 'false');
-    opener?.focus();
-  };
-  const open = ({ concept, question } = {}) => {
-    opener = document.activeElement;
-    const mod = featured.modules[featured.progress.module];
-    const [label, value] = question ? ['You asked', `“${question}”`]
-      : concept ? ['You were looking at', `${concept.name}, in ${featured.title}`]
-      : ['You’re studying', `${featured.title} · chapter ${featured.progress.module + 1}, ${mod.name}`];
-    body.replaceChildren(
-      h('p', {}, 'Q will be CATION’s teaching assistant. It isn’t connected to an AI service in this prototype, so it can’t answer yet.'),
-      h('div', { class: 'q-context' }, h('span', {}, label), h('b', {}, value)),
-      h('p', {}, 'When it is connected, Q will start from what you’re studying. Its full teaching experience is still being designed.'),
-      h('p', { class: 'q-status' }, 'Not connected. Nothing is sent.'));
-    panel.hidden = false;
-    navButton.setAttribute('aria-expanded', 'true');
-    panel.querySelector('[data-q-close]').focus();
-  };
-  navButton.setAttribute('aria-expanded', 'false');
-  navButton.addEventListener('click', (e) => { e.stopPropagation(); panel.hidden ? open() : close(); });
-  panel.querySelector('[data-q-close]').addEventListener('click', close);
-  panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-  document.addEventListener('click', (e) => { if (!panel.hidden && e.target.isConnected && !panel.contains(e.target) && !e.target.closest('[data-q]')) close(); });
-  return { open };
 }
 
 // ---------------------------------------------------------------- search
@@ -135,8 +107,8 @@ export function search({ ask }) {
       if (!groups.length) parts.push(h('p', { class: 'pop-empty' }, `Nothing in the catalogue matches “${query}”.`));
       parts.push(h('div', { class: 'pop-rule', role: 'separator' }));
       parts.push(option(`sr-${n++}`, [h('span', { html: icon('search') }).firstChild, h('span', {}, 'See every match in Explore')], { href: url(`/explore/?q=${encodeURIComponent(query)}`) }));
-      parts.push(option(`sr-${n++}`, [h('span', { class: 'ask-mark', html: Q_MARK }).firstChild, h('span', {}, `Ask Q “${query}”`, h('small', {}, 'Prototype: Q isn’t connected yet'))],
-        { type: 'button', class: 'pop-item ask', 'data-q': '', onclick: () => { close(false); ask(query); } }));
+      parts.push(option(`sr-${n++}`, [h('span', { class: 'ask-mark', html: Q_MARK }).firstChild, h('span', {}, `Ask Q “${query}”`, h('small', {}, 'Prototype: Q answers the questions written for it'))],
+        { type: 'button', class: 'pop-item ask', onclick: () => { close(false); ask(query); } }));
     }
     list.replaceChildren(...parts);
     options = [...list.querySelectorAll('[role="option"]')];
