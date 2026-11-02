@@ -2,13 +2,13 @@
 // Rhythm rail (rhythm.js), with the learner's other courses below; My Learning holds the course list and the
 // Understanding Map. See dashboard/index.html for the page and model.js for where the numbers come from.
 
-import { h, icon } from './ui.js?v=20261102-1';
-import { map, url } from './model.js?v=20261102-1';
-import { renderJourney, renderOthers } from './journey.js?v=20261102-1';
-import { renderRhythm } from './rhythm.js?v=20261102-1';
-import { renderCourses } from './panels.js?v=20261102-1';
-import { renderMap } from './map.js?v=20261102-1';
-import { router, q, search, account, greeting } from './shell.js?v=20261102-1';
+import { h, icon } from './ui.js?v=20261102-2';
+import { map, url } from './model.js?v=20261102-2';
+import { renderJourney, renderOthers } from './journey.js?v=20261102-2';
+import { renderRhythm } from './rhythm.js?v=20261102-2';
+import { renderCourses } from './panels.js?v=20261102-2';
+import { renderMap } from './map.js?v=20261102-2';
+import { router, q, search, account, greeting } from './shell.js?v=20261102-2';
 
 const assistant = q();
 search({ ask: (question) => assistant.open({ question }) });

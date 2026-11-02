@@ -3,9 +3,9 @@
 // actions taken) and the rest follows. The records are the sample learner for now (data/sample-learner.js).
 // Every module of the app is imported with the same ?v= stamp, so a release never mixes old and new files.
 
-import { catalogue } from './data/catalogue.js?v=20261102-1';
-import { paths } from './data/paths.js?v=20261102-1';
-import * as learnerData from './data/sample-learner.js?v=20261102-1';
+import { catalogue } from './data/catalogue.js?v=20261102-2';
+import { paths } from './data/paths.js?v=20261102-2';
+import * as learnerData from './data/sample-learner.js?v=20261102-2';
 
 // Site links are written root-relative, as in the site's own pages, and resolved against the site's root, which the
 // page names in <link rel="home"> (a hosted copy may live below the root of its domain).

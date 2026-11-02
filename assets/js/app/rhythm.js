@@ -3,8 +3,8 @@
 // day only counts when something was learned in it. A missed day is shown as empty, never as a failure, and the run
 // counts from yesterday until today's first action.
 
-import { h, icon, dateLabel } from './ui.js?v=20261102-1';
-import { rhythm, revisit, STATES } from './model.js?v=20261102-1';
+import { h, icon, dateLabel } from './ui.js?v=20261102-2';
+import { rhythm, revisit, STATES } from './model.js?v=20261102-2';
 
 const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 const DAY = { weekday: 'short', day: 'numeric', month: 'short' };
@@ -126,5 +126,5 @@ export function renderRhythm(el, { onReview }) {
           'aria-label': `Review ${revisit.name} on your Understanding Map`, html: `Review${icon('arrow')}`,
         }))));
   }
-  el.replaceChildren(...sections);
+  el.replaceChildren(...sections.flatMap((x, i) => (i ? [h('hr'), x] : [x])));
 }
