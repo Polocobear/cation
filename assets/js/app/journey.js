@@ -3,9 +3,9 @@
 // the course outline, the only page a chapter has so far. The current chapter carries the next lesson and the one
 // action that matters, Continue learning, with Q beside it. Below the path: the learner's other courses, kept small.
 
-import { h, icon } from './ui.js?v=20261102-3';
-import { ART } from './art.js?v=20261102-3';
-import { journey, others, url } from './model.js?v=20261102-3';
+import { h, icon } from './ui.js?v=20261102-4';
+import { ART } from './art.js?v=20261102-4';
+import { journey, others, url } from './model.js?v=20261102-4';
 
 const NS = 'http://www.w3.org/2000/svg';
 const two = (n) => String(n).padStart(2, '0');

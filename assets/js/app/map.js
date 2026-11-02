@@ -3,8 +3,8 @@
 // and neighbours; choosing one (click, Enter or Space) opens what it is, the record behind its state, what it builds
 // on and leads to, and the way into the course. The arrow keys move between concepts by direction.
 
-import { h, icon } from './ui.js?v=20261102-3';
-import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js?v=20261102-3';
+import { h, icon } from './ui.js?v=20261102-4';
+import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js?v=20261102-4';
 
 const NS = 'http://www.w3.org/2000/svg';
 const ago = (n) => (n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`);

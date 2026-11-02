@@ -5,7 +5,12 @@
 
 export const SAMPLE = true;
 
-export const learner = { name: 'Nevin', initials: 'N' };
+// `joined` is when the learner signed up; the activity chart starts there. A page address ending ?joined=20 previews a
+// learner who joined that many days ago (the activity below starts from then too).
+const preview = Number(new URLSearchParams(location.search).get('joined'));
+const joinedDaysAgo = preview > 0 ? preview : 430;
+const now = new Date();
+export const learner = { name: 'Nevin', initials: 'N', joined: new Date(now.getFullYear(), now.getMonth(), now.getDate() - joinedDaysAgo) };
 
 // Enrolments, most recently studied first. `done` is how many lessons are finished, in outline order, so the module
 // and lesson in progress follow from it and the course's modules (catalogue.js). `thumb` names the course list's
@@ -68,12 +73,12 @@ export const understanding = {
 // (a problem solved), 'practice' (a concept practised) or 'lesson' (a lesson finished); opening the site is not an
 // event. Real events would also name the course and concept. Generated from a fixed seed for the last 53 weeks, so it
 // is the same on every visit: more days lately than a year ago, a run of the last twelve days, a rest day before it,
-// a fortnight away in the summer, and nothing yet today.
+// a fortnight away in the summer, and nothing yet today. Nothing before the learner joined.
 export const activity = (() => {
   let s = 20261102;
   const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const now = new Date(), events = [];
-  for (let i = 371; i >= 1; i--) {
+  const events = [];
+  for (let i = Math.min(371, joinedDaysAgo); i >= 1; i--) {
     const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
     const weekend = day.getDay() === 0 || day.getDay() === 6;
     const run = i <= 12, away = i === 13 || (i >= 96 && i <= 109);

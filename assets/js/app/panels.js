@@ -1,8 +1,8 @@
 // The course list: the learner's courses with their progress, filtered by status or discipline. My Learning shows it;
 // each row opens the course's outline.
 
-import { h, icon, menu } from './ui.js?v=20261102-3';
-import { enrolled, STATUS, catalogue } from './model.js?v=20261102-3';
+import { h, icon, menu } from './ui.js?v=20261102-4';
+import { enrolled, STATUS, catalogue } from './model.js?v=20261102-4';
 
 // ---------------------------------------------------------------- your courses
 
