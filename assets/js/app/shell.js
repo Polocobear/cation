@@ -1,27 +1,33 @@
-// The application around the dashboard: routing between views by the address's #/ path, the catalogue search, the
-// notifications and account menus, and Q. Q is not connected to any AI service yet: its panel says so, shows what it
-// would start from, and sends nothing anywhere.
+// The application around the home page: routing between views by the address's #/ path, the catalogue search, the
+// account menu and Q. Q is not connected to any AI service yet: its panel says so, shows what it would start from, and
+// sends nothing anywhere.
 
-import { h, icon, menu, dueLabel, daysFrom } from './ui.js';
-import { catalogue, enrolled, featured, tasks, learner, url } from './model.js';
+import { h, icon, menu } from './ui.js?v=20261102-1';
+import { catalogue, enrolled, featured, learner, url } from './model.js?v=20261102-1';
 
-const ROUTES = { '': 'home', courses: 'courses', knowledge: 'knowledge', calendar: 'calendar', settings: 'settings' };
-const TITLES = { home: 'Home', courses: 'My Courses', knowledge: 'Knowledge', calendar: 'Calendar', settings: 'Settings' };
+// Older addresses (#/courses, #/knowledge) open My Learning, where their contents now live.
+const ROUTES = { '': 'home', learning: 'learning', courses: 'learning', knowledge: 'learning', settings: 'settings' };
+const TITLES = { home: 'Home', learning: 'My Learning', settings: 'Settings' };
 const Q_MARK = '<svg class="q-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="11" r="7"/><path d="m13.6 13.6 5.4 5.6"/></svg>';
 
 // ---------------------------------------------------------------- views
 
+// Each view draws itself the first time it is shown; `enter` runs every time, with what follows the view's name in
+// the address (#/learning/conservation opens that concept on the map).
 export function router(views) {
-  const drawn = new Set(['home']);
+  const drawn = new Set();
   const go = (first) => {
-    const name = ROUTES[location.hash.replace(/^#\/?/, '').split('/')[0]] || 'home';
-    for (const v of document.querySelectorAll('.view')) v.hidden = v.dataset.view !== name;
+    const [path, param] = location.hash.replace(/^#\/?/, '').split('/');
+    const name = ROUTES[path] || 'home';
+    const el = document.querySelector(`.view[data-view="${name}"]`);
+    for (const v of document.querySelectorAll('.view')) v.hidden = v !== el;
     for (const a of document.querySelectorAll('[data-route]')) {
       if (a.dataset.route === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     }
-    if (!drawn.has(name)) { views[name](document.querySelector(`.view[data-view="${name}"]`)); drawn.add(name); }
+    if (!drawn.has(name)) { views[name].draw(el); drawn.add(name); }
+    views[name].enter?.(el, param);
     document.title = `${TITLES[name]} · CATION`;
-    if (!first) { scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
+    if (!first && !param) { scrollTo(0, 0); document.getElementById('main').focus({ preventScroll: true }); }
   };
   addEventListener('hashchange', () => go(false));
   go(true);
@@ -44,7 +50,7 @@ export function q() {
     const mod = featured.modules[featured.progress.module];
     const [label, value] = question ? ['You asked', `“${question}”`]
       : concept ? ['You were looking at', `${concept.name}, in ${featured.title}`]
-      : ['You’re studying', `${featured.title} · ${mod.name}`];
+      : ['You’re studying', `${featured.title} · chapter ${featured.progress.module + 1}, ${mod.name}`];
     body.replaceChildren(
       h('p', {}, 'Q will be CATION’s teaching assistant. It isn’t connected to an AI service in this prototype, so it can’t answer yet.'),
       h('div', { class: 'q-context' }, h('span', {}, label), h('b', {}, value)),
@@ -76,14 +82,14 @@ const INDEX = [
     href: url(`/courses/${c.slug}/`), text: `${c.title} ${c.summary}`,
   })),
   ...catalogue.courses.flatMap((c) => c.modules.map((m, i) => ({
-    kind: 'module', label: m.name, sub: `${c.title} · Module ${i + 1}`, href: url(`/courses/${c.slug}/#syllabus-title`), text: m.name,
+    kind: 'module', label: m.name, sub: `${c.title} · Chapter ${i + 1}`, href: url(`/courses/${c.slug}/#syllabus-title`), text: m.name,
   }))),
   ...catalogue.subjects.map((s) => ({
     kind: 'subject', label: s.name, sub: `${catalogue.disciplines.find((d) => d.slug === s.discipline).name} · ${s.topics.join(', ')}`,
     href: url(`/${s.discipline}/#subjects`), text: `${s.name} ${s.topics.join(' ')}`,
   })),
 ];
-const GROUPS = [['lesson', 'Lessons', 3], ['course', 'Courses', 5], ['module', 'Modules', 4], ['subject', 'Subjects', 3]];
+const GROUPS = [['lesson', 'Lessons', 3], ['course', 'Courses', 5], ['module', 'Chapters', 4], ['subject', 'Subjects', 3]];
 const ICONS = { lesson: 'lesson', course: 'course', module: 'module', subject: 'subject' };
 
 function find(query) {
@@ -106,10 +112,11 @@ const mark = (text, query) => {
   return span;
 };
 
+// Search opens over the page (from the sidebar, ⌘K or Ctrl+K, or /) and closes with Escape or a click outside it.
 export function search({ ask }) {
-  const input = document.getElementById('search'), list = document.getElementById('search-results');
-  const box = input.closest('.search');
-  let options = [], active = -1;
+  const layer = document.getElementById('search-layer'), input = document.getElementById('search');
+  const list = document.getElementById('search-results');
+  let options = [], active = -1, opener = null;
 
   const option = (id, content, attrs) => h(attrs.href ? 'a' : 'button', { id, role: 'option', class: 'pop-item', 'aria-selected': 'false', tabindex: -1, ...attrs }, ...content);
   const draw = () => {
@@ -118,7 +125,7 @@ export function search({ ask }) {
     let n = 0;
     if (!query) {
       parts.push(h('p', { class: 'pop-title' }, 'Your courses'));
-      for (const c of enrolled.slice(0, 4)) parts.push(option(`sr-${n++}`, [h('span', { html: icon('course') }).firstChild, h('span', {}, c.title, h('small', {}, `${c.subjectName} · ${c.progress.percent}%`))], { href: c.href }));
+      for (const c of enrolled.slice(0, 4)) parts.push(option(`sr-${n++}`, [h('span', { html: icon('course') }).firstChild, h('span', {}, c.title, h('small', {}, `${c.subjectName} · ${c.progress.done} of ${c.progress.total} lessons`))], { href: c.href }));
     } else {
       const groups = find(query);
       for (const [title, items] of groups) {
@@ -129,7 +136,7 @@ export function search({ ask }) {
       parts.push(h('div', { class: 'pop-rule', role: 'separator' }));
       parts.push(option(`sr-${n++}`, [h('span', { html: icon('search') }).firstChild, h('span', {}, 'See every match in Explore')], { href: url(`/explore/?q=${encodeURIComponent(query)}`) }));
       parts.push(option(`sr-${n++}`, [h('span', { class: 'ask-mark', html: Q_MARK }).firstChild, h('span', {}, `Ask Q “${query}”`, h('small', {}, 'Prototype: Q isn’t connected yet'))],
-        { type: 'button', class: 'pop-item ask', 'data-q': '', onclick: () => { close(); ask(query); } }));
+        { type: 'button', class: 'pop-item ask', 'data-q': '', onclick: () => { close(false); ask(query); } }));
     }
     list.replaceChildren(...parts);
     options = [...list.querySelectorAll('[role="option"]')];
@@ -144,76 +151,67 @@ export function search({ ask }) {
       input.setAttribute('aria-activedescendant', options[i].id);
     } else input.removeAttribute('aria-activedescendant');
   };
-  const openList = () => { if (list.hidden) { list.hidden = false; input.setAttribute('aria-expanded', 'true'); } draw(); };
-  const close = () => { list.hidden = true; input.setAttribute('aria-expanded', 'false'); select(-1); };
+  const open = () => {
+    if (!layer.hidden) { input.select(); return; }
+    opener = document.activeElement;
+    layer.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    input.value = '';
+    draw();
+    input.focus();
+  };
+  const close = (refocus = true) => {
+    if (layer.hidden) return;
+    layer.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+    select(-1);
+    if (refocus) opener?.focus?.();
+  };
 
-  input.addEventListener('focus', openList);
-  input.addEventListener('input', openList);
+  input.addEventListener('input', draw);
   input.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      if (list.hidden) openList();
       const step = e.key === 'ArrowDown' ? 1 : -1;
       select(options.length ? (active + step + options.length) % options.length : -1);
     } else if (e.key === 'Enter') {
       const target = options[active] || (input.value.trim() && options.find((o) => o.matches('a[href*="/courses/"]')));
       if (target) { e.preventDefault(); target.click(); }
     } else if (e.key === 'Escape') {
-      if (!list.hidden) { e.stopPropagation(); close(); } else input.blur();
+      e.preventDefault(); close();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();                       // focus stays in the search; the arrow keys move through the results
     }
   });
-  document.addEventListener('click', (e) => { if (!box.contains(e.target)) close(); });
-  box.addEventListener('focusout', (e) => { if (!box.contains(e.relatedTarget)) close(); });
+  list.addEventListener('click', (e) => { if (e.target.closest('a')) close(false); });
+  layer.addEventListener('click', (e) => { if (e.target === layer) close(); });
+  for (const b of document.querySelectorAll('[data-search-open]')) b.addEventListener('click', (e) => { e.stopPropagation(); open(); });
 
-  // ⌘K or Ctrl+K from anywhere, and / when not typing.
   const mac = /Mac|iPhone|iPad/.test(navigator.platform);
-  if (!mac) document.querySelector('[data-mod]').textContent = 'Ctrl';
+  if (!mac) for (const k of document.querySelectorAll('[data-mod]')) k.textContent = 'Ctrl';
   document.addEventListener('keydown', (e) => {
     const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName);
-    if ((e.key === 'k' && (mac ? e.metaKey : e.ctrlKey)) || (e.key === '/' && !typing)) { e.preventDefault(); input.focus(); input.select(); }
+    if ((e.key === 'k' && (mac ? e.metaKey : e.ctrlKey)) || (e.key === '/' && !typing)) { e.preventDefault(); open(); }
   });
 }
 
-// ---------------------------------------------------------------- notifications and account
+// ---------------------------------------------------------------- account
 
-export function topBar({ onTask }) {
-  document.getElementById('greeting').textContent = `Welcome back, ${learner.name}.`;
-  const mod = featured.modules[featured.progress.module];
-  document.getElementById('greeting-line').textContent = `You’re on module ${featured.progress.module + 1} of ${featured.title}: ${mod.name.toLowerCase()}.`;
-
-  // Notifications: what's due in the next three days. Opening the menu marks them read on this device.
-  const bell = document.getElementById('bell'), notes = document.getElementById('notes'), dot = bell.querySelector('.dot');
-  const soon = tasks.filter((t) => daysFrom(t.date) <= 3);
-  const KEY = 'cation-app-read';
-  const read = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } };
-  const unread = () => soon.filter((t) => !read().includes(t.id));
-  const refresh = () => {
-    dot.hidden = !unread().length;
-    bell.setAttribute('aria-label', unread().length ? `Notifications, ${unread().length} new` : 'Notifications');
-  };
-  notes.replaceChildren(
-    h('p', { class: 'pop-title' }, 'Due in the next three days'),
-    ...(soon.length ? soon.map((t) => h('button', { type: 'button', class: 'pop-item', 'data-q': '', onclick: () => { closeNotes(); onTask(t); } },
-      h('span', { html: icon(t.concept ? 'review' : 'lesson') }).firstChild,
-      h('span', {}, t.title, h('small', {}, `${dueLabel(t.date)} · ${t.course.title}`))))
-      : [h('p', { class: 'pop-empty' }, 'Nothing is due in the next three days.')]));
-  const closeNotes = menu(bell, notes, {
-    onOpen: () => {
-      try { localStorage.setItem(KEY, JSON.stringify([...new Set([...read(), ...soon.map((t) => t.id)])])); } catch { /* private mode */ }
-      refresh();
-      notes.querySelector('.pop-item')?.focus();
-    },
-  });
-  refresh();
-
-  const me = document.getElementById('me'), account = document.getElementById('account');
+export function account() {
+  const me = document.getElementById('me'), panel = document.getElementById('account');
   me.textContent = learner.initials;
-  account.replaceChildren(
+  panel.replaceChildren(
     h('div', { class: 'account-who' }, h('span', { class: 'avatar', 'aria-hidden': 'true' }, learner.initials),
       h('span', {}, h('b', {}, learner.name), h('span', {}, 'Sample learner · no sign-in yet'))),
     h('div', { class: 'pop-rule', role: 'separator' }),
     h('a', { class: 'pop-item', href: '#/settings', html: `${icon('module')}Settings` }),
     h('a', { class: 'pop-item', href: url('/'), html: `${icon('arrow')}CATION website` }));
-  const closeAccount = menu(me, account, { onOpen: () => account.querySelector('.pop-item')?.focus() });
-  account.addEventListener('click', (e) => { if (e.target.closest('a')) closeAccount(); });
+  const close = menu(me, panel, { onOpen: () => panel.querySelector('.pop-item')?.focus() });
+  panel.addEventListener('click', (e) => { if (e.target.closest('a')) close(); });
 }
+
+// A greeting for the time of day.
+export const greeting = () => {
+  const hour = new Date().getHours();
+  return `Good ${hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening'}, ${learner.name}.`;
+};

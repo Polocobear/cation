@@ -1,35 +1,36 @@
 // A sample learner for the dashboard prototype. None of this is measured: CATION has no accounts, finished lessons or
 // assessments yet, and the dashboard says so wherever it shows these numbers. Everything the dashboard reports about
 // the learner comes from this file, in the shape real records would take, so replacing it replaces them all.
-// Days are counted back from today (0 is today, 1 yesterday); due dates count forward.
+// Days are counted back from today (0 is today, 1 yesterday).
 
 export const SAMPLE = true;
 
 export const learner = { name: 'Nevin', initials: 'N' };
 
 // Enrolments, most recently studied first. `done` is how many lessons are finished, in outline order, so the module
-// and lesson in progress follow from it and the course's modules (catalogue.js). `thumb` names a picture in
-// /assets/app/. `next` is set where the next lesson already exists somewhere on the site.
+// and lesson in progress follow from it and the course's modules (catalogue.js). `thumb` names the course list's
+// picture in /assets/app/ and `picture` the wider one the home page's course cards use. `next` is set where the next
+// lesson already exists somewhere on the site.
 export const enrolments = [
-  { course: 'inside-the-particle-zoo', done: 6, lastDay: 0, thumb: 'physics' },
-  { course: 'forces-in-structures', done: 9, lastDay: 1, thumb: 'structures',
+  { course: 'inside-the-particle-zoo', done: 6, lastDay: 1, thumb: 'physics', picture: '/assets/atlas/physics-960.webp' },
+  { course: 'forces-in-structures', done: 9, lastDay: 2, thumb: 'structures', picture: '/assets/atlas/structures-960.webp',
     next: { title: 'Forces in a Warren truss', href: '/#adaptive' } },
-  { course: 'calculus-mathematics-of-change', done: 12, lastDay: 2, thumb: 'calculus' },
-  { course: 'chemistry-of-change', done: 5, lastDay: 6, thumb: 'chemistry' },
-  { course: 'how-computers-think', done: 23, lastDay: 41, thumb: 'computing' },
-  { course: 'circuits-and-sensors', done: 0, lastDay: null, thumb: 'electronics' },
+  { course: 'calculus-mathematics-of-change', done: 12, lastDay: 4, thumb: 'calculus', picture: '/assets/atlas/calculus-1440.webp' },
+  { course: 'chemistry-of-change', done: 5, lastDay: 6, thumb: 'chemistry', picture: '/assets/atlas/chemistry-1440.webp' },
+  { course: 'how-computers-think', done: 23, lastDay: 41, thumb: 'computing', picture: '/assets/atlas/computing-960.webp' },
+  { course: 'circuits-and-sensors', done: 0, lastDay: null, thumb: 'electronics', picture: '/assets/atlas/electronics-960.webp' },
 ];
 
 // The Understanding Map for the course in progress. Each concept belongs to one of the course's modules (by index)
 // and carries its practice record: answers to practice questions on it, oldest first, 1 right and 0 wrong. Its state
-// (mastered, developing, needs review, not started) is worked out from that record by mastery.js, as it would be from
+// (mastered, developing, needs review, not started) is worked out from that record by model.js, as it would be from
 // real answers. x and y place it on the map, as percentages of its width and height; label says which side its name
 // sits on when not below it.
 export const understanding = {
   course: 'inside-the-particle-zoo',
   focus: 'pair-production',
   concepts: [
-    { id: 'pair-production', name: 'Pair production', module: 1, x: 50, y: 47, practice: '1101101', lastDay: 0,
+    { id: 'pair-production', name: 'Pair production', module: 1, x: 50, y: 47, practice: '1101101', lastDay: 1,
       about: 'A high-energy photon passing close to a nucleus turns into an electron and a positron.' },
     { id: 'photons', name: 'Photons', module: 0, x: 8, y: 42, practice: '1111011111', lastDay: 19,
       about: 'Light comes in quanta. A photon’s energy is E = hf; it carries momentum but no charge and no mass.' },
@@ -63,37 +64,26 @@ export const understanding = {
   ],
 };
 
-// Time spent studying, in minutes per day, for the last 182 days (index 0 is today). Generated from a fixed seed so
-// it is the same on every visit: a few sessions a week, longer at weekends, growing over the last two months.
-export const studyLog = (() => {
-  let s = 20261031;
+// Learning activity: one event per meaningful learning action, as the platform would log them. `kind` is 'problem'
+// (a problem solved), 'practice' (a concept practised) or 'lesson' (a lesson finished); opening the site is not an
+// event. Real events would also name the course and concept. Generated from a fixed seed for the last 53 weeks, so it
+// is the same on every visit: more days lately than a year ago, a run of the last twelve days, a rest day before it,
+// a fortnight away in the summer, and nothing yet today.
+export const activity = (() => {
+  let s = 20261102;
   const rand = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
-  const today = new Date();
-  return Array.from({ length: 182 }, (_, i) => {
-    const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i).getDay();
-    const weekend = day === 0 || day === 6;
-    const habit = 0.5 + 0.3 * Math.max(0, 1 - i / 60);            // more days studied lately
-    if (rand() > habit + (weekend ? 0.15 : 0)) return 0;
-    const length = (weekend ? 55 : 32) * (0.85 + 0.35 * Math.max(0, 1 - i / 90)) * (0.55 + rand() * 0.9);
-    return Math.round(length / 5) * 5;
-  });
+  const now = new Date(), events = [];
+  for (let i = 371; i >= 1; i--) {
+    const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+    const weekend = day.getDay() === 0 || day.getDay() === 6;
+    const run = i <= 12, away = i === 13 || (i >= 96 && i <= 109);
+    const chance = 0.26 + 0.42 * Math.max(0, 1 - i / 260) + (weekend ? 0.1 : 0);
+    if (away || (!run && rand() > chance)) continue;
+    const count = 1 + Math.floor(rand() * rand() * (weekend ? 11 : 8));
+    for (let j = 0; j < count; j++) {
+      const r = rand();
+      events.push({ at: new Date(day.getTime() + (16 + rand() * 6) * 3600e3), kind: r < 0.64 ? 'problem' : r < 0.95 ? 'practice' : 'lesson' });
+    }
+  }
+  return events;
 })();
-
-// Practice questions answered each week, for the last 12 weeks (oldest first), and how many were right.
-export const practice = [
-  [18, 11], [22, 13], [25, 16], [20, 13], [28, 19], [31, 21], [24, 17], [30, 22], [33, 24], [29, 22], [36, 28], [41, 33],
-].map(([answered, correct]) => ({ answered, correct }));
-
-// Coming up, soonest first. `concept` opens that concept on the map; `href` goes to a page that exists.
-export const tasks = [
-  { id: 'review-conservation', kind: 'review', title: 'Review conservation laws', course: 'inside-the-particle-zoo',
-    detail: 'Flagged for review on your map', due: 1, concept: 'conservation' },
-  { id: 'truss-lesson', kind: 'lesson', title: 'Lesson: forces in a Warren truss', course: 'forces-in-structures',
-    detail: 'Module 3 · Trusses', due: 2, href: '/#adaptive' },
-  { id: 'calculus-set', kind: 'practice', title: 'Problem set: rules of differentiation', course: 'calculus-mathematics-of-change',
-    detail: 'Module 3 · Rules of differentiation', due: 5, href: '/courses/calculus-mathematics-of-change/#syllabus-title' },
-  { id: 'chemistry-quiz', kind: 'quiz', title: 'Quiz: atoms, ions and bonds', course: 'chemistry-of-change',
-    detail: 'Module 1 · Atoms, ions and bonds', due: 8, href: '/courses/chemistry-of-change/#syllabus-title' },
-  { id: 'circuits-start', kind: 'start', title: 'Start Circuits and Sensors', course: 'circuits-and-sensors',
-    detail: 'Module 1 · Charge, current and voltage', due: 12, href: '/courses/circuits-and-sensors/#syllabus-title' },
-];

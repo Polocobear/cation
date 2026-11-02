@@ -3,8 +3,8 @@
 // and neighbours; choosing one (click, Enter or Space) opens what it is, the record behind its state, what it builds
 // on and leads to, and the way into the course. The arrow keys move between concepts by direction.
 
-import { h, icon } from './ui.js';
-import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js';
+import { h, icon } from './ui.js?v=20261102-1';
+import { map, STATES, MASTERY_RULE, SAMPLE } from './model.js?v=20261102-1';
 
 const NS = 'http://www.w3.org/2000/svg';
 const ago = (n) => (n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`);
@@ -81,7 +81,7 @@ export function renderMap(el, { onAsk, headingId = 'map-title', more = true } = 
     const verb = { new: 'See it in the outline', review: 'Review in the outline', developing: 'Continue in the outline', mastered: 'Open in the outline' }[c.state];
     detail = h('div', { class: 'map-detail', role: 'dialog', 'aria-label': c.name, 'data-side': c.x > 50 ? 'left' : 'right' },
       h('button', { type: 'button', class: 'x', 'aria-label': 'Close', onclick: () => close(true), html: icon('close') }),
-      h('span', { class: 'state', 'data-state': c.state }, h('i'), `${STATES[c.state]} · Module ${c.module + 1}: ${c.moduleName}`),
+      h('span', { class: 'state', 'data-state': c.state }, h('i'), `${STATES[c.state]} · Chapter ${c.module + 1}: ${c.moduleName}`),
       h('h3', {}, c.name),
       h('p', {}, c.about),
       h('p', { class: 'evidence', title: MASTERY_RULE },
@@ -134,7 +134,7 @@ export function renderMap(el, { onAsk, headingId = 'map-title', more = true } = 
   el.replaceChildren(
     h('div', { class: 'card-head' },
       h('h2', { id: headingId }, 'Your understanding', h('small', {}, map.course.title)),
-      more ? h('a', { class: 'link-btn', href: '#/knowledge', html: `Explore all${icon('arrow')}` }) : null),
+      more ? h('a', { class: 'link-btn', href: '#/learning', html: `Explore all${icon('arrow')}` }) : null),
     scroll, legend);
   // Where the map is wider than its card (phones), it starts centred on the lesson in progress.
   requestAnimationFrame(() => { scroll.scrollLeft = (scroll.scrollWidth - scroll.clientWidth) / 2; });
